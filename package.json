@@ -2,20 +2,25 @@
   "name": "markgraf-vscode",
   "displayName": "Markgraf",
   "version": "0.0.1",
-  "private": true,
   "engines": {
     "vscode": "^1.90.0"
   },
   "activationEvents": [
-    "onLanguage:markgraf"
+    "onLanguage:markgraf",
+    "onCommand:markgraf.preview"
   ],
   "main": "./output/Main/index.js",
   "contributes": {
     "languages": [
       {
         "id": "markgraf",
-        "aliases": ["Markgraf"],
-        "extensions": [".markgraf"]
+        "aliases": [
+          "Markgraf"
+        ],
+        "extensions": [
+          ".markgraf"
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "configuration": {
@@ -23,17 +28,43 @@
       "properties": {
         "markgraf.serverCommand": {
           "type": "string",
-          "default": "/Users/mark/code/markgraf-language-server/bin/markgraf-language-server.js"
+          "default": "",
+          "description": "Path to a Markgraf language server script. Leave empty to use the bundled server."
         },
         "markgraf.serverRuntime": {
           "type": "string",
-          "default": "bun"
+          "default": "",
+          "description": "Runtime command for the Markgraf language server. Leave empty to use VS Code\u2019s Node runtime."
         }
       }
+    },
+    "grammars": [
+      {
+        "language": "markgraf",
+        "scopeName": "source.markgraf",
+        "path": "./syntaxes/markgraf.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "markgraf.preview",
+        "title": "Markgraf: Preview",
+        "category": "Markgraf"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "markgraf.preview",
+          "when": "resourceLangId == markgraf",
+          "group": "navigation"
+        }
+      ]
     }
   },
   "scripts": {
-    "build": "spago build"
+    "build": "PATH=/opt/homebrew/bin:$PATH spago build",
+    "vscode:prepublish": "bun run build"
   },
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
@@ -41,5 +72,26 @@
   "devDependencies": {
     "purescript": "^0.15.15",
     "spago": "^1.0.3"
-  }
+  },
+  "type": "module",
+  "publisher": "markgrafhq",
+  "description": "Markgraf language support, diagnostics, and live preview for VS Code.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markgrafhq/markgraf-vscode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/markgrafhq/markgraf-vscode/issues"
+  },
+  "homepage": "https://github.com/markgrafhq/markgraf-vscode#readme",
+  "categories": [
+    "Programming Languages",
+    "Visualization"
+  ],
+  "keywords": [
+    "markgraf",
+    "diagram",
+    "preview",
+    "language-server"
+  ]
 }

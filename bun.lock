@@ -4,6 +4,8 @@
     "": {
       "name": "markgraf-vscode",
       "dependencies": {
+        "@markgrafhq/markgraf-embed": "file:../markgraf-embed",
+        "@markgrafhq/markgraf-language-server": "file:../markgraf-language-server",
         "vscode-languageclient": "^9.0.1",
       },
       "devDependencies": {
@@ -18,6 +20,10 @@
     "@isaacs/cliui": ["@isaacs/cliui@9.0.0", "", {}, "sha512-AokJm4tuBHillT+FpMtxQ60n8ObyXBatq7jD2/JA9dxbDDokKQm8KMht5ibGzLVU9IJDIKK4TPKgMHEYMn3lMg=="],
 
     "@isaacs/fs-minipass": ["@isaacs/fs-minipass@4.0.1", "", { "dependencies": { "minipass": "^7.0.4" } }, "sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w=="],
+
+    "@markgrafhq/markgraf-embed": ["@markgrafhq/markgraf-embed@file:../markgraf-embed", {}],
+
+    "@markgrafhq/markgraf-language-server": ["@markgrafhq/markgraf-language-server@file:../markgraf-language-server", { "bin": { "markgraf-language-server": "./bin/markgraf-language-server.js" } }],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@4.0.1", "", { "dependencies": { "@nodelib/fs.stat": "4.0.0", "run-parallel": "^1.2.0" } }, "sha512-vAkI715yhnmiPupY+dq+xenu5Tdf2TBQ66jLvBIcCddtz+5Q8LbMKaf9CIJJreez8fQ8fgaY+RaywQx8RJIWpw=="],
 

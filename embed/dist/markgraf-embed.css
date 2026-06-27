@@ -1,0 +1,284 @@
+@font-face {
+  font-family: 'CommitMono';
+  src: url('./CommitMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+.markgraf-embed {
+  --mg-bg: #ffffff;
+  --mg-fg: #111111;
+  --mg-bar-bg: #111111;
+  --mg-bar-fg: #ffffff;
+  --mg-muted: #9a9a9a;
+  --mg-accent: #ffffff;
+  --mg-track: #111111;
+  --mg-track-hover: #111111;
+  position: relative;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--mg-fg);
+  font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+.markgraf-embed canvas[data-mg="stage"] {
+  width: 100%;
+  display: block;
+  max-height: var(--mg-max-height, 90svh);
+  object-fit: contain;
+}
+
+.markgraf-embed :focus,
+.markgraf-embed :focus-visible {
+  outline: none;
+}
+
+/* Big centered play hint shown while paused.  Hidden as soon as a play
+   button anywhere in the embed flips to data-mg-playing="1". */
+.markgraf-embed [data-mg="play-overlay"] {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.markgraf-embed [data-mg="play-overlay"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  -webkit-mask: var(--mg-icon-play) center / contain no-repeat;
+  mask: var(--mg-icon-play) center / contain no-repeat;
+}
+
+.markgraf-embed:has([data-mg="play"][data-mg-playing="0"]) [data-mg="play-overlay"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* The bar sits in normal flow *below* the canvas (not as a bottom overlay),
+   so it reserves its own space and can never cover the lowest node of the
+   graph. It's always visible — a player should show its scrubber. */
+.markgraf-embed [data-mg="bar"] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--mg-fg);
+}
+
+.markgraf-embed [data-mg="play"] {
+  background: transparent;
+  color: var(--mg-fg);
+  border: 0;
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s ease;
+}
+
+.markgraf-embed [data-mg="play"]:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Heroicons v2 solid play / pause, rendered as a mask so the icon picks up
+   currentColor (light-mode black, dark-mode white via the bar override). */
+.markgraf-embed [data-mg="play"]::before {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  -webkit-mask: var(--mg-icon-play) center / contain no-repeat;
+  mask: var(--mg-icon-play) center / contain no-repeat;
+}
+
+.markgraf-embed [data-mg="play"][data-mg-playing="1"]::before {
+  -webkit-mask: var(--mg-icon-pause) center / contain no-repeat;
+  mask: var(--mg-icon-pause) center / contain no-repeat;
+}
+
+.markgraf-embed {
+  --mg-icon-play: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653Z'/></svg>");
+  --mg-icon-pause: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'><path d='M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25Zm7.5 0A.75.75 0 0 1 15 4.5h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H15a.75.75 0 0 1-.75-.75V5.25Z'/></svg>");
+}
+
+.markgraf-embed [data-mg="time"] {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  color: var(--mg-fg);
+  white-space: nowrap;
+}
+
+.markgraf-embed [data-mg="speed"] {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 1px 4px;
+  color: var(--mg-fg);
+  font: 11px/1 inherit;
+  cursor: pointer;
+}
+
+.markgraf-embed [data-mg="speed"] option {
+  color: var(--mg-fg);
+  background: var(--mg-bg);
+}
+
+.markgraf-embed [data-mg="scrub-wrap"] {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.markgraf-embed [data-mg="ticks"] {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
+  pointer-events: none;
+}
+
+.markgraf-embed .mg-tick {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.7;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.markgraf-embed .mg-tick:hover {
+  opacity: 1;
+  transform: scale(1.6);
+}
+
+.markgraf-embed .mg-tick::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -4px);
+  background: rgba(15, 23, 42, 0.95);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease;
+}
+
+.markgraf-embed .mg-tick:hover::after {
+  opacity: 1;
+}
+
+/* Custom-styled scrubber.  Cross-browser range inputs are notoriously ugly,
+   so we strip the native chrome and rebuild from CSS primitives. */
+.markgraf-embed [data-mg="scrub"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.markgraf-embed [data-mg="scrub"]::-webkit-slider-runnable-track {
+  height: 4px;
+  /* WebKit lays the 4px track at the top of the 18px input box, which floated
+     the line and thumb above the play button / time / speed. Centre it within
+     the input: (18 - 4) / 2 = 7px. */
+  margin-top: 7px;
+  background: var(--mg-track);
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.markgraf-embed [data-mg="scrub"]:hover::-webkit-slider-runnable-track {
+  background: var(--mg-track-hover);
+}
+
+.markgraf-embed [data-mg="scrub"]::-moz-range-track {
+  height: 4px;
+  background: var(--mg-track);
+  border-radius: 999px;
+}
+
+.markgraf-embed [data-mg="scrub"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #111;
+  border: 2px solid #fff;
+  /* `margin-top` centres the thumb on the track; `top: auto` resets any host
+     slider positioning (e.g. Obsidian's editor sets `top: var(--slider-thumb-y)`
+     on range thumbs, which otherwise floats ours above the controls). */
+  margin-top: -5px;
+  top: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: transform 0.08s ease;
+}
+
+.markgraf-embed [data-mg="scrub"]:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+.markgraf-embed [data-mg="scrub"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #111;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  .markgraf-embed {
+    --mg-bg: #111111;
+    --mg-fg: #ffffff;
+    --mg-track: #ffffff;
+    --mg-track-hover: #ffffff;
+  }
+  .markgraf-embed [data-mg="bar"] {
+    background: rgba(17, 17, 17, 0.92);
+  }
+  .markgraf-embed [data-mg="scrub"]::-webkit-slider-thumb,
+  .markgraf-embed [data-mg="scrub"]::-moz-range-thumb {
+    background: #fff;
+    border-color: #111;
+  }
+}
