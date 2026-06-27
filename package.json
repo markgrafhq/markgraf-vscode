@@ -1,0 +1,45 @@
+{
+  "name": "markgraf-vscode",
+  "displayName": "Markgraf",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onLanguage:markgraf"
+  ],
+  "main": "./output/Main/index.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "markgraf",
+        "aliases": ["Markgraf"],
+        "extensions": [".markgraf"]
+      }
+    ],
+    "configuration": {
+      "title": "Markgraf",
+      "properties": {
+        "markgraf.serverCommand": {
+          "type": "string",
+          "default": "/Users/mark/code/markgraf-language-server/bin/markgraf-language-server.js"
+        },
+        "markgraf.serverRuntime": {
+          "type": "string",
+          "default": "bun"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "spago build"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "purescript": "^0.15.15",
+    "spago": "^1.0.3"
+  }
+}
