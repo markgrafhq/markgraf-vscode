@@ -331,6 +331,22 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       box-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
     }
 
+    .preview-status {
+      display: none;
+      margin: 0 0 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--vscode-inputValidation-warningBorder);
+      border-radius: 8px;
+      background: var(--vscode-inputValidation-warningBackground);
+      color: var(--vscode-inputValidation-warningForeground);
+      white-space: pre-wrap;
+      font: 12px var(--vscode-editor-font-family);
+    }
+
+    .preview-status[data-visible="true"] {
+      display: block;
+    }
+
   </style>
 </head>
 <body>
@@ -342,6 +358,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       <button class="theme-button" type="button" data-theme="whiteboard">Whiteboard</button>
       <button class="theme-button" type="button" data-theme="isometric">Isometric</button>
     </div>
+    <div id="preview-status" class="preview-status"></div>
     <div id="preview" data-markgraf-titles="false"></div>
   </main>
   <script nonce="${nonce}" type="module">
@@ -349,10 +366,12 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 
     const vscode = acquireVsCodeApi();
     const element = document.getElementById("preview");
+    const status = document.getElementById("preview-status");
     const themeButtons = Array.from(document.querySelectorAll("[data-theme]"));
     const state = vscode.getState() ?? {};
     let currentSource = ${initialSource};
     let currentTheme = state.theme ?? ${JSON.stringify(defaultTheme)};
+    let playbackMemory = state.playbackMemory ?? null;
 
     const markSelectedTheme = () => {
       for (const button of themeButtons) {
@@ -363,18 +382,78 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     const render = source => {
       currentSource = source;
       markSelectedTheme();
+      rememberPlayback();
+
+      const parsed = window.markgraf.tryParse(source);
+      if (!parsed.ok) {
+        showStatus("Preview kept at last valid frame.\n" + (parsed.error ?? "Markgraf preview failed to parse."));
+        return;
+      }
+
+      hideStatus();
       element.innerHTML = "";
       element.classList.add("markgraf-embed");
       element.setAttribute("data-markgraf", "");
       element.setAttribute("data-markgraf-theme", currentTheme);
       element.setAttribute("data-markgraf-mounted", "1");
       window.markgraf.mount(element, source);
+      restorePlayback();
+    };
+
+    const rememberPlayback = () => {
+      const scrub = element.querySelector('[data-mg="scrub"]');
+      const play = element.querySelector('[data-mg="play"]');
+      const time = element.querySelector('[data-mg="time"]');
+      if (!scrub || !play) {
+        return;
+      }
+
+      playbackMemory = {
+        scrubValue: scrub.value,
+        playing: play.dataset.mgPlaying === "1",
+        time: time?.textContent ?? ""
+      };
+      vscode.setState({ theme: currentTheme, playbackMemory });
+    };
+
+    const restorePlayback = () => {
+      const memory = playbackMemory;
+      if (!memory) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        const scrub = element.querySelector('[data-mg="scrub"]');
+        const play = element.querySelector('[data-mg="play"]');
+        if (!scrub || !play) {
+          return;
+        }
+
+        scrub.value = memory.scrubValue;
+        scrub.dispatchEvent(new Event("input", { bubbles: true }));
+
+        const playing = play.dataset.mgPlaying === "1";
+        if (memory.playing !== playing) {
+          play.click();
+        }
+      });
+    };
+
+    const showStatus = message => {
+      status.textContent = message;
+      status.dataset.visible = "true";
+    };
+
+    const hideStatus = () => {
+      status.textContent = "";
+      status.dataset.visible = "false";
     };
 
     for (const button of themeButtons) {
       button.addEventListener("click", () => {
         currentTheme = button.dataset.theme;
-        vscode.setState({ theme: currentTheme });
+        rememberPlayback();
+        vscode.setState({ theme: currentTheme, playbackMemory });
         render(currentSource);
       });
     }
