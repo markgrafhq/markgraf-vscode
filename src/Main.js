@@ -353,6 +353,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     const state = vscode.getState() ?? {};
     let currentSource = ${initialSource};
     let currentTheme = state.theme ?? ${JSON.stringify(defaultTheme)};
+    let lastScrubValue = state.lastScrubValue ?? null;
 
     const markSelectedTheme = () => {
       for (const button of themeButtons) {
@@ -363,18 +364,53 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     const render = source => {
       currentSource = source;
       markSelectedTheme();
+      rememberFrame();
+
+      const parsed = window.markgraf.tryParse(source);
+      if (!parsed.ok) {
+        return;
+      }
+
       element.innerHTML = "";
       element.classList.add("markgraf-embed");
       element.setAttribute("data-markgraf", "");
       element.setAttribute("data-markgraf-theme", currentTheme);
       element.setAttribute("data-markgraf-mounted", "1");
       window.markgraf.mount(element, source);
+      restoreFrame();
+    };
+
+    const rememberFrame = () => {
+      const scrub = element.querySelector('[data-mg="scrub"]');
+      if (!scrub) {
+        return;
+      }
+
+      lastScrubValue = scrub.value;
+      vscode.setState({ theme: currentTheme, lastScrubValue });
+    };
+
+    const restoreFrame = () => {
+      if (lastScrubValue == null) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        const scrub = element.querySelector('[data-mg="scrub"]');
+        if (!scrub) {
+          return;
+        }
+
+        scrub.value = lastScrubValue;
+        scrub.dispatchEvent(new Event("input", { bubbles: true }));
+      });
     };
 
     for (const button of themeButtons) {
       button.addEventListener("click", () => {
         currentTheme = button.dataset.theme;
-        vscode.setState({ theme: currentTheme });
+        rememberFrame();
+        vscode.setState({ theme: currentTheme, lastScrubValue });
         render(currentSource);
       });
     }
