@@ -353,7 +353,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     const state = vscode.getState() ?? {};
     let currentSource = ${initialSource};
     let currentTheme = state.theme ?? ${JSON.stringify(defaultTheme)};
-    let lastScrubValue = state.lastScrubValue ?? null;
+    let lastKeyframe = state.lastKeyframe ?? null;
 
     const markSelectedTheme = () => {
       for (const button of themeButtons) {
@@ -381,36 +381,54 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     };
 
     const rememberFrame = () => {
-      const scrub = element.querySelector('[data-mg="scrub"]');
-      if (!scrub) {
+      const keyframe = currentKeyframe();
+      if (!keyframe) {
         return;
       }
 
-      lastScrubValue = scrub.value;
-      vscode.setState({ theme: currentTheme, lastScrubValue });
+      lastKeyframe = keyframe;
+      vscode.setState({ theme: currentTheme, lastKeyframe });
     };
 
     const restoreFrame = () => {
-      if (lastScrubValue == null) {
+      if (!lastKeyframe) {
         return;
       }
 
       requestAnimationFrame(() => {
+        const tick = ticks().find(candidate => candidate.label === lastKeyframe);
         const scrub = element.querySelector('[data-mg="scrub"]');
-        if (!scrub) {
+        if (!tick || !scrub) {
           return;
         }
 
-        scrub.value = lastScrubValue;
+        scrub.value = String(Math.round(tick.left * 10));
         scrub.dispatchEvent(new Event("input", { bubbles: true }));
       });
     };
+
+    const currentKeyframe = () => {
+      const scrub = element.querySelector('[data-mg="scrub"]');
+      if (!scrub) {
+        return null;
+      }
+
+      const currentLeft = Number(scrub.value) / 10;
+      return ticks()
+        .filter(tick => tick.left <= currentLeft)
+        .at(-1)
+        ?.label ?? null;
+    };
+
+    const ticks = () => Array.from(element.querySelectorAll(".mg-tick"))
+      .map(tick => ({ label: tick.dataset.label, left: parseFloat(tick.style.left) }))
+      .filter(tick => tick.label && Number.isFinite(tick.left));
 
     for (const button of themeButtons) {
       button.addEventListener("click", () => {
         currentTheme = button.dataset.theme;
         rememberFrame();
-        vscode.setState({ theme: currentTheme, lastScrubValue });
+        vscode.setState({ theme: currentTheme, lastKeyframe });
         render(currentSource);
       });
     }
