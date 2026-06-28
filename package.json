@@ -48,8 +48,9 @@
     "commands": [
       {
         "command": "markgraf.preview",
-        "title": "Markgraf: Preview",
-        "category": "Markgraf"
+        "title": "Preview",
+        "category": "Markgraf",
+        "icon": "$(preview)"
       }
     ],
     "menus": {

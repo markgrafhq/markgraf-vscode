@@ -140,14 +140,14 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     .preview-shell {
       min-height: 100vh;
       box-sizing: border-box;
-      padding: 16px;
+      padding: 12px 16px 16px;
     }
 
     .preview-toolbar {
-      position: fixed;
-      top: 12px;
-      right: 12px;
+      position: relative;
       z-index: 10;
+      width: fit-content;
+      margin: 0 0 10px auto;
       display: flex;
       align-items: center;
       gap: 2px;
@@ -156,12 +156,12 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       border-radius: 999px;
       background: color-mix(in srgb, var(--vscode-editor-background) 72%, transparent);
       box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
-      opacity: 0.28;
+      opacity: 0;
       transition: opacity 120ms ease;
       backdrop-filter: blur(18px);
     }
 
-    .preview-toolbar:hover,
+    .preview-shell:hover .preview-toolbar,
     .preview-toolbar:focus-within {
       opacity: 1;
     }
@@ -190,33 +190,30 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 
     #preview {
       min-width: 100%;
-      --mg-max-height: calc(100vh - 32px);
+      min-height: 180px;
+      --mg-max-height: calc(100vh - 96px);
     }
 
     #preview.markgraf-embed {
+      display: flex;
+      flex-direction: column;
       border-radius: 14px;
       background: var(--vscode-editor-background);
     }
 
-    #preview.markgraf-embed [data-mg="play-overlay"] {
-      width: 52px;
-      height: 52px;
-      background: rgba(15, 23, 42, 0.34);
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
-      backdrop-filter: blur(12px);
+    #preview.markgraf-embed[data-markgraf-theme="whiteboard"] {
+      background: #fff;
     }
 
-    #preview.markgraf-embed [data-mg="play-overlay"]::before {
-      width: 22px;
-      height: 22px;
+    #preview.markgraf-embed [data-mg="play-overlay"] {
+      display: none;
     }
 
     #preview.markgraf-embed [data-mg="bar"] {
-      position: absolute;
-      left: 50%;
-      bottom: 14px;
+      order: 1;
+      position: relative;
       width: min(560px, calc(100% - 44px));
-      transform: translateX(-50%);
+      margin: 12px auto 0;
       display: grid;
       grid-template-columns: 24px minmax(120px, 1fr) auto auto;
       align-items: center;
@@ -227,7 +224,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       background: rgba(8, 13, 22, 0.52);
       color: #fff;
       box-shadow: 0 14px 44px rgba(0, 0, 0, 0.28);
-      opacity: 0.18;
+      opacity: 0;
       transition: opacity 140ms ease, background 140ms ease;
       backdrop-filter: blur(18px);
     }
@@ -333,6 +330,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       border: 0;
       box-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
     }
+
   </style>
 </head>
 <body>
@@ -369,7 +367,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       element.classList.add("markgraf-embed");
       element.setAttribute("data-markgraf", "");
       element.setAttribute("data-markgraf-theme", currentTheme);
-      element.removeAttribute("data-markgraf-mounted");
+      element.setAttribute("data-markgraf-mounted", "1");
       window.markgraf.mount(element, source);
     };
 

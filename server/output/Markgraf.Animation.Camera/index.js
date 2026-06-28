@@ -18,12 +18,11 @@ var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
 var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
 var mapFlipped = /* #__PURE__ */ Data_Functor.mapFlipped(Data_Maybe.functorMaybe);
 var bind = /* #__PURE__ */ Control_Bind.bind(Data_Maybe.bindMaybe);
-var compare = /* #__PURE__ */ Data_Ord.compare(Data_Ord.ordInt);
-var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var append = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
 var sort = /* #__PURE__ */ Data_Array.sort(Data_Ord.ordNumber);
 var foldl = /* #__PURE__ */ Data_Foldable.foldl(Data_Foldable.foldableArray);
 var max1 = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordInt);
+var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var map1 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
 var Hold = /* #__PURE__ */ (function () {
     function Hold() {
@@ -38,13 +37,6 @@ var Gap = /* #__PURE__ */ (function () {
     };
     Gap.value = new Gap();
     return Gap;
-})();
-var Move = /* #__PURE__ */ (function () {
-    function Move() {
-
-    };
-    Move.value = new Move();
-    return Move;
 })();
 var LinearLerp = /* #__PURE__ */ (function () {
     function LinearLerp() {
@@ -68,7 +60,7 @@ var showCameraInterp = {
         if (v instanceof LogLerp) {
             return "LogLerp";
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 95, column 1 - line 97, column 27): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 90, column 1 - line 92, column 27): " + [ v.constructor.name ]);
     }
 };
 var eqSpanKind = {
@@ -78,9 +70,6 @@ var eqSpanKind = {
                 return true;
             };
             if (x instanceof Gap && y instanceof Gap) {
-                return true;
-            };
-            if (x instanceof Move && y instanceof Move) {
                 return true;
             };
             return false;
@@ -109,23 +98,23 @@ var transitionDurationFor = function (cfg) {
             var dx = b.center.x - a.center.x;
             var panDistance = Data_Number.sqrt(dx * dx + dy * dy);
             var panTime = (function () {
-                var $66 = cfg.panSpeed <= 0.0;
-                if ($66) {
+                var $58 = cfg.panSpeed <= 0.0;
+                if ($58) {
                     return cfg.minTransition;
                 };
                 return panDistance / cfg.panSpeed;
             })();
             var abs = function (n) {
-                var $67 = n < 0.0;
-                if ($67) {
+                var $59 = n < 0.0;
+                if ($59) {
                     return -n;
                 };
                 return n;
             };
             var zoomDelta = abs(b.zoom - a.zoom);
             var zoomTime = (function () {
-                var $68 = cfg.zoomSpeed <= 0.0;
-                if ($68) {
+                var $60 = cfg.zoomSpeed <= 0.0;
+                if ($60) {
                     return cfg.minTransition;
                 };
                 return zoomDelta / cfg.zoomSpeed;
@@ -151,65 +140,11 @@ var sameCamera = function (a) {
         return a.zoom === b.zoom && (a.center.x === b.center.x && a.center.y === b.center.y);
     };
 };
-var readableZoomFloorForLayout = Markgraf_Animation_Camera_Composition.readableZoomFloorForLayout;
-var readableZoomFloor = function (cfg) {
-    var $71 = cfg.minLabelPx <= 0.0;
-    if ($71) {
-        return 0.0;
-    };
-    return cfg.minLabelPx / max(zoomEpsilon)(cfg.labelBasePx);
-};
-var posAtTime = function (samples) {
-    return function (t) {
-        var origin = {
-            x: 0.0,
-            y: 0.0
-        };
-        var lerpPos = function (lo) {
-            return function (hi) {
-                var progress = (function () {
-                    var $72 = hi.t <= lo.t;
-                    if ($72) {
-                        return 0.0;
-                    };
-                    return (t - lo.t) / (hi.t - lo.t);
-                })();
-                var cu = clamp(0.0)(1.0)(progress);
-                return {
-                    x: lo.pos.x + (hi.pos.x - lo.pos.x) * cu,
-                    y: lo.pos.y + (hi.pos.y - lo.pos.y) * cu
-                };
-            };
-        };
-        var firstSamplePos = Data_Maybe.maybe(origin)(function (v) {
-            return v.pos;
-        })(Data_Array.head(samples));
-        var bracketsT = function (s) {
-            return s.t <= t;
-        };
-        var v = Data_Array.findLastIndex(bracketsT)(samples);
-        if (v instanceof Data_Maybe.Nothing) {
-            return firstSamplePos;
-        };
-        if (v instanceof Data_Maybe.Just) {
-            var v1 = Data_Array.index(samples)(v.value0 + 1 | 0);
-            var v2 = Data_Array.index(samples)(v.value0);
-            if (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just) {
-                return lerpPos(v2.value0)(v1.value0);
-            };
-            if (v2 instanceof Data_Maybe.Just) {
-                return v2.value0.pos;
-            };
-            return origin;
-        };
-        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 284, column 23 - line 289, column 19): " + [ v.constructor.name ]);
-    };
-};
 var nearlyEqualCamera = function (a) {
     return function (b) {
         var absN = function (n) {
-            var $80 = n < 0.0;
-            if ($80) {
+            var $63 = n < 0.0;
+            if ($63) {
                 return -n;
             };
             return n;
@@ -265,8 +200,8 @@ var resolveSpan = function (_cfg) {
     return function (t) {
         return function (span) {
             var raw = (function () {
-                var $83 = span.endT <= span.startT;
-                if ($83) {
+                var $66 = span.endT <= span.startT;
+                if ($66) {
                     return 1.0;
                 };
                 return (t - span.startT) / (span.endT - span.startT);
@@ -278,7 +213,7 @@ var resolveSpan = function (_cfg) {
             if (span.interp instanceof LogLerp) {
                 return logLerpCamera(span.fromCam)(span.toCam)(eased);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 402, column 5 - line 404, column 61): " + [ span.interp.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 335, column 5 - line 337, column 61): " + [ span.interp.constructor.name ]);
         };
     };
 };
@@ -327,8 +262,8 @@ var insertLeadIns = function (cfg) {
                             };
                         };
                         if (st.pending instanceof Data_Maybe.Just) {
-                            var $86 = !isHold(cur) || (nearlyEqualCamera(st.pending.value0.toCam)(cur.toCam) || leadDur(st.pending.value0)(cur) <= 0.0);
-                            if ($86) {
+                            var $69 = !isHold(cur) || (nearlyEqualCamera(st.pending.value0.toCam)(cur.toCam) || leadDur(st.pending.value0)(cur) <= 0.0);
+                            if ($69) {
                                 return {
                                     acc: Data_Array.snoc(st.acc)(st.pending.value0),
                                     pending: new Data_Maybe.Just(cur)
@@ -339,7 +274,7 @@ var insertLeadIns = function (cfg) {
                                 pending: new Data_Maybe.Just(cur)
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 336, column 17 - line 344, column 10): " + [ st.pending.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 269, column 17 - line 277, column 10): " + [ st.pending.constructor.name ]);
                     };
                 };
                 var v = Data_Array.foldl(step)({
@@ -352,7 +287,7 @@ var insertLeadIns = function (cfg) {
                 if (v.pending instanceof Data_Maybe.Just) {
                     return Data_Array.snoc(v.acc)(v.pending.value0);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 332, column 3 - line 334, column 45): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 265, column 3 - line 267, column 45): " + [ v.constructor.name ]);
             };
         };
     };
@@ -373,7 +308,7 @@ var fillInTweens = function (cfg) {
                     };
                 };
                 var isSettled = function (s) {
-                    return eq2(s.kind)(Hold.value) || eq2(s.kind)(Move.value);
+                    return eq2(s.kind)(Hold.value);
                 };
                 var growFocusBBox = function (amount) {
                     return function (box) {
@@ -440,16 +375,6 @@ var fillInTweens = function (cfg) {
                         if (s.kind instanceof Hold) {
                             return holdSpan(s)(Data_Maybe.fromMaybe(fitAllCam)(findAdjacent(i)));
                         };
-                        if (s.kind instanceof Move) {
-                            return {
-                                startT: s.startT,
-                                endT: s.endT,
-                                fromCam: s.fromCam,
-                                toCam: s.toCam,
-                                easing: Markgraf_Animation_Easing.Linear.value,
-                                interp: LinearLerp.value
-                            };
-                        };
                         if (s.kind instanceof Gap) {
                             return {
                                 startT: s.startT,
@@ -460,7 +385,7 @@ var fillInTweens = function (cfg) {
                                 interp: LinearLerp.value
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 225, column 17 - line 238, column 8): " + [ s.kind.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 184, column 17 - line 193, column 8): " + [ s.kind.constructor.name ]);
                     };
                 };
                 return Data_Array.mapWithIndex(resolve)(raw);
@@ -514,8 +439,8 @@ var computeZoomCover = function (layout) {
             var paddedW = box.w + padding * 2.0;
             var paddedH = box.h + padding * 2.0;
             var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $97 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($97) {
+            var $80 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
+            if ($80) {
                 return 1.0;
             };
             return max(layB.w / paddedW)(layB.h / paddedH);
@@ -528,8 +453,8 @@ var computeZoom = function (layout) {
             var paddedW = box.w + padding * 2.0;
             var paddedH = box.h + padding * 2.0;
             var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $98 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($98) {
+            var $81 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
+            if ($81) {
                 return 1.0;
             };
             return min(layB.w / paddedW)(layB.h / paddedH);
@@ -596,46 +521,9 @@ var buildCameraSpansFromIntervals = function (cfg) {
     return function (layout) {
         return function (totalDuration) {
             return function (intervals) {
-                var sortByPriority = Data_Array.sortBy(function (a) {
-                    return function (b) {
-                        return compare(b.priority)(a.priority);
-                    };
-                });
-                var pathBoundaries = function (iv) {
-                    if (iv.pathFollow instanceof Data_Maybe.Nothing) {
-                        return [  ];
-                    };
-                    if (iv.pathFollow instanceof Data_Maybe.Just) {
-                        return map(function (v) {
-                            return v.t;
-                        })(iv.pathFollow.value0.samples);
-                    };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 159, column 23 - line 161, column 34): " + [ iv.pathFollow.constructor.name ]);
-                };
-                var rawTimes = append([ 0.0, totalDuration ])(append(Data_Array.concatMap(function (i) {
+                var rawTimes = append([ 0.0, totalDuration ])(Data_Array.concatMap(function (i) {
                     return [ i.startT, i.endT ];
-                })(intervals))(Data_Array.concatMap(pathBoundaries)(intervals)));
-                var followEntry = function (a) {
-                    return function (b) {
-                        return function (fp) {
-                            return {
-                                kind: Move.value,
-                                startT: a,
-                                endT: b,
-                                fromCam: {
-                                    center: posAtTime(fp.samples)(a),
-                                    zoom: fp.zoom
-                                },
-                                toCam: {
-                                    center: posAtTime(fp.samples)(b),
-                                    zoom: fp.zoom
-                                },
-                                easing: Markgraf_Animation_Easing.Linear.value,
-                                focus: Data_Maybe.Nothing.value
-                            };
-                        };
-                    };
-                };
+                })(intervals));
                 var fitAllCam = bboxToCamera(cfg)(layout)(Markgraf_Animation_Layout.bbox(layout));
                 var boundaries = Data_Array.filter(function (t) {
                     return t >= 0.0 && t <= totalDuration;
@@ -644,11 +532,6 @@ var buildCameraSpansFromIntervals = function (cfg) {
                     return Data_Array.filter(function (iv) {
                         return iv.startT <= t && t < iv.endT;
                     })(intervals);
-                };
-                var followAt = function (t) {
-                    return Data_Array.head(Data_Array.mapMaybe(function (v) {
-                        return v.pathFollow;
-                    })(sortByPriority(activeAt(t))));
                 };
                 var topPri = function (t) {
                     return foldl(max1)(0)(map(function (v) {
@@ -675,43 +558,36 @@ var buildCameraSpansFromIntervals = function (cfg) {
                         if (Data_Boolean.otherwise) {
                             return bboxToCameraWithFloor(cfg)(layout)(Markgraf_Animation_Camera_Focus.combineBBoxes(bs))(0.0);
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 196, column 3 - line 198, column 74): " + [ bs.constructor.name, t.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 166, column 3 - line 168, column 74): " + [ bs.constructor.name, t.constructor.name ]);
                     };
                 };
                 var segmentFor = function (v) {
                     var midpoint = (v.value0 + v.value1) / 2.0;
-                    var $106 = v.value1 <= v.value0;
-                    if ($106) {
+                    var $87 = v.value1 <= v.value0;
+                    if ($87) {
                         return Data_Maybe.Nothing.value;
                     };
-                    var v1 = followAt(midpoint);
-                    if (v1 instanceof Data_Maybe.Just) {
-                        return new Data_Maybe.Just(followEntry(v.value0)(v.value1)(v1.value0));
-                    };
-                    if (v1 instanceof Data_Maybe.Nothing) {
-                        var v2 = winningStaticAt(midpoint);
-                        if (v2.length === 0) {
-                            return new Data_Maybe.Just({
-                                kind: Gap.value,
-                                startT: v.value0,
-                                endT: v.value1,
-                                fromCam: fitAllCam,
-                                toCam: fitAllCam,
-                                easing: cfg.easing,
-                                focus: Data_Maybe.Nothing.value
-                            });
-                        };
+                    var v1 = winningStaticAt(midpoint);
+                    if (v1.length === 0) {
                         return new Data_Maybe.Just({
-                            kind: Hold.value,
+                            kind: Gap.value,
                             startT: v.value0,
                             endT: v.value1,
-                            fromCam: heldCam(v2)(midpoint),
-                            toCam: heldCam(v2)(midpoint),
+                            fromCam: fitAllCam,
+                            toCam: fitAllCam,
                             easing: cfg.easing,
-                            focus: new Data_Maybe.Just(Markgraf_Animation_Camera_Focus.combineBBoxes(v2))
+                            focus: Data_Maybe.Nothing.value
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 173, column 10 - line 193, column 12): " + [ v1.constructor.name ]);
+                    return new Data_Maybe.Just({
+                        kind: Hold.value,
+                        startT: v.value0,
+                        endT: v.value1,
+                        fromCam: heldCam(v1)(midpoint),
+                        toCam: heldCam(v1)(midpoint),
+                        easing: cfg.easing,
+                        focus: new Data_Maybe.Just(Markgraf_Animation_Camera_Focus.combineBBoxes(v1))
+                    });
                 };
                 return insertLeadIns(cfg)(layout)(fitAllCam)(coalesceHolds(fillInTweens(cfg)(layout)(fitAllCam)(Data_Array.mapMaybe(segmentFor)(Data_Array.zip(boundaries)(Data_Array.drop(1)(boundaries))))));
             };
@@ -738,7 +614,7 @@ var cameraAt = function (cfg) {
                         return v2.fromCam;
                     })(Data_Array.head(spans)));
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 385, column 31 - line 390, column 37): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 318, column 31 - line 323, column 37): " + [ v.constructor.name ]);
             };
         };
     };
@@ -796,12 +672,9 @@ export {
     buildCameraSpans,
     buildCameraSpansFromIntervals,
     cameraAt,
-    posAtTime,
     computeZoom,
     computeZoomCover,
     clampZoomWithFloor,
-    readableZoomFloor,
-    readableZoomFloorForLayout,
     bboxToActionCamera,
     expDecayCamera,
     bboxToCamera,

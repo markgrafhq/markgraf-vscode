@@ -57,17 +57,22 @@ var lineIsSymbol = {
     }
 };
 var showRecord1 = /* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(characterIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(lineIsSymbol)(Data_Show.showInt))(Data_Show.showInt));
+var showRecord2 = /* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(endIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(startIsSymbol)(showRecord1))(showRecord1));
 var eqRec = /* #__PURE__ */ Data_Eq.eqRec();
 var eqRowCons = /* #__PURE__ */ Data_Eq.eqRowCons(Data_Eq.eqRowNil)();
 var eqRec1 = /* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(lineIsSymbol)(Data_Eq.eqInt))()(characterIsSymbol)(Data_Eq.eqInt));
+var eqRec2 = /* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(startIsSymbol)(eqRec1))()(endIsSymbol)(eqRec1));
 var discard2 = /* #__PURE__ */ discard(Effect_Aff.bindAff);
 var shouldEqual1 = /* #__PURE__ */ shouldEqual(Data_Show.showInt)(Data_Eq.eqInt);
 var shouldEqual2 = /* #__PURE__ */ shouldEqual(/* #__PURE__ */ Data_Show.showArray(showRecord1))(/* #__PURE__ */ Data_Eq.eqArray(eqRec1));
 var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
+var shouldEqual3 = /* #__PURE__ */ shouldEqual(/* #__PURE__ */ Data_Show.showArray(showRecord2))(/* #__PURE__ */ Data_Eq.eqArray(eqRec2));
 var validSource = "seed 1\x0akeyframe first {\x0a  +node a \"A\"\x0a}\x0a";
+var unknownSingleLetterEndpointSource = "seed 1\x0akeyframe first {\x0a  +node api \"API\"\x0a  +edge api d\x0a}\x0a";
+var unknownEdgeEndpointSource = "seed 1\x0akeyframe first {\x0a  +node a \"A\"\x0a  +edge a b\x0a}\x0a";
 var semanticInvalidSource = "seed 1\x0akeyframe first {\x0a  -node missing\x0a}\x0a";
 var invalidSource = "seed 1\x0a  nope\x0a";
-var main = /* #__PURE__ */ Effect_Aff.launchAff_(/* #__PURE__ */ Test_Spec_Runner.runSpec()([ Test_Spec_Reporter_Console.consoleReporter ])(/* #__PURE__ */ Test_Spec.describe(Data_Identity.monadIdentity)("markgraf diagnostics")(/* #__PURE__ */ discard1(/* #__PURE__ */ it("emits no diagnostics for valid markgraf")(/* #__PURE__ */ shouldEqual(/* #__PURE__ */ Data_Show.showArray(/* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(messageIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(rangeIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(severityIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(sourceIsSymbol)(Data_Show.showString))(Data_Show.showInt))(/* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(endIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(startIsSymbol)(showRecord1))(showRecord1))))(Data_Show.showString))))(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(sourceIsSymbol)(Data_Eq.eqString))()(severityIsSymbol)(Data_Eq.eqInt))()(rangeIsSymbol)(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(startIsSymbol)(eqRec1))()(endIsSymbol)(eqRec1))))()(messageIsSymbol)(Data_Eq.eqString))))(/* #__PURE__ */ Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(validSource))([  ])))(function () {
+var main = /* #__PURE__ */ Effect_Aff.launchAff_(/* #__PURE__ */ Test_Spec_Runner.runSpec()([ Test_Spec_Reporter_Console.consoleReporter ])(/* #__PURE__ */ Test_Spec.describe(Data_Identity.monadIdentity)("markgraf diagnostics")(/* #__PURE__ */ discard1(/* #__PURE__ */ it("emits no diagnostics for valid markgraf")(/* #__PURE__ */ shouldEqual(/* #__PURE__ */ Data_Show.showArray(/* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(messageIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(rangeIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(severityIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(sourceIsSymbol)(Data_Show.showString))(Data_Show.showInt))(showRecord2))(Data_Show.showString))))(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(sourceIsSymbol)(Data_Eq.eqString))()(severityIsSymbol)(Data_Eq.eqInt))()(rangeIsSymbol)(eqRec2))()(messageIsSymbol)(Data_Eq.eqString))))(/* #__PURE__ */ Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(validSource))([  ])))(function () {
     return discard1(it("emits parser diagnostics with zero-based LSP positions")((function () {
         var diagnostics = Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(invalidSource);
         return discard2(shouldEqual1(Data_Array.length(diagnostics))(1))(function () {
@@ -79,7 +84,7 @@ var main = /* #__PURE__ */ Effect_Aff.launchAff_(/* #__PURE__ */ Test_Spec_Runne
             } ]);
         });
     })()))(function () {
-        return it("emits semantic diagnostics with source positions")((function () {
+        return discard1(it("emits semantic diagnostics with source positions")((function () {
             var diagnostics = Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(semanticInvalidSource);
             return discard2(shouldEqual1(Data_Array.length(diagnostics))(1))(function () {
                 return shouldEqual2(map(function (v) {
@@ -89,13 +94,51 @@ var main = /* #__PURE__ */ Effect_Aff.launchAff_(/* #__PURE__ */ Test_Spec_Runne
                     character: 2
                 } ]);
             });
-        })());
+        })()))(function () {
+            return discard1(it("squiggles the unknown edge endpoint")((function () {
+                var diagnostics = Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(unknownEdgeEndpointSource);
+                return discard2(shouldEqual1(Data_Array.length(diagnostics))(1))(function () {
+                    return shouldEqual3(map(function (v) {
+                        return v.range;
+                    })(diagnostics))([ {
+                        start: {
+                            line: 3,
+                            character: 10
+                        },
+                        end: {
+                            line: 3,
+                            character: 11
+                        }
+                    } ]);
+                });
+            })()))(function () {
+                return it("does not match unknown node names inside keywords")((function () {
+                    var diagnostics = Markgraf_LanguageServer_Diagnostics.diagnosticsFromSource(unknownSingleLetterEndpointSource);
+                    return discard2(shouldEqual1(Data_Array.length(diagnostics))(1))(function () {
+                        return shouldEqual3(map(function (v) {
+                            return v.range;
+                        })(diagnostics))([ {
+                            start: {
+                                line: 3,
+                                character: 12
+                            },
+                            end: {
+                                line: 3,
+                                character: 13
+                            }
+                        } ]);
+                    });
+                })());
+            });
+        });
     });
 }))));
 export {
     main,
     validSource,
     invalidSource,
-    semanticInvalidSource
+    semanticInvalidSource,
+    unknownEdgeEndpointSource,
+    unknownSingleLetterEndpointSource
 };
 //# sourceMappingURL=index.js.map

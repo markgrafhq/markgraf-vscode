@@ -3,43 +3,80 @@ import * as Data_Boolean from "../Data.Boolean/index.js";
 import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Ord from "../Data.Ord/index.js";
 import * as Markgraf_Animation_Layout from "../Markgraf.Animation.Layout/index.js";
-var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
 var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
+var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
 var un = /* #__PURE__ */ Data_Newtype.un();
 var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
+var WorldY = function (x) {
+    return x;
+};
+var WorldX = function (x) {
+    return x;
+};
+var WorldWidth = function (x) {
+    return x;
+};
+var WorldHeight = function (x) {
+    return x;
+};
+var WorldViewport = function (x) {
+    return x;
+};
+var newtypeWorldY_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeWorldX_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeWorldWidth_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeWorldViewport_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeWorldHeight_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
 var zoomForFrame = function (layout) {
     return function (frameW) {
         return function (frameH) {
             var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $13 = frameW <= 0.0 || (frameH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($13) {
+            var $18 = frameW <= 0.0 || (frameH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
+            if ($18) {
                 return 1.0;
             };
-            return max(layB.w / frameW)(layB.h / frameH);
+            return min(layB.w / frameW)(layB.h / frameH);
         };
     };
 };
 var zoomEpsilon = 1.0e-4;
+var viewportFromCenter = function (center) {
+    return function (frame) {
+        return {
+            x: center.x - frame.w / 2.0,
+            y: center.y - frame.h / 2.0,
+            w: frame.w,
+            h: frame.h
+        };
+    };
+};
 var smallerFrame = function (a) {
     return function (b) {
-        var $14 = a.w * a.h <= b.w * b.h;
-        if ($14) {
+        var $19 = a.w * a.h <= b.w * b.h;
+        if ($19) {
             return a;
         };
         return b;
-    };
-};
-var screenScaleForLayout = function (cfg) {
-    return function (layout) {
-        var layB = Markgraf_Animation_Layout.bbox(layout);
-        var scaleX = cfg.viewportWidthPx / max(zoomEpsilon)(layB.w);
-        var scaleY = cfg.viewportHeightPx / max(zoomEpsilon)(layB.h);
-        var rawScale = min(scaleX)(scaleY);
-        var $15 = rawScale <= 0.0;
-        if ($15) {
-            return 1.0;
-        };
-        return rawScale;
     };
 };
 var scaleFrameToFit = function (frame) {
@@ -49,24 +86,6 @@ var scaleFrameToFit = function (frame) {
             w: frame.w * scale,
             h: frame.h * scale
         };
-    };
-};
-var readableZoomFloorForLayout = function (cfg) {
-    return function (layout) {
-        var screenScale = screenScaleForLayout(cfg)(layout);
-        var labelFloor = (function () {
-            if (cfg.minLabelPx <= 0.0) {
-                return 0.0;
-            };
-            if (screenScale <= 0.0) {
-                return cfg.minLabelPx / max(zoomEpsilon)(cfg.labelBasePx);
-            };
-            if (Data_Boolean.otherwise) {
-                return cfg.minLabelPx / (max(zoomEpsilon)(cfg.labelBasePx) * screenScale);
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Camera.Composition (line 83, column 3 - line 86, column 83): " + [  ]);
-        })();
-        return labelFloor;
     };
 };
 var readableFrameForLayout = function (cfg) {
@@ -80,8 +99,8 @@ var readableFrameForLayout = function (cfg) {
                     h: b.h
                 };
             })();
-            var $16 = cfg.viewportWidthPx <= 0.0 || (cfg.viewportHeightPx <= 0.0 || (targetPx <= 0.0 || cfg.labelBasePx <= 0.0));
-            if ($16) {
+            var $20 = cfg.viewportWidthPx <= 0.0 || (cfg.viewportHeightPx <= 0.0 || (targetPx <= 0.0 || cfg.labelBasePx <= 0.0));
+            if ($20) {
                 return fallback;
             };
             return {
@@ -89,12 +108,6 @@ var readableFrameForLayout = function (cfg) {
                 h: cfg.viewportHeightPx * worldPerCssPx
             };
         };
-    };
-};
-var zoomForReadableFrame = function (cfg) {
-    return function (layout) {
-        var frame = readableFrameForLayout(cfg)(layout)(cfg.minLabelPx);
-        return zoomForFrame(layout)(frame.w)(frame.h);
     };
 };
 var placementScale = function (placement) {
@@ -122,7 +135,7 @@ var readableFrameForPlacement = function (cfg) {
                     h: cfg.viewportHeightPx * worldPerCssPx
                 };
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Camera.Composition (line 206, column 1 - line 206, column 109): " + [ cfg.constructor.name, placement.constructor.name, targetPx.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Camera.Composition (line 162, column 1 - line 162, column 109): " + [ cfg.constructor.name, placement.constructor.name, targetPx.constructor.name ]);
         };
     };
 };
@@ -136,96 +149,8 @@ var growBBox = function (amount) {
         };
     };
 };
-var framingPolicyForPlacement = function (cfg) {
-    return function (placement) {
-        return {
-            paddingWorld: cfg.padding * placementScale(placement)
-        };
-    };
-};
 var defaultMaxLabelPx = 40.0;
 var defaultDiveLabelPx = 7.0;
-var readabilityPolicyFromConfig = function (cfg) {
-    return {
-        labelTargetPx: (function () {
-            var $20 = cfg.diveLabelPx <= 0.0;
-            if ($20) {
-                return defaultDiveLabelPx;
-            };
-            return cfg.diveLabelPx;
-        })(),
-        labelBasePx: cfg.labelBasePx,
-        labelMaxPx: defaultMaxLabelPx
-    };
-};
-var computeZoom = function (layout) {
-    return function (box) {
-        return function (padding) {
-            var paddedW = box.w + padding * 2.0;
-            var paddedH = box.h + padding * 2.0;
-            var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $21 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($21) {
-                return 1.0;
-            };
-            return min(layB.w / paddedW)(layB.h / paddedH);
-        };
-    };
-};
-var composeDiveLanding = function (cfg) {
-    return function (rootLayout) {
-        return function (childLayout) {
-            return function (placement) {
-                return function (nodeCount) {
-                    var readability = readabilityPolicyFromConfig(cfg);
-                    var readableFrame = readableFrameForPlacement(cfg)(placement)(readability.labelTargetPx);
-                    var readabilityZoom = zoomForFrame(rootLayout)(readableFrame.w)(readableFrame.h);
-                    var framing = framingPolicyForPlacement(cfg)(placement);
-                    var footprint = Markgraf_Animation_Layout.placeBBox(placement)(Markgraf_Animation_Layout.bbox(childLayout));
-                    var containZoom = computeZoom(rootLayout)(footprint)(framing.paddingWorld);
-                    var center = {
-                        x: footprint.x + footprint.w / 2.0,
-                        y: footprint.y + footprint.h / 2.0
-                    };
-                    var ceilingFrame = readableFrameForPlacement(cfg)(placement)(readability.labelMaxPx);
-                    var comfortableFrame = (function () {
-                        var $22 = nodeCount <= 1;
-                        if ($22) {
-                            return smallerFrame(readableFrame)(ceilingFrame);
-                        };
-                        return readableFrame;
-                    })();
-                    var landingFrame = scaleFrameToFit(comfortableFrame)(growBBox(framing.paddingWorld)(footprint));
-                    var landingZoom = zoomForFrame(rootLayout)(landingFrame.w)(landingFrame.h);
-                    var labelCeilingZoom = zoomForFrame(rootLayout)(ceilingFrame.w)(ceilingFrame.h);
-                    return {
-                        footprint: footprint,
-                        center: center,
-                        containZoom: containZoom,
-                        readabilityZoom: readabilityZoom,
-                        labelCeilingZoom: labelCeilingZoom,
-                        landingZoom: landingZoom
-                    };
-                };
-            };
-        };
-    };
-};
-var diveLandingCamera = function (cfg) {
-    return function (rootLayout) {
-        return function (childLayout) {
-            return function (placement) {
-                return function (nodeCount) {
-                    var composition = composeDiveLanding(cfg)(rootLayout)(childLayout)(placement)(nodeCount);
-                    return {
-                        center: composition.center,
-                        zoom: composition.landingZoom
-                    };
-                };
-            };
-        };
-    };
-};
 var centerOneAxis = function (worldMin) {
     return function (worldSize) {
         return function (focusMin) {
@@ -240,12 +165,12 @@ var centerOneAxis = function (worldMin) {
                     var focusHigh = focusMin + viewSize / 2.0;
                     var high = min(worldHigh)(focusHigh);
                     var focusCenter = focusMin + focusSize / 2.0;
-                    var $23 = viewSize >= worldSize;
-                    if ($23) {
+                    var $24 = viewSize >= worldSize;
+                    if ($24) {
                         return worldCenter;
                     };
-                    var $24 = focusHigh < focusLow;
-                    if ($24) {
+                    var $25 = focusHigh < focusLow;
+                    if ($25) {
                         return clamp(worldLow)(worldHigh)(focusCenter);
                     };
                     return clamp(low)(high)(worldCenter);
@@ -267,25 +192,83 @@ var centerForFrame = function (layout) {
         };
     };
 };
+var cameraFromViewport = function (layout) {
+    return function (viewport) {
+        var v = un(WorldViewport)(viewport);
+        var w = un(WorldWidth)(v.w);
+        var x = un(WorldX)(v.x);
+        var y = un(WorldY)(v.y);
+        var h = un(WorldHeight)(v.h);
+        return {
+            center: {
+                x: x + w / 2.0,
+                y: y + h / 2.0
+            },
+            zoom: zoomForFrame(layout)(w)(h)
+        };
+    };
+};
 var composeActionFraming = function (cfg) {
     return function (layout) {
         return function (focus) {
-            var readableZoom = zoomForReadableFrame(cfg)(layout);
             var readableFrame = readableFrameForLayout(cfg)(layout)(cfg.minLabelPx);
             var paddedFocus = growBBox(cfg.padding)(focus);
-            var overviewZoom = computeZoom(layout)(Markgraf_Animation_Layout.bbox(layout))(0.0);
             var frame = scaleFrameToFit(readableFrame)(paddedFocus);
-            var focusFitZoom = computeZoom(layout)(focus)(cfg.padding);
-            var zoom = min(zoomForFrame(layout)(frame.w)(frame.h))(focusFitZoom);
             var center = centerForFrame(layout)(paddedFocus)(frame.w)(frame.h);
+            var viewport = viewportFromCenter(center)(frame);
             return {
                 focus: focus,
                 paddedFocus: paddedFocus,
-                center: center,
-                overviewZoom: overviewZoom,
-                readableZoom: readableZoom,
-                focusFitZoom: focusFitZoom,
-                zoom: zoom
+                viewport: viewport,
+                camera: cameraFromViewport(layout)(viewport)
+            };
+        };
+    };
+};
+var composeDiveLanding = function (cfg) {
+    return function (rootLayout) {
+        return function (childLayout) {
+            return function (placement) {
+                return function (nodeCount) {
+                    var paddingWorld = cfg.padding * placementScale(placement);
+                    var footprint = Markgraf_Animation_Layout.placeBBox(placement)(Markgraf_Animation_Layout.bbox(childLayout));
+                    var paddedFootprint = growBBox(paddingWorld)(footprint);
+                    var diveLabelTarget = (function () {
+                        var $26 = cfg.diveLabelPx <= 0.0;
+                        if ($26) {
+                            return defaultDiveLabelPx;
+                        };
+                        return cfg.diveLabelPx;
+                    })();
+                    var readableFrame = readableFrameForPlacement(cfg)(placement)(diveLabelTarget);
+                    var ceilingFrame = readableFrameForPlacement(cfg)(placement)(defaultMaxLabelPx);
+                    var comfortableFrame = (function () {
+                        var $27 = nodeCount <= 1;
+                        if ($27) {
+                            return smallerFrame(readableFrame)(ceilingFrame);
+                        };
+                        return readableFrame;
+                    })();
+                    var frame = scaleFrameToFit(comfortableFrame)(paddedFootprint);
+                    var center = centerForFrame(rootLayout)(paddedFootprint)(frame.w)(frame.h);
+                    var viewport = viewportFromCenter(center)(frame);
+                    return {
+                        footprint: footprint,
+                        viewport: viewport,
+                        camera: cameraFromViewport(rootLayout)(viewport)
+                    };
+                };
+            };
+        };
+    };
+};
+var diveLandingCamera = function (cfg) {
+    return function (rootLayout) {
+        return function (childLayout) {
+            return function (placement) {
+                return function (nodeCount) {
+                    return (composeDiveLanding(cfg)(rootLayout)(childLayout)(placement)(nodeCount)).camera;
+                };
             };
         };
     };
@@ -293,23 +276,24 @@ var composeActionFraming = function (cfg) {
 var actionCamera = function (cfg) {
     return function (layout) {
         return function (focus) {
-            var composition = composeActionFraming(cfg)(layout)(focus);
-            return {
-                center: composition.center,
-                zoom: composition.zoom
-            };
+            return (composeActionFraming(cfg)(layout)(focus)).camera;
         };
     };
 };
 export {
-    defaultDiveLabelPx,
-    defaultMaxLabelPx,
-    readabilityPolicyFromConfig,
-    framingPolicyForPlacement,
-    readableZoomFloorForLayout,
+    WorldX,
+    WorldY,
+    WorldWidth,
+    WorldHeight,
+    WorldViewport,
     composeActionFraming,
     actionCamera,
     composeDiveLanding,
-    diveLandingCamera
+    diveLandingCamera,
+    newtypeWorldX_,
+    newtypeWorldY_,
+    newtypeWorldWidth_,
+    newtypeWorldHeight_,
+    newtypeWorldViewport_
 };
 //# sourceMappingURL=index.js.map

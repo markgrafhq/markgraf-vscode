@@ -264,7 +264,7 @@ var showDiveDir = {
         if (v instanceof DiveOut) {
             return "DiveOut";
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 147, column 1 - line 149, column 27): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 148, column 1 - line 150, column 27): " + [ v.constructor.name ]);
     }
 };
 var eqScheduleError = {
@@ -374,8 +374,7 @@ var windowsToCameraIntervals = function (_cfg) {
                         startT: w.startT,
                         endT: w.endT,
                         bbox: b,
-                        priority: 1,
-                        pathFollow: Data_Maybe.Nothing.value
+                        priority: 1
                     };
                 };
             };
@@ -406,7 +405,7 @@ var windowsToCameraIntervals = function (_cfg) {
                 if (w.target instanceof FillWindow) {
                     return new Data_Maybe.Just(staticInterval(w)(Markgraf_Animation_Camera_Focus.expandedNodesBBox(layout)(endpoints)(Data_Set.singleton(w.target.value1))));
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 675, column 22 - line 681, column 85): " + [ w.target.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 691, column 22 - line 697, column 85): " + [ w.target.constructor.name ]);
             };
             return Data_Array.mapMaybe(windowInterval);
         };
@@ -418,8 +417,8 @@ var tokenTiming = function (timing) {
             return function (s) {
                 var worldPathLength = Data_Maybe.maybe(0.0)(Markgraf_Animation_Layout.pathLength)(lookup(s.edge)(layout.edges));
                 var travelDur = (function () {
-                    var $250 = timing.tokenSpeed <= 0.0;
-                    if ($250) {
+                    var $251 = timing.tokenSpeed <= 0.0;
+                    if ($251) {
                         return 0.0;
                     };
                     return worldPathLength / timing.tokenSpeed;
@@ -435,15 +434,15 @@ var tokenTiming = function (timing) {
                 return {
                     duration: duration,
                     holdPre: (function () {
-                        var $251 = duration <= 0.0;
-                        if ($251) {
+                        var $252 = duration <= 0.0;
+                        if ($252) {
                             return 0.0;
                         };
                         return hold.pre / duration;
                     })(),
                     holdPost: (function () {
-                        var $252 = duration <= 0.0;
-                        if ($252) {
+                        var $253 = duration <= 0.0;
+                        if ($253) {
                             return 0.0;
                         };
                         return hold.post / duration;
@@ -470,7 +469,7 @@ var tokenHolds = function (timing) {
                     if (p.kind instanceof Markgraf_Animation_Spec.FillNodeWithoutTransition) {
                         return false;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 972, column 35 - line 974, column 41): " + [ p.kind.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 984, column 35 - line 986, column 41): " + [ p.kind.constructor.name ]);
                 };
             };
         };
@@ -483,7 +482,7 @@ var tokenHolds = function (timing) {
                     if (n.kind instanceof Markgraf_Animation_Spec.FillNodeWithoutTransition) {
                         return false;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 979, column 32 - line 981, column 41): " + [ n.kind.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 991, column 32 - line 993, column 41): " + [ n.kind.constructor.name ]);
                 };
             };
         };
@@ -507,7 +506,7 @@ var tokenHolds = function (timing) {
             if (e.kind instanceof Markgraf_Animation_Spec.FillNodeWithoutTransition) {
                 return Data_Maybe.Nothing.value;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 962, column 15 - line 965, column 43): " + [ e.kind.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 974, column 15 - line 977, column 43): " + [ e.kind.constructor.name ]);
         };
         return fromFoldable(Data_Array.mapMaybe(holdFor)(events));
     };
@@ -527,7 +526,7 @@ var toWindow = function (r) {
             target: new FillWindow(r.event.id, r.event.kind.value0.node, r.event.kind.value0.labels)
         });
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 917, column 14 - line 927, column 6): " + [ r.event.kind.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 929, column 14 - line 939, column 6): " + [ r.event.kind.constructor.name ]);
 };
 var sortWindows = /* #__PURE__ */ Data_Array.sortBy(/* #__PURE__ */ comparing(function (v) {
     return v.startT;
@@ -558,7 +557,7 @@ var segmentEndingAt = function (flat) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return segmentForPath(flat)(path);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 590, column 3 - line 599, column 40): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 607, column 3 - line 616, column 40): " + [ v.constructor.name ]);
             };
         };
     };
@@ -580,7 +579,7 @@ var sceneEndKeyframe = function (carried) {
         if (span.scene instanceof Markgraf_Animation_Spec.ExitNode) {
             return carried;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1066, column 33 - line 1071, column 22): " + [ span.scene.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1078, column 33 - line 1083, column 22): " + [ span.scene.constructor.name ]);
     };
 };
 var sceneBaselineIntervals = function (layout) {
@@ -601,7 +600,7 @@ var sceneBaselineIntervals = function (layout) {
                         shape: Markgraf_Graph.Rectangle.value
                     };
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 655, column 19 - line 657, column 79): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 671, column 19 - line 673, column 79): " + [ v.constructor.name ]);
             };
             var kfNodes = function (kid) {
                 return Data_Maybe.maybe(Data_Set.empty)(function (v) {
@@ -624,7 +623,7 @@ var sceneBaselineIntervals = function (layout) {
                 if (v instanceof Markgraf_Animation_Spec.ExitNode) {
                     return Data_Set.empty;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 641, column 18 - line 646, column 24): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 657, column 18 - line 662, column 24): " + [ v.constructor.name ]);
             };
             var initial = function (n) {
                 return {
@@ -674,11 +673,10 @@ var sceneBaselineIntervals = function (layout) {
                         startT: span.startT,
                         endT: span.endT,
                         bbox: v.value0,
-                        priority: 0,
-                        pathFollow: Data_Maybe.Nothing.value
+                        priority: 0
                     });
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 631, column 24 - line 639, column 8): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 648, column 24 - line 655, column 8): " + [ v.constructor.name ]);
             };
             return Data_Array.mapMaybe(sceneInterval);
         };
@@ -721,9 +719,9 @@ var retractFrom = function (edgeEndpoints) {
                 if (!sourceLeaving && !targetLeaving) {
                     return Markgraf_Animation_State.FromTarget.value;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 898, column 7 - line 902, column 35): " + [ sourceLeaving.constructor.name, targetLeaving.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 910, column 7 - line 914, column 35): " + [ sourceLeaving.constructor.name, targetLeaving.constructor.name ]);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 891, column 46 - line 902, column 35): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 903, column 46 - line 914, column 35): " + [ v.constructor.name ]);
         };
     };
 };
@@ -767,7 +765,7 @@ var resolveOne = function (timing) {
                                 return eq1(r.event.id)(e.event.when.value0);
                             })(resolved));
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1000, column 12 - line 1004, column 79): " + [ e.event.when.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1012, column 12 - line 1016, column 79): " + [ e.event.when.constructor.name ]);
                     })();
                     var v = (function () {
                         if (e.event.kind instanceof Markgraf_Animation_Spec.SendToken) {
@@ -780,7 +778,7 @@ var resolveOne = function (timing) {
                                 holdPost: 0.0
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1006, column 37 - line 1008, column 90): " + [ e.event.kind.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1018, column 37 - line 1020, column 90): " + [ e.event.kind.constructor.name ]);
                     })();
                     return Data_Array.snoc(resolved)({
                         startT: startT,
@@ -839,7 +837,7 @@ var keyframeAt = function (sch) {
             if (v instanceof Data_Maybe.Nothing) {
                 return new AtKeyframe(sch.initialKeyframe);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1051, column 30 - line 1053, column 48): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1063, column 30 - line 1065, column 48): " + [ v.constructor.name ]);
         };
         if (Data_Boolean.otherwise) {
             var v = Data_Array.find(function (s) {
@@ -861,14 +859,14 @@ var keyframeAt = function (sch) {
                 if (v.value0.scene instanceof Markgraf_Animation_Spec.ExitNode) {
                     return new AtKeyframe(sch.initialKeyframe);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1055, column 20 - line 1060, column 51): " + [ v.value0.scene.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1067, column 20 - line 1072, column 51): " + [ v.value0.scene.constructor.name ]);
             };
             if (v instanceof Data_Maybe.Nothing) {
                 return new AtKeyframe(sch.initialKeyframe);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1054, column 17 - line 1061, column 48): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1066, column 17 - line 1073, column 48): " + [ v.constructor.name ]);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1048, column 1 - line 1048, column 62): " + [ sch.constructor.name, t.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1060, column 1 - line 1060, column 62): " + [ sch.constructor.name, t.constructor.name ]);
     };
 };
 var eventRefs = function (e) {
@@ -884,7 +882,7 @@ var eventRefs = function (e) {
     if (e.when instanceof Markgraf_Animation_Spec.With) {
         return [ e.when.value0 ];
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 747, column 15 - line 751, column 22): " + [ e.when.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 759, column 15 - line 763, column 22): " + [ e.when.constructor.name ]);
 };
 var emptyKf = /* #__PURE__ */ (function () {
     return {
@@ -919,8 +917,8 @@ var edgeTraversalDuration = function (speed) {
             return function (eid) {
                 var v = lookup(eid)(layout.edges);
                 if (v instanceof Data_Maybe.Just) {
-                    var $323 = speed <= 0.0;
-                    if ($323) {
+                    var $324 = speed <= 0.0;
+                    if ($324) {
                         return minDur;
                     };
                     return max(minDur)(Markgraf_Animation_Layout.pathLength(v.value0) / speed);
@@ -928,7 +926,7 @@ var edgeTraversalDuration = function (speed) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return minDur;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1042, column 3 - line 1046, column 22): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 1054, column 3 - line 1058, column 22): " + [ v.constructor.name ]);
             };
         };
     };
@@ -978,7 +976,7 @@ var structuralPlan = function (timing) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return false;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 849, column 20 - line 851, column 23): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 861, column 20 - line 863, column 23): " + [ v.constructor.name ]);
                         };
                         return Data_Array.any(incident)(toUnfoldable(d.leaving.edges));
                     };
@@ -992,8 +990,8 @@ var structuralPlan = function (timing) {
                     var plopInW = map(mkPlopIn)(toUnfoldable(d.entering.nodes));
                     var retractMaxEnd = foldl(max)(0.0)(map(retractDur)(toUnfoldable(d.leaving.edges)));
                     var plopOutStart = function (nid) {
-                        var $329 = hasIncidentLeavingEdge(nid);
-                        if ($329) {
+                        var $330 = hasIncidentLeavingEdge(nid);
+                        if ($330) {
                             return retractMaxEnd;
                         };
                         return 0.0;
@@ -1027,7 +1025,7 @@ var structuralPlan = function (timing) {
                         if (v instanceof Data_Maybe.Nothing) {
                             return timing.gap;
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 886, column 12 - line 888, column 26): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 898, column 12 - line 900, column 26): " + [ v.constructor.name ]);
                     })();
                     return {
                         duration: maxEnd,
@@ -1071,12 +1069,12 @@ var duplicateIds = function (xs) {
         if (v instanceof Data_Maybe.Nothing) {
             return "";
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 742, column 13 - line 744, column 26): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 754, column 13 - line 756, column 26): " + [ v.constructor.name ]);
     };
     var groups = group(sort1(xs));
     return Data_Array.mapMaybe(function (g) {
-        var $335 = Data_Array.length(fromFoldable2(g)) > 1;
-        if ($335) {
+        var $336 = Data_Array.length(fromFoldable2(g)) > 1;
+        if ($336) {
             return new Data_Maybe.Just(head1(g));
         };
         return Data_Maybe.Nothing.value;
@@ -1115,9 +1113,9 @@ var detectCycle = function (events) {
                     if (v instanceof Data_Maybe.Just) {
                         return Data_Array.concatMap(walk(insert(eid)(visited))(insert(eid)(path)))(v.value0);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 760, column 21 - line 762, column 90): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 772, column 21 - line 774, column 90): " + [ v.constructor.name ]);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 757, column 5 - line 762, column 90): " + [ visited.constructor.name, path.constructor.name, eid.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 769, column 5 - line 774, column 90): " + [ visited.constructor.name, path.constructor.name, eid.constructor.name ]);
             };
         };
     };
@@ -1173,7 +1171,7 @@ var sceneWindows = function (timing) {
                     if (span.scene instanceof Markgraf_Animation_Spec.ExitNode) {
                         return [  ];
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 801, column 53 - line 806, column 17): " + [ span.scene.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 813, column 53 - line 818, column 17): " + [ span.scene.constructor.name ]);
                 };
             };
         };
@@ -1212,7 +1210,7 @@ var sceneDuration = function (timing) {
                     if (v instanceof Markgraf_Animation_Spec.ExitNode) {
                         return 0.0;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 767, column 45 - line 772, column 18): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 779, column 45 - line 784, column 18): " + [ v.constructor.name ]);
                 };
             };
         };
@@ -1234,7 +1232,7 @@ var flattenLevel = function (timing) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return "";
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 330, column 15 - line 332, column 29): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 347, column 15 - line 349, column 29): " + [ v.constructor.name ]);
                         })();
                         var initialAcc = function (t) {
                             return {
@@ -1264,8 +1262,8 @@ var flattenLevel = function (timing) {
                             };
                             return {
                                 segments: (function () {
-                                    var $354 = Data_Array["null"](acc.runSpans);
-                                    if ($354) {
+                                    var $355 = Data_Array["null"](acc.runSpans);
+                                    if ($355) {
                                         return acc.segments;
                                     };
                                     return Data_Array.snoc(acc.segments)(seg);
@@ -1378,7 +1376,7 @@ var clipSpanTo = function (lo) {
                     endT: min(hi)(span.endT)
                 });
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 520, column 1 - line 520, column 65): " + [ lo.constructor.name, hi.constructor.name, span.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 537, column 1 - line 537, column 65): " + [ lo.constructor.name, hi.constructor.name, span.constructor.name ]);
         };
     };
 };
@@ -1398,7 +1396,7 @@ var parentRestCamera = function (cameraConfig) {
             if (Data_Boolean.otherwise) {
                 return childHomeCamera(cameraConfig)(rootLayout)(seg);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 455, column 1 - line 455, column 69): " + [ cameraConfig.constructor.name, rootLayout.constructor.name, seg.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 472, column 1 - line 472, column 69): " + [ cameraConfig.constructor.name, rootLayout.constructor.name, seg.constructor.name ]);
         };
     };
 };
@@ -1418,7 +1416,7 @@ var diveCameraSpans = function (cameraConfig) {
                                 if (d.direction instanceof DiveOut) {
                                     return new Data_Tuple.Tuple(camIn, camOut);
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 568, column 26 - line 570, column 35): " + [ d.direction.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 585, column 26 - line 587, column 35): " + [ d.direction.constructor.name ]);
                             })();
                             return pure({
                                 startT: d.startT,
@@ -1438,8 +1436,8 @@ var diveCameraSpans = function (cameraConfig) {
 };
 var checkKf = function (kfs) {
     return function (kid) {
-        var $367 = member2(kid)(kfs);
-        if ($367) {
+        var $368 = member2(kid)(kfs);
+        if ($368) {
             return Data_Maybe.Nothing.value;
         };
         return new Data_Maybe.Just(new UnknownKeyframe(kid));
@@ -1462,14 +1460,14 @@ var validateScene = function (kfs) {
         if (v instanceof Markgraf_Animation_Spec.ExitNode) {
             return [  ];
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 709, column 21 - line 719, column 17): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 721, column 21 - line 731, column 17): " + [ v.constructor.name ]);
     };
 };
 var validate = function (kfs) {
     return function (scenes) {
         var errs = Data_Array.concatMap(validateScene(kfs))(scenes);
-        var $373 = Data_Array["null"](errs);
-        if ($373) {
+        var $374 = Data_Array["null"](errs);
+        if ($374) {
             return new Data_Either.Right(Data_Unit.unit);
         };
         return new Data_Either.Left(errs);
@@ -1491,7 +1489,7 @@ var anchorFirstSpan = function (home) {
                 fromCam: home
             })(v.value0.tail);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 529, column 30 - line 531, column 63): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 546, column 30 - line 548, column 63): " + [ v.constructor.name ]);
     };
 };
 var buildLevelCameraSpans = function (cameraConfig) {
@@ -1523,11 +1521,20 @@ var buildLevelCameraSpans = function (cameraConfig) {
                         };
                         return anchorFirstSpan((homeHold(seg)).fromCam)(v);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 480, column 3 - line 484, column 62): " + [ seg.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 497, column 3 - line 501, column 62): " + [ seg.constructor.name ]);
                 };
                 return Data_Array.sortBy(comparing(function (v) {
                     return v.startT;
                 }))(Data_Array.concatMap(spansFor)(flat.segments));
+            };
+        };
+    };
+};
+var cameraSpansFor = function (cameraConfig) {
+    return function (layout) {
+        return function (kfs) {
+            return function (flat) {
+                return append(diveCameraSpans(cameraConfig)(layout)(kfs)(flat))(buildLevelCameraSpans(cameraConfig)(layout)(kfs)(flat));
             };
         };
     };
@@ -1544,7 +1551,7 @@ var precomputeTreeWith = function (cameraConfig) {
                     var kfs = Markgraf_Animation_Spec.keyframeById(animation);
                     return bind1(validate(kfs)(animation.scenes))(function () {
                         var flat = flattenLevel(timing)(levelTree)(levelTree)([  ])(animation)(0.0);
-                        var cameraSpans = append(diveCameraSpans(cameraConfig)(levelTree.layout)(kfs)(flat))(buildLevelCameraSpans(cameraConfig)(levelTree.layout)(kfs)(flat));
+                        var cameraSpans = cameraSpansFor(cameraConfig)(levelTree.layout)(kfs)(flat);
                         return pure1({
                             totalDuration: flat.endT,
                             windows: flat.windows,
@@ -1562,7 +1569,7 @@ var precomputeTreeWith = function (cameraConfig) {
                         });
                     });
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 246, column 3 - line 279, column 10): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Schedule (line 247, column 3 - line 279, column 10): " + [ v.constructor.name ]);
             };
         };
     };
@@ -1578,6 +1585,33 @@ var precomputeWith = function (cameraConfig) {
     };
 };
 var precompute = /* #__PURE__ */ precomputeWith(Markgraf_Animation_Camera.defaultCameraConfig);
+var withCameraConfig = function (cameraConfig) {
+    return function (schedule) {
+        var flat = {
+            endT: schedule.totalDuration,
+            spans: schedule.spans,
+            windows: schedule.windows,
+            segments: schedule.segments,
+            dives: schedule.dives
+        };
+        var cameraSpans = cameraSpansFor(cameraConfig)(schedule.layout)(schedule.keyframes)(flat);
+        return {
+            totalDuration: schedule.totalDuration,
+            windows: schedule.windows,
+            spans: schedule.spans,
+            keyframes: schedule.keyframes,
+            initialKeyframe: schedule.initialKeyframe,
+            timing: schedule.timing,
+            layout: schedule.layout,
+            levelTree: schedule.levelTree,
+            segments: schedule.segments,
+            dives: schedule.dives,
+            seed: schedule.seed,
+            cameraConfig: cameraConfig,
+            cameraSpans: cameraSpans
+        };
+    };
+};
 export {
     NodeWindow,
     EdgeWindow,
@@ -1594,6 +1628,7 @@ export {
     precomputeWith,
     precomputeTree,
     precomputeTreeWith,
+    withCameraConfig,
     NoKeyframes,
     UnknownKeyframe,
     DuplicateEventId,
