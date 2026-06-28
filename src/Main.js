@@ -354,6 +354,8 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     let currentSource = ${initialSource};
     let currentTheme = state.theme ?? ${JSON.stringify(defaultTheme)};
     let lastFrame = state.lastFrame ?? null;
+    let wasPlaying = state.wasPlaying ?? true;
+    let previewBlocked = false;
 
     const markSelectedTheme = () => {
       for (const button of themeButtons) {
@@ -368,9 +370,12 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 
       const parsed = window.markgraf.tryParse(source);
       if (!parsed.ok) {
+        previewBlocked = true;
+        pausePreview();
         return;
       }
 
+      previewBlocked = false;
       element.innerHTML = "";
       element.classList.add("markgraf-embed");
       element.setAttribute("data-markgraf", "");
@@ -387,7 +392,10 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       }
 
       lastFrame = scrub.value;
-      vscode.setState({ theme: currentTheme, lastFrame });
+      if (!previewBlocked) {
+        wasPlaying = element.querySelector('[data-mg="play"]')?.dataset.mgPlaying === "1";
+      }
+      vscode.setState({ theme: currentTheme, lastFrame, wasPlaying });
     };
 
     const restoreFrame = () => {
@@ -403,14 +411,27 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 
         scrub.value = lastFrame;
         scrub.dispatchEvent(new Event("input", { bubbles: true }));
+
+        const play = element.querySelector('[data-mg="play"]');
+        const playing = play?.dataset.mgPlaying === "1";
+        if (play && wasPlaying !== playing) {
+          play.click();
+        }
       });
+    };
+
+    const pausePreview = () => {
+      const play = element.querySelector('[data-mg="play"]');
+      if (play?.dataset.mgPlaying === "1") {
+        play.click();
+      }
     };
 
     for (const button of themeButtons) {
       button.addEventListener("click", () => {
         currentTheme = button.dataset.theme;
         rememberFrame();
-        vscode.setState({ theme: currentTheme, lastFrame });
+        vscode.setState({ theme: currentTheme, lastFrame, wasPlaying });
         render(currentSource);
       });
     }
