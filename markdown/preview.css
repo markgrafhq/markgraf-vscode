@@ -1,10 +1,62 @@
-.markgraf-markdown-preview {
+.markgraf-markdown-shell {
   margin: 1.25rem 0;
+}
+
+.markgraf-markdown-toolbar {
+  position: relative;
+  z-index: 10;
+  width: fit-content;
+  margin: 0 0 10px auto;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid color-mix(in srgb, var(--vscode-editor-foreground) 12%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vscode-editor-background) 72%, transparent);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.16);
+  opacity: 0;
+  transition: opacity 120ms ease;
+  backdrop-filter: blur(18px);
+}
+
+.markgraf-markdown-shell:hover .markgraf-markdown-toolbar,
+.markgraf-markdown-toolbar:focus-within {
+  opacity: 1;
+}
+
+.markgraf-markdown-theme-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: transparent;
+  color: var(--vscode-descriptionForeground);
+  font: 11px var(--vscode-font-family);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.markgraf-markdown-theme-button:hover {
+  color: var(--vscode-editor-foreground);
+  background: color-mix(in srgb, var(--vscode-editor-foreground) 8%, transparent);
+}
+
+.markgraf-markdown-theme-button[aria-pressed="true"] {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+}
+
+.markgraf-markdown-preview {
   display: flex;
   flex-direction: column;
   border-radius: 14px;
   background: var(--vscode-editor-background);
   --mg-max-height: 70vh;
+}
+
+.markgraf-markdown-preview[data-markgraf-theme="whiteboard"] {
+  background: #fff;
 }
 
 .markgraf-markdown-preview canvas[data-mg="stage"] {
