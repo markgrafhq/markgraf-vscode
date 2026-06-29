@@ -1,7 +1,141 @@
 .markgraf-markdown-preview {
-  margin: 1rem 0;
+  margin: 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  background: var(--vscode-editor-background);
+  --mg-max-height: 70vh;
 }
 
 .markgraf-markdown-preview canvas[data-mg="stage"] {
-  max-height: 70vh;
+  width: 100%;
+  display: block;
+  max-height: var(--mg-max-height);
+  object-fit: contain;
+}
+
+.markgraf-markdown-preview [data-mg="play-overlay"] {
+  display: none;
+}
+
+.markgraf-markdown-preview [data-mg="bar"] {
+  order: 1;
+  position: relative;
+  width: min(560px, calc(100% - 44px));
+  margin: 12px auto 0;
+  display: grid;
+  grid-template-columns: 24px minmax(120px, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 13, 22, 0.52);
+  color: #fff;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  transition: opacity 140ms ease, background 140ms ease;
+  backdrop-filter: blur(18px);
+}
+
+.markgraf-markdown-preview:hover [data-mg="bar"],
+.markgraf-markdown-preview [data-mg="bar"]:focus-within {
+  opacity: 0.96;
+  background: rgba(8, 13, 22, 0.68);
+}
+
+.markgraf-markdown-preview [data-mg="play"] {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.markgraf-markdown-preview [data-mg="play"]:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.markgraf-markdown-preview [data-mg="play"]::before {
+  width: 12px;
+  height: 12px;
+}
+
+.markgraf-markdown-preview [data-mg="time"] {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.markgraf-markdown-preview [data-mg="speed"] {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 19px 3px 8px;
+  background:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.72) 50%) calc(100% - 11px) 50% / 5px 5px no-repeat,
+    linear-gradient(135deg, rgba(255,255,255,.72) 50%, transparent 50%) calc(100% - 7px) 50% / 5px 5px no-repeat,
+    rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 10px;
+}
+
+.markgraf-markdown-preview [data-mg="speed"]:hover {
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.markgraf-markdown-preview [data-mg="speed"] option {
+  color: var(--vscode-dropdown-foreground);
+  background: var(--vscode-dropdown-background);
+}
+
+.markgraf-markdown-preview [data-mg="scrub-wrap"] {
+  min-width: 0;
+}
+
+.markgraf-markdown-preview [data-mg="ticks"] {
+  left: 5px;
+  right: 5px;
+  height: 12px;
+}
+
+.markgraf-markdown-preview .mg-tick {
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  margin-top: -1.5px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.markgraf-markdown-preview [data-mg="scrub"] {
+  height: 14px;
+}
+
+.markgraf-markdown-preview [data-mg="scrub"]::-webkit-slider-runnable-track {
+  height: 3px;
+  margin-top: 5.5px;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+}
+
+.markgraf-markdown-preview [data-mg="scrub"]::-webkit-slider-thumb {
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+
+.markgraf-markdown-preview [data-mg="scrub"]::-moz-range-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+}
+
+.markgraf-markdown-preview [data-mg="scrub"]::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
 }
