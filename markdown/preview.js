@@ -1,8 +1,17 @@
 (function () {
   const encodeBase64 = text => btoa(unescape(encodeURIComponent(text)));
 
+  const isMarkgrafCode = code => {
+    const classes = Array.from(code.classList);
+    return classes.some(name => name === "language-markgraf" || name === "lang-markgraf" || name.endsWith("-markgraf"));
+  };
+
   const replaceFences = () => {
-    for (const code of document.querySelectorAll('pre > code.language-markgraf, pre > code.lang-markgraf')) {
+    for (const code of document.querySelectorAll("pre > code")) {
+      if (!isMarkgrafCode(code)) {
+        continue;
+      }
+
       const pre = code.parentElement;
       if (!pre || pre.dataset.markgrafReplaced === "1") {
         continue;

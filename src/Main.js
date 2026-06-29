@@ -53,9 +53,7 @@ export const deactivateImpl = () => {
 };
 
 export const extendMarkdownItImpl = md => {
-  const defaultFence = md.renderer.rules.fenced ?? ((tokens, index, options, env, self) => self.renderToken(tokens, index, options));
-
-  md.renderer.rules.fenced = (tokens, index, options, env, self) => {
+  const renderMarkgrafFence = defaultFence => (tokens, index, options, env, self) => {
     const token = tokens[index];
     const language = token.info.trim().split(/\s+/, 1)[0];
 
@@ -66,6 +64,10 @@ export const extendMarkdownItImpl = md => {
     const source = Buffer.from(token.content, "utf8").toString("base64");
     return `<div class="markgraf-markdown-preview markgraf-embed" data-markgraf data-markgraf-src-b64="${source}" data-markgraf-titles="false"></div>`;
   };
+
+  const fallback = (tokens, index, options, env, self) => self.renderToken(tokens, index, options);
+  md.renderer.rules.fence = renderMarkgrafFence(md.renderer.rules.fence ?? fallback);
+  md.renderer.rules.fenced = renderMarkgrafFence(md.renderer.rules.fenced ?? md.renderer.rules.fence ?? fallback);
 
   return md;
 };
