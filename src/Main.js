@@ -367,11 +367,11 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       currentSource = source;
       markSelectedTheme();
       rememberFrame();
+      pausePreview();
 
       const parsed = window.markgraf.tryParse(source);
       if (!parsed.ok) {
         previewBlocked = true;
-        pausePreview();
         return;
       }
 
