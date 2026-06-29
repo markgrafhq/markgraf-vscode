@@ -6,9 +6,12 @@
     "vscode": "^1.90.0"
   },
   "activationEvents": [
+    "onCommand:markdown.showPreview",
+    "onCommand:markdown.showPreviewToSide",
     "onCommand:markgraf.preview",
     "onLanguage:markdown",
-    "onLanguage:markgraf"
+    "onLanguage:markgraf",
+    "onWebviewPanel:markdown.preview"
   ],
   "main": "./output/Main/index.js",
   "contributes": {
