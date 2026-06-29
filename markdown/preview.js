@@ -34,6 +34,11 @@
   };
 
   const markgrafBlock = source => {
+    const parsed = window.markgraf?.tryParse?.(source);
+    if (parsed && !parsed.ok) {
+      return errorBlock(parsed.error ?? "Markgraf preview failed to parse.");
+    }
+
     const shell = document.createElement("div");
     shell.className = "markgraf-markdown-shell";
 
@@ -64,6 +69,13 @@
     return shell;
   };
 
+  const errorBlock = message => {
+    const error = document.createElement("pre");
+    error.className = "markgraf-markdown-error";
+    error.textContent = message;
+    return error;
+  };
+
   const setTheme = (preview, toolbar, theme) => {
     localStorage.setItem("markgraf.markdownTheme", theme);
     markSelectedTheme(toolbar, theme);
@@ -82,6 +94,24 @@
 
   const sourceFromPreview = preview => decodeURIComponent(escape(atob(preview.getAttribute("data-markgraf-src-b64") || "")));
 
+  const validatePreviews = () => {
+    for (const preview of document.querySelectorAll(".markgraf-markdown-preview[data-markgraf-src-b64]")) {
+      if (preview.dataset.markgrafValidated === "1") {
+        continue;
+      }
+
+      preview.dataset.markgrafValidated = "1";
+      const parsed = window.markgraf?.tryParse?.(sourceFromPreview(preview));
+      if (!parsed || parsed.ok) {
+        continue;
+      }
+
+      preview.removeAttribute("data-markgraf");
+      preview.className = "markgraf-markdown-error";
+      preview.textContent = parsed.error ?? "Markgraf preview failed to parse.";
+    }
+  };
+
   const pause = preview => {
     const play = preview.querySelector('[data-mg="play"]');
     if (play?.dataset.mgPlaying === "1") {
@@ -91,6 +121,7 @@
 
   const mount = () => {
     replaceFences();
+    validatePreviews();
     if (window.markgraf && typeof window.markgraf.mountAll === "function") {
       window.markgraf.mountAll(document);
     }
