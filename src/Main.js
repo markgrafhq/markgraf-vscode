@@ -53,9 +53,9 @@ export const deactivateImpl = () => {
 };
 
 export const extendMarkdownItImpl = md => {
-  const defaultFence = md.renderer.rules.fence ?? ((tokens, index, options, env, self) => self.renderToken(tokens, index, options));
+  const defaultFence = md.renderer.rules.fenced ?? ((tokens, index, options, env, self) => self.renderToken(tokens, index, options));
 
-  md.renderer.rules.fence = (tokens, index, options, env, self) => {
+  md.renderer.rules.fenced = (tokens, index, options, env, self) => {
     const token = tokens[index];
     const language = token.info.trim().split(/\s+/, 1)[0];
 
