@@ -52,6 +52,24 @@ export const deactivateImpl = () => {
   current?.stop();
 };
 
+export const extendMarkdownItImpl = md => {
+  const defaultFence = md.renderer.rules.fence ?? ((tokens, index, options, env, self) => self.renderToken(tokens, index, options));
+
+  md.renderer.rules.fence = (tokens, index, options, env, self) => {
+    const token = tokens[index];
+    const language = token.info.trim().split(/\s+/, 1)[0];
+
+    if (language !== "markgraf") {
+      return defaultFence(tokens, index, options, env, self);
+    }
+
+    const source = Buffer.from(token.content, "utf8").toString("base64");
+    return `<div class="markgraf-markdown-preview markgraf-embed" data-markgraf data-markgraf-src-b64="${source}" data-markgraf-titles="false"></div>`;
+  };
+
+  return md;
+};
+
 const openPreview = (config, context) => {
   const document = vscode.window.activeTextEditor?.document;
   if (!document || document.languageId !== config.languageId) {

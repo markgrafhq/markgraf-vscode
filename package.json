@@ -6,8 +6,9 @@
     "vscode": "^1.90.0"
   },
   "activationEvents": [
-    "onLanguage:markgraf",
-    "onCommand:markgraf.preview"
+    "onCommand:markgraf.preview",
+    "onLanguage:markdown",
+    "onLanguage:markgraf"
   ],
   "main": "./output/Main/index.js",
   "contributes": {
@@ -61,7 +62,16 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "markdown.markdownItPlugins": true,
+    "markdown.previewScripts": [
+      "./embed/dist/markgraf-embed.js",
+      "./markdown/preview.js"
+    ],
+    "markdown.previewStyles": [
+      "./embed/dist/markgraf-embed.css",
+      "./markdown/preview.css"
+    ]
   },
   "scripts": {
     "build": "PATH=/opt/homebrew/bin:$PATH spago build",

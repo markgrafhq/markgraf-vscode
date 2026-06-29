@@ -1,7 +1,9 @@
 module Main
   ( ExtensionContext
+  , MarkdownIt
   , activate
   , deactivate
+  , extendMarkdownIt
   ) where
 
 import Prelude
@@ -10,12 +12,16 @@ import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, mkEffectFn1, runEffectFn2)
 
 foreign import data ExtensionContext :: Type
+foreign import data MarkdownIt :: Type
 
 activate :: EffectFn1 ExtensionContext Unit
 activate = mkEffectFn1 \context -> runEffectFn2 activateImpl extensionConfig context
 
 deactivate :: Effect Unit
 deactivate = runEffectFn2 deactivateImpl unit unit
+
+extendMarkdownIt :: MarkdownIt -> MarkdownIt
+extendMarkdownIt = extendMarkdownItImpl
 
 type ExtensionConfig =
   { languageId :: String
@@ -38,3 +44,4 @@ extensionConfig =
 
 foreign import activateImpl :: EffectFn2 ExtensionConfig ExtensionContext Unit
 foreign import deactivateImpl :: EffectFn2 Unit Unit Unit
+foreign import extendMarkdownItImpl :: MarkdownIt -> MarkdownIt

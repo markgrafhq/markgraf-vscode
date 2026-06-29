@@ -1,0 +1,7 @@
+.markgraf-markdown-preview {
+  margin: 1rem 0;
+}
+
+.markgraf-markdown-preview canvas[data-mg="stage"] {
+  max-height: 70vh;
+}
