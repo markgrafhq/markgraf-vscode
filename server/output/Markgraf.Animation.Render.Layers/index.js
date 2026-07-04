@@ -8,6 +8,7 @@ import * as Data_Char from "../Data.Char/index.js";
 import * as Data_Eq from "../Data.Eq/index.js";
 import * as Data_EuclideanRing from "../Data.EuclideanRing/index.js";
 import * as Data_Foldable from "../Data.Foldable/index.js";
+import * as Data_Function from "../Data.Function/index.js";
 import * as Data_Functor from "../Data.Functor/index.js";
 import * as Data_Int from "../Data.Int/index.js";
 import * as Data_List_Types from "../Data.List.Types/index.js";
@@ -36,6 +37,7 @@ import * as Markgraf_Animation_Render_Morph from "../Markgraf.Animation.Render.M
 import * as Markgraf_Animation_Render_Op from "../Markgraf.Animation.Render.Op/index.js";
 import * as Markgraf_Animation_Render_ShapeGeometry from "../Markgraf.Animation.Render.ShapeGeometry/index.js";
 import * as Markgraf_Animation_Render_Theme from "../Markgraf.Animation.Render.Theme/index.js";
+import * as Markgraf_Animation_Render_TokenChipPlacement from "../Markgraf.Animation.Render.TokenChipPlacement/index.js";
 import * as Markgraf_Animation_Render_WhiteboardWobble from "../Markgraf.Animation.Render.WhiteboardWobble/index.js";
 import * as Markgraf_Animation_Spec from "../Markgraf.Animation.Spec/index.js";
 import * as Markgraf_Animation_State from "../Markgraf.Animation.State/index.js";
@@ -46,18 +48,16 @@ var discard = /* #__PURE__ */ Control_Bind.discard(Control_Bind.discardUnit);
 var add = /* #__PURE__ */ Data_Semiring.add(Data_Semiring.semiringNumber);
 var un = /* #__PURE__ */ Data_Newtype.un();
 var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
-var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
-var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
-var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
-var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Animation_Spec.ordEventId);
-var insert = /* #__PURE__ */ Data_Map_Internal.insert(Markgraf_Animation_Spec.ordEventId);
-var lookup1 = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordNodeId);
+var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordNodeId);
 var toUnfoldable = /* #__PURE__ */ Data_Map_Internal.toUnfoldable(Data_Unfoldable.unfoldableArray);
 var append1 = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
 var traverse = /* #__PURE__ */ Data_Traversable.traverse(Data_Traversable.traversableArray);
-var lookup2 = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordEdgeId);
+var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
+var lookup1 = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordEdgeId);
 var mapFlipped = /* #__PURE__ */ Data_Functor.mapFlipped(Data_Functor.functorArray);
 var foldMap = /* #__PURE__ */ Data_Array.foldMap(Data_Monoid.monoidArray);
+var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
+var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
 var compare = /* #__PURE__ */ Data_Ord.compare(Data_Ord.ordNumber);
 var mod = /* #__PURE__ */ Data_EuclideanRing.mod(Data_EuclideanRing.euclideanRingInt);
 var foldl = /* #__PURE__ */ Data_Foldable.foldl(Data_Foldable.foldableArray);
@@ -68,6 +68,7 @@ var fromFoldable = /* #__PURE__ */ Data_Map_Internal.fromFoldable(Markgraf_Anima
 var sort = /* #__PURE__ */ Data_Array.sort(Markgraf_Animation_Spec.ordEventId);
 var fromFoldable1 = /* #__PURE__ */ Data_Array.fromFoldable(Data_Set.foldableSet);
 var fromFoldable2 = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
+var lookup2 = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Animation_Spec.ordEventId);
 var map1 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
 var alter = /* #__PURE__ */ Data_Map_Internal.alter(Markgraf_Graph.ordNodeId);
 var member = /* #__PURE__ */ Data_Set.member(Markgraf_Graph.ordNodeId);
@@ -204,6 +205,14 @@ var withBubblePop = function (dictMonadDraw) {
 var viewportRectCmds = function (vp) {
     return [ Markgraf_Animation_Render_Op.pathOpMove, vp.vx, vp.vy, Markgraf_Animation_Render_Op.pathOpLine, vp.vx + vp.vw, vp.vy, Markgraf_Animation_Render_Op.pathOpLine, vp.vx + vp.vw, vp.vy + vp.vh, Markgraf_Animation_Render_Op.pathOpLine, vp.vx, vp.vy + vp.vh, Markgraf_Animation_Render_Op.pathOpClose ];
 };
+var unboundedTokenLabelViewport = /* #__PURE__ */ (function () {
+    return {
+        vx: -1.0e9,
+        vy: -1.0e9,
+        vw: 2.0e9,
+        vh: 2.0e9
+    };
+})();
 var uiFontFamily = "Ilisarniq, ui-sans-serif, system-ui, sans-serif";
 var traverse_ = function (dictApplicative) {
     var applySecond = Control_Apply.applySecond(dictApplicative.Apply0());
@@ -242,7 +251,7 @@ var tokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return sourceCenter;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1857, column 15 - line 1859, column 28): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1839, column 15 - line 1841, column 28): " + [ v.constructor.name ]);
                         })();
                         var pathLen = Markgraf_Animation_Layout.pathLength(path);
                         var pathEnd = (function () {
@@ -253,22 +262,22 @@ var tokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return targetCenter;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1860, column 13 - line 1862, column 28): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1842, column 13 - line 1844, column 28): " + [ v.constructor.name ]);
                         })();
                         var outPair = Markgraf_Animation_Render_Morph.prepareMorph(128)(Markgraf_Animation_Render_ShapeGeometry.nodeOutline(Markgraf_Animation_Render_ShapeGeometry.fillRectRx)(Markgraf_Animation_Render_ShapeGeometry.insetNode(Markgraf_Animation_Render_ShapeGeometry.tokenInset)(source)))(Markgraf_Animation_Render_ShapeGeometry.circleOutline(pathStart)(Markgraf_Animation_Render_ShapeGeometry.tokenRadius));
                         var manhattanOut = 2.0 * (Markgraf_Animation_Render_ShapeGeometry.absN(pathStart.x - sourceCenter.x) + Markgraf_Animation_Render_ShapeGeometry.absN(pathStart.y - sourceCenter.y));
                         var manhattanIn = 2.0 * (Markgraf_Animation_Render_ShapeGeometry.absN(pathEnd.x - targetCenter.x) + Markgraf_Animation_Render_ShapeGeometry.absN(pathEnd.y - targetCenter.y));
                         var totalDist = manhattanOut + pathLen + manhattanIn;
                         var morphInStart = (function () {
-                            var $467 = totalDist <= 1.0e-4;
-                            if ($467) {
+                            var $476 = totalDist <= 1.0e-4;
+                            if ($476) {
                                 return 1.0;
                             };
                             return 1.0 - manhattanIn / totalDist;
                         })();
                         var morphOutEnd = (function () {
-                            var $468 = totalDist <= 1.0e-4;
-                            if ($468) {
+                            var $477 = totalDist <= 1.0e-4;
+                            if ($477) {
                                 return 0.0;
                             };
                             return manhattanOut / totalDist;
@@ -280,8 +289,8 @@ var tokenShape = function (path) {
                             smoothPasses: 2
                         };
                         var edgeT = (function () {
-                            var $469 = travelLen <= 1.0e-4;
-                            if ($469) {
+                            var $478 = travelLen <= 1.0e-4;
+                            if ($478) {
                                 return 0.0;
                             };
                             return (progress - morphOutEnd) / travelLen;
@@ -294,39 +303,39 @@ var tokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return pathStart;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1871, column 14 - line 1873, column 25): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1853, column 14 - line 1855, column 25): " + [ v.constructor.name ]);
                         })();
                         var clamp01$prime = function (x) {
-                            var $472 = x < 0.0;
-                            if ($472) {
+                            var $481 = x < 0.0;
+                            if ($481) {
                                 return 0.0;
                             };
-                            var $473 = x > 1.0;
-                            if ($473) {
+                            var $482 = x > 1.0;
+                            if ($482) {
                                 return 1.0;
                             };
                             return x;
                         };
                         var inT = (function () {
-                            var $474 = morphInStart >= 1.0;
-                            if ($474) {
+                            var $483 = morphInStart >= 1.0;
+                            if ($483) {
                                 return 0.0;
                             };
                             return smoothstep(clamp01$prime((progress - morphInStart) / (1.0 - morphInStart)));
                         })();
                         var outT = (function () {
-                            var $475 = morphOutEnd <= 1.0e-4;
-                            if ($475) {
+                            var $484 = morphOutEnd <= 1.0e-4;
+                            if ($484) {
                                 return 1.0;
                             };
                             return smoothstep(clamp01$prime(progress / morphOutEnd));
                         })();
-                        var $476 = progress < morphOutEnd;
-                        if ($476) {
+                        var $485 = progress < morphOutEnd;
+                        if ($485) {
                             return new PolyShape(Markgraf_Animation_Render_Morph.morphAtGenie(outT)(outPair.from)(outPair.to)(genieOpts));
                         };
-                        var $477 = progress >= morphInStart;
-                        if ($477) {
+                        var $486 = progress >= morphInStart;
+                        if ($486) {
                             return new PolyShape(Markgraf_Animation_Render_Morph.morphAtGenie(inT)(inPair.from)(inPair.to)(genieOpts));
                         };
                         return new CircleShape(travelPt, Markgraf_Animation_Render_ShapeGeometry.ballRadius);
@@ -349,7 +358,7 @@ var tokenCenter = function (path) {
                         if (v instanceof CircleShape) {
                             return v.value0;
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1943, column 3 - line 1945, column 25): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1925, column 3 - line 1927, column 25): " + [ v.constructor.name ]);
                     };
                 };
             };
@@ -357,64 +366,6 @@ var tokenCenter = function (path) {
     };
 };
 var tipEpsilon = 1.0e-3;
-var slideRect = function (natural) {
-    return function (obstacles) {
-        var labelBottom = (natural.y + natural.h) - 6.0;
-        var sAbove = function (r) {
-            return ((labelBottom + 10.0) - (r.y - 12.0)) / 0.7071067811865476;
-        };
-        var labelTop = natural.y + 6.0;
-        var labelLeft = natural.x + 14.0;
-        var sRight = function (r) {
-            return ((r.x + r.w + 12.0) - (labelLeft - 10.0)) / 0.7071067811865476;
-        };
-        var labelRight = (natural.x + natural.w) - 14.0;
-        var overlapsRect = function (r) {
-            return labelLeft - 10.0 < r.x + r.w + 12.0 && (labelRight + 10.0 > r.x - 12.0 && (labelTop - 10.0 < r.y + r.h + 12.0 && labelBottom + 10.0 > r.y - 12.0));
-        };
-        var rectSlide = function (r) {
-            var $482 = overlapsRect(r);
-            if ($482) {
-                return min(sRight(r))(sAbove(r));
-            };
-            return 0.0;
-        };
-        var slide = Data_Array.foldl(max)(0.0)(map(rectSlide)(obstacles));
-        return {
-            w: natural.w,
-            h: natural.h,
-            x: natural.x + slide * 0.7071067811865476,
-            y: natural.y - slide * 0.7071067811865476
-        };
-    };
-};
-var resolveChain = function (ids) {
-    return function (naturals) {
-        return function (fixed) {
-            var step = function (st) {
-                return function (eid) {
-                    var v = lookup(eid)(naturals);
-                    if (v instanceof Data_Maybe.Nothing) {
-                        return st;
-                    };
-                    if (v instanceof Data_Maybe.Just) {
-                        var resolved = slideRect(v.value0)(st.obstacles);
-                        return {
-                            acc: insert(eid)(resolved)(st.acc),
-                            obstacles: Data_Array.snoc(st.obstacles)(resolved)
-                        };
-                    };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1402, column 17 - line 1410, column 10): " + [ v.constructor.name ]);
-                };
-            };
-            var result = Data_Array.foldl(step)({
-                acc: Data_Map_Internal.empty,
-                obstacles: fixed
-            })(ids);
-            return result.acc;
-        };
-    };
-};
 var palette = /* #__PURE__ */ (function () {
     var zinc900 = {
         r: 24,
@@ -752,13 +703,13 @@ var palette = /* #__PURE__ */ (function () {
                 fontFamily: uiFontFamily
             };
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 199, column 11 - line 340, column 6): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 202, column 11 - line 343, column 6): " + [ v.constructor.name ]);
     };
 })();
 var nodesUnionCmds = function (layout) {
     return function (state) {
         var one = function (v) {
-            var v1 = lookup1(v.value0)(state.nodes);
+            var v1 = lookup(v.value0)(state.nodes);
             if (v1 instanceof Data_Maybe.Just && Markgraf_Animation_Render_FrameReadout.nodeAlpha(v1.value0) > 0.0) {
                 return Markgraf_Animation_Render_ShapeGeometry.shapeClipPath(v.value1);
             };
@@ -772,6 +723,12 @@ var notNodesClip = function (viewport) {
         return function (state) {
             return append1(viewportRectCmds(viewport))(nodesUnionCmds(layout)(state));
         };
+    };
+};
+var nodeCenter = function (pos) {
+    return {
+        x: pos.x + pos.w / 2.0,
+        y: pos.y + pos.h / 2.0
     };
 };
 var measureLineChars = function (dictMonadDraw) {
@@ -793,13 +750,13 @@ var measureLineChars = function (dictMonadDraw) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return " ";
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 689, column 14 - line 691, column 19): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 692, column 14 - line 694, column 19): " + [ v.constructor.name ]);
             };
             var baselineShift = 0.32 * font.size;
             var atIndex = function (i) {
                 return bind1((function () {
-                    var $493 = i === 0;
-                    if ($493) {
+                    var $499 = i === 0;
+                    if ($499) {
                         return pure(0.0);
                     };
                     return measureText(font)(Data_String_CodePoints.take(i)(line));
@@ -834,8 +791,8 @@ var leaderDots = function (chip) {
         };
         var pickCloser = function (best) {
             return function (c) {
-                var $494 = distSq(c) < distSq(best);
-                if ($494) {
+                var $500 = distSq(c) < distSq(best);
+                if ($500) {
                     return c;
                 };
                 return best;
@@ -960,7 +917,7 @@ var insideTokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return sourceCenter;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1916, column 15 - line 1918, column 28): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1898, column 15 - line 1900, column 28): " + [ v.constructor.name ]);
                         })();
                         var pathLen = Markgraf_Animation_Layout.pathLength(path);
                         var pathEnd = (function () {
@@ -971,29 +928,29 @@ var insideTokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return targetCenter;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1919, column 13 - line 1921, column 28): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1901, column 13 - line 1903, column 28): " + [ v.constructor.name ]);
                         })();
                         var manhattanOut = 2.0 * (Markgraf_Animation_Render_ShapeGeometry.absN(pathStart.x - sourceCenter.x) + Markgraf_Animation_Render_ShapeGeometry.absN(pathStart.y - sourceCenter.y));
                         var manhattanIn = 2.0 * (Markgraf_Animation_Render_ShapeGeometry.absN(pathEnd.x - targetCenter.x) + Markgraf_Animation_Render_ShapeGeometry.absN(pathEnd.y - targetCenter.y));
                         var totalDist = manhattanOut + pathLen + manhattanIn;
                         var morphInStart = (function () {
-                            var $501 = totalDist <= 1.0e-4;
-                            if ($501) {
+                            var $507 = totalDist <= 1.0e-4;
+                            if ($507) {
                                 return 1.0;
                             };
                             return 1.0 - manhattanIn / totalDist;
                         })();
                         var morphOutEnd = (function () {
-                            var $502 = totalDist <= 1.0e-4;
-                            if ($502) {
+                            var $508 = totalDist <= 1.0e-4;
+                            if ($508) {
                                 return 0.0;
                             };
                             return manhattanOut / totalDist;
                         })();
                         var travelLen = morphInStart - morphOutEnd;
                         var edgeT = (function () {
-                            var $503 = travelLen <= 1.0e-4;
-                            if ($503) {
+                            var $509 = travelLen <= 1.0e-4;
+                            if ($509) {
                                 return 0.0;
                             };
                             return (progress - morphOutEnd) / travelLen;
@@ -1006,14 +963,14 @@ var insideTokenShape = function (path) {
                             if (v instanceof Data_Maybe.Nothing) {
                                 return pathStart;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1930, column 14 - line 1932, column 25): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1912, column 14 - line 1914, column 25): " + [ v.constructor.name ]);
                         })();
-                        var $506 = progress < morphOutEnd;
-                        if ($506) {
+                        var $512 = progress < morphOutEnd;
+                        if ($512) {
                             return new InsideRect(Markgraf_Animation_Render_ShapeGeometry.insetNode(Markgraf_Animation_Render_ShapeGeometry.tokenInset)(source));
                         };
-                        var $507 = progress >= morphInStart;
-                        if ($507) {
+                        var $513 = progress >= morphInStart;
+                        if ($513) {
                             return new InsideRect(Markgraf_Animation_Render_ShapeGeometry.insetNode(Markgraf_Animation_Render_ShapeGeometry.tokenInset)(target));
                         };
                         return new InsideBall(travelPt, Markgraf_Animation_Render_ShapeGeometry.ballRadius);
@@ -1062,9 +1019,9 @@ var drawTokensInsideClean = function (dictMonadDraw) {
                     };
                     var drawOne = function (v) {
                         if (v.value1 instanceof Markgraf_Animation_State.Travelling) {
-                            var v1 = lookup2(v.value1.value0.edge)(layout.edges);
-                            var v2 = lookup1(v.value1.value0.target)(layout.nodes);
-                            var v3 = lookup1(v.value1.value0.source)(layout.nodes);
+                            var v1 = lookup1(v.value1.value0.edge)(layout.edges);
+                            var v2 = lookup(v.value1.value0.target)(layout.nodes);
+                            var v3 = lookup(v.value1.value0.source)(layout.nodes);
                             if (v3 instanceof Data_Maybe.Just && (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just)) {
                                 var v4 = insideTokenShape(Markgraf_Animation_Render_ShapeGeometry.orientPath(v.value1.value0.direction)(v1.value0))(v3.value0)(v2.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost);
                                 if (v4 instanceof InsideRect) {
@@ -1073,19 +1030,19 @@ var drawTokensInsideClean = function (dictMonadDraw) {
                                 if (v4 instanceof InsideBall) {
                                     return fillStrokePath(Markgraf_Animation_Render_ShapeGeometry.circleCmds(v4.value0)(v4.value1))(fill)(stroke);
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1197, column 11 - line 1199, column 74): " + [ v4.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1200, column 11 - line 1202, column 74): " + [ v4.constructor.name ]);
                             };
                             return pure(Data_Unit.unit);
                         };
                         if (v.value1 instanceof Markgraf_Animation_State.Filling) {
-                            var v1 = lookup1(v.value1.value0.node)(layout.nodes);
+                            var v1 = lookup(v.value1.value0.node)(layout.nodes);
                             if (v1 instanceof Data_Maybe.Just) {
                                 return rectToken(Markgraf_Animation_Render_ShapeGeometry.insetNode(Markgraf_Animation_Render_ShapeGeometry.tokenInset)(v1.value0));
                             };
                             if (v1 instanceof Data_Maybe.Nothing) {
                                 return pure(Data_Unit.unit);
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1201, column 25 - line 1203, column 27): " + [ v1.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1204, column 25 - line 1206, column 27): " + [ v1.constructor.name ]);
                         };
                         return pure(Data_Unit.unit);
                     };
@@ -1145,7 +1102,7 @@ var drawSpiralDot = function (dictMonadDraw) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return [  ];
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1272, column 10 - line 1275, column 18): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1275, column 10 - line 1278, column 18): " + [ v.constructor.name ]);
                 })();
                 return strokePath(path)(style);
             };
@@ -1247,14 +1204,14 @@ var drawNodeShadows = function (dictMonadDraw) {
             return function (layout) {
                 return function (state) {
                     var drawOne = function (v) {
-                        var v1 = lookup1(v.value0)(state.nodes);
+                        var v1 = lookup(v.value0)(state.nodes);
                         if (v1 instanceof Data_Maybe.Just) {
                             return drawShadow1(p)(halftone)(v.value1)(v1.value0);
                         };
                         if (v1 instanceof Data_Maybe.Nothing) {
                             return pure(Data_Unit.unit);
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 526, column 26 - line 528, column 25): " + [ v1.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 529, column 26 - line 531, column 25): " + [ v1.constructor.name ]);
                     };
                     return traverse_1(drawOne)(toUnfoldable(layout.nodes));
                 };
@@ -1321,8 +1278,8 @@ var drawOneNode = function (dictMonadDraw) {
                                 return function (pos) {
                                     return function (animState) {
                                         var raw = (function () {
-                                            var $543 = pos.label === "";
-                                            if ($543) {
+                                            var $549 = pos.label === "";
+                                            if ($549) {
                                                 return un(Markgraf_Graph.NodeId)(nid);
                                             };
                                             return pos.label;
@@ -1400,8 +1357,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                 var segLen = function (seg) {
                                                     var dx = seg.to.x - seg.from.x;
                                                     return Data_Number.sqrt(2.0) * (function () {
-                                                        var $551 = dx >= 0.0;
-                                                        if ($551) {
+                                                        var $557 = dx >= 0.0;
+                                                        if ($557) {
                                                             return dx;
                                                         };
                                                         return -dx;
@@ -1464,8 +1421,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                                     var dx = p1.x - m.x;
                                                                     var len = Data_Number.sqrt(dx * dx + dy * dy);
                                                                     var f = (function () {
-                                                                        var $556 = len < 1.0e-4;
-                                                                        if ($556) {
+                                                                        var $562 = len < 1.0e-4;
+                                                                        if ($562) {
                                                                             return 1.0;
                                                                         };
                                                                         return (len + amt) / len;
@@ -1510,8 +1467,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                             return function (rT) {
                                                                 return function (rB) {
                                                                     return sortByX(Data_Array.catMaybes([ (function () {
-                                                                        var $557 = slope * rL + off >= rT && slope * rL + off <= rB;
-                                                                        if ($557) {
+                                                                        var $563 = slope * rL + off >= rT && slope * rL + off <= rB;
+                                                                        if ($563) {
                                                                             return new Data_Maybe.Just({
                                                                                 x: rL,
                                                                                 y: slope * rL + off
@@ -1519,8 +1476,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                                         };
                                                                         return Data_Maybe.Nothing.value;
                                                                     })(), (function () {
-                                                                        var $558 = slope * rR + off >= rT && slope * rR + off <= rB;
-                                                                        if ($558) {
+                                                                        var $564 = slope * rR + off >= rT && slope * rR + off <= rB;
+                                                                        if ($564) {
                                                                             return new Data_Maybe.Just({
                                                                                 x: rR,
                                                                                 y: slope * rR + off
@@ -1529,8 +1486,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                                         return Data_Maybe.Nothing.value;
                                                                     })(), (function () {
                                                                         var xT = (rT - off) / slope;
-                                                                        var $559 = xT >= rL && xT <= rR;
-                                                                        if ($559) {
+                                                                        var $565 = xT >= rL && xT <= rR;
+                                                                        if ($565) {
                                                                             return new Data_Maybe.Just({
                                                                                 x: xT,
                                                                                 y: rT
@@ -1539,8 +1496,8 @@ var drawOneNode = function (dictMonadDraw) {
                                                                         return Data_Maybe.Nothing.value;
                                                                     })(), (function () {
                                                                         var xB = (rB - off) / slope;
-                                                                        var $560 = xB >= rL && xB <= rR;
-                                                                        if ($560) {
+                                                                        var $566 = xB >= rL && xB <= rR;
+                                                                        if ($566) {
                                                                             return new Data_Maybe.Just({
                                                                                 x: xB,
                                                                                 y: rB
@@ -1604,7 +1561,7 @@ var drawOneNode = function (dictMonadDraw) {
                                                             to: seg.to
                                                         } ];
                                                     };
-                                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 929, column 5 - line 934, column 12): " + [ seg.constructor.name ]);
+                                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 932, column 5 - line 937, column 12): " + [ seg.constructor.name ]);
                                                 };
                                                 var charClipRects = Data_Array.concat(Data_Array.mapWithIndex(perLineRects)(perLineChars));
                                                 var clipCharRects = function (seg) {
@@ -1789,7 +1746,7 @@ var drawOneNode = function (dictMonadDraw) {
                                                             if (labelVis instanceof LabelsHidden) {
                                                                 return pure(Data_Unit.unit);
                                                             };
-                                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 805, column 5 - line 810, column 32): " + [ labelVis.constructor.name ]);
+                                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 808, column 5 - line 813, column 32): " + [ labelVis.constructor.name ]);
                                                         })())(function () {
                                                             return discard1(when(isErase)(drawEraserSweep1(p)(rect)(eraseT)))(function () {
                                                                 return discard1(popTransform)(function () {
@@ -1827,8 +1784,8 @@ var drawNodeInversions = function (dictMonadDraw) {
                 var inv = invertColors(p);
                 var flash = function (v) {
                     return when(v.value1 > 0.0)((function () {
-                        var v1 = lookup1(v.value0)(state.nodes);
-                        var v2 = lookup1(v.value0)(layout.nodes);
+                        var v1 = lookup(v.value0)(state.nodes);
+                        var v2 = lookup(v.value0)(layout.nodes);
                         if (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just) {
                             return discard1(pushAlpha(v.value1))(function () {
                                 return discard1(drawOneNode1(LabelsShown.value)(1.0)(inv)(1.0)(1.0)(Data_Maybe.Nothing.value)(v.value0)(v2.value0)(v1.value0))(function () {
@@ -1867,11 +1824,11 @@ var drawEdgeLabels = function (dictMonadDraw) {
                     if (v.value1 === "") {
                         return pure(Data_Unit.unit);
                     };
-                    if (notEq(lookup2(v.value0)(state.edges))(new Data_Maybe.Just(Markgraf_Animation_State.Extended.value))) {
+                    if (notEq(lookup1(v.value0)(state.edges))(new Data_Maybe.Just(Markgraf_Animation_State.Extended.value))) {
                         return pure(Data_Unit.unit);
                     };
                     if (Data_Boolean.otherwise) {
-                        var v1 = bind(lookup2(v.value0)(layout.edges))(function (path) {
+                        var v1 = bind(lookup1(v.value0)(layout.edges))(function (path) {
                             return Markgraf_Animation_Layout.pointAt(path)(0.5);
                         });
                         if (v1 instanceof Data_Maybe.Nothing) {
@@ -1903,9 +1860,9 @@ var drawEdgeLabels = function (dictMonadDraw) {
                                 });
                             });
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 412, column 19 - line 431, column 14): " + [ v1.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 415, column 19 - line 434, column 14): " + [ v1.constructor.name ]);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 409, column 3 - line 431, column 14): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 412, column 3 - line 434, column 14): " + [ v.constructor.name ]);
                 };
                 return traverse_1(drawOne)(toUnfoldable(layout.edgeLabels));
             };
@@ -1953,7 +1910,7 @@ var classifyChar = function (ch) {
     if (Data_Boolean.otherwise) {
         return Short.value;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 648, column 1 - line 648, column 34): " + [ ch.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 651, column 1 - line 651, column 34): " + [ ch.constructor.name ]);
 };
 var clamp01 = function (x) {
     if (x < 0.0) {
@@ -1965,7 +1922,7 @@ var clamp01 = function (x) {
     if (Data_Boolean.otherwise) {
         return x;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1593, column 1 - line 1593, column 28): " + [ x.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1575, column 1 - line 1575, column 28): " + [ x.constructor.name ]);
 };
 var drawOneToken = function (dictMonadDraw) {
     var drawSpiralDot1 = drawSpiralDot(dictMonadDraw);
@@ -1994,7 +1951,7 @@ var drawOneToken = function (dictMonadDraw) {
                                             if (Data_Boolean.otherwise) {
                                                 return 1.0;
                                             };
-                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1245, column 3 - line 1248, column 22): " + [  ]);
+                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1248, column 3 - line 1251, column 22): " + [  ]);
                                         })();
                                         var v = tokenShape(path)(source)(target)(raw)(holdPre)(holdPost);
                                         if (v instanceof CircleShape) {
@@ -2036,12 +1993,12 @@ var drawOneToken = function (dictMonadDraw) {
                                             if (v instanceof PolyShape) {
                                                 return pure(Data_Unit.unit);
                                             };
-                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1206, column 1 - line 1218, column 12): " + [ v.constructor.name ]);
+                                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1209, column 1 - line 1221, column 12): " + [ v.constructor.name ]);
                                         };
                                         if (v instanceof PolyShape) {
                                             if (wobbleTokens) {
-                                                var $606 = Data_Array.length(v.value0) >= 3;
-                                                if ($606) {
+                                                var $612 = Data_Array.length(v.value0) >= 3;
+                                                if ($612) {
                                                     return discard1(pushAlpha(dwellAlpha))(function () {
                                                         return discard1(drawSpiralDot1(Markgraf_Animation_Render_ShapeGeometry.centroid(v.value0))(Markgraf_Animation_Render_ShapeGeometry.ballRadius)({
                                                             r: 200,
@@ -2109,8 +2066,8 @@ var drawTeleportToken = function (dictMonadDraw) {
                                         });
                                     };
                                 };
-                                var $608 = t < 0.5;
-                                if ($608) {
+                                var $614 = t < 0.5;
+                                if ($614) {
                                     return dotAt(srcCenter)(1.0 - eased(t * 2.0));
                                 };
                                 return dotAt(dstCenter)(eased((t - 0.5) * 2.0));
@@ -2136,17 +2093,17 @@ var drawTokensInner = function (dictMonadDraw) {
                     return function (strokeC) {
                         var drawOne = function (v) {
                             if (v.value1 instanceof Markgraf_Animation_State.Travelling) {
-                                var v1 = lookup1(v.value1.value0.target)(layout.nodes);
-                                var v2 = lookup1(v.value1.value0.source)(layout.nodes);
+                                var v1 = lookup(v.value1.value0.target)(layout.nodes);
+                                var v2 = lookup(v.value1.value0.source)(layout.nodes);
                                 if (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just) {
-                                    var v3 = lookup2(v.value1.value0.edge)(layout.edges);
+                                    var v3 = lookup1(v.value1.value0.edge)(layout.edges);
                                     if (v3 instanceof Data_Maybe.Just) {
                                         return drawOneToken1(wobbleTokens)(fillC)(strokeC)(Markgraf_Animation_Render_ShapeGeometry.orientPath(v.value1.value0.direction)(v3.value0))(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost);
                                     };
                                     if (v3 instanceof Data_Maybe.Nothing) {
                                         return drawTeleportToken1(fillC)(strokeC)(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost);
                                     };
-                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1149, column 31 - line 1154, column 87): " + [ v3.constructor.name ]);
+                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1152, column 31 - line 1157, column 87): " + [ v3.constructor.name ]);
                                 };
                                 return pure(Data_Unit.unit);
                             };
@@ -2155,7 +2112,7 @@ var drawTokensInner = function (dictMonadDraw) {
                                     return pure(Data_Unit.unit);
                                 };
                                 if (Data_Boolean.otherwise) {
-                                    var v1 = lookup1(v.value1.value0.node)(layout.nodes);
+                                    var v1 = lookup(v.value1.value0.node)(layout.nodes);
                                     if (v1 instanceof Data_Maybe.Just) {
                                         return fillStrokePath(Markgraf_Animation_Render_ShapeGeometry.smoothClosedCmds(Markgraf_Animation_Render_ShapeGeometry.nodeOutline(Markgraf_Animation_Render_ShapeGeometry.fillRectRx)(Markgraf_Animation_Render_ShapeGeometry.insetNode(Markgraf_Animation_Render_ShapeGeometry.tokenInset)(v1.value0))))({
                                             color: fillC,
@@ -2170,7 +2127,7 @@ var drawTokensInner = function (dictMonadDraw) {
                                     if (v1 instanceof Data_Maybe.Nothing) {
                                         return pure(Data_Unit.unit);
                                     };
-                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1162, column 22 - line 1166, column 31): " + [ v1.constructor.name ]);
+                                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1165, column 22 - line 1169, column 31): " + [ v1.constructor.name ]);
                                 };
                             };
                             return pure(Data_Unit.unit);
@@ -2243,10 +2200,10 @@ var drawTokensInsideNodes = function (dictMonadDraw) {
                                 if (style instanceof Markgraf_Animation_Render_Draw.ConvexAbsorb) {
                                     return drawTokensInsideClean1(layout)(state)(p.tokenInside)(p.tokenInsideStroke);
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1110, column 9 - line 1112, column 95): " + [ style.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1113, column 9 - line 1115, column 95): " + [ style.constructor.name ]);
                             });
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1106, column 3 - line 1112, column 95): " + [  ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1109, column 3 - line 1115, column 95): " + [  ]);
                     })();
                     if (p.tokenInsideBlend instanceof Markgraf_Animation_Render_Op.Difference) {
                         return discard1(pushLayer(Markgraf_Animation_Render_Op.LayerPolyIn.value))(function () {
@@ -2258,7 +2215,7 @@ var drawTokensInsideNodes = function (dictMonadDraw) {
                                                 return discard1(popLayer)(function () {
                                                     return discard1(pushLayer(Markgraf_Animation_Render_Op.LayerNodeMask.value))(function () {
                                                         return discard1(for_1(toUnfoldable(layout.nodes))(function (v) {
-                                                            var v1 = lookup1(v.value0)(state.nodes);
+                                                            var v1 = lookup(v.value0)(state.nodes);
                                                             if (v1 instanceof Data_Maybe.Just && Markgraf_Animation_Render_FrameReadout.nodeAlpha(v1.value0) > 0.0) {
                                                                 return drawShape(v.value1.shape)(Markgraf_Animation_Render_ShapeGeometry.toRect(v.value1))(Markgraf_Animation_Render_ShapeGeometry.nodeRx)(new Data_Maybe.Just({
                                                                     color: Markgraf_Animation_Render_Op.white,
@@ -2289,7 +2246,7 @@ var drawTokensInsideNodes = function (dictMonadDraw) {
                             });
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1080, column 48 - line 1101, column 12): " + [ p.tokenInsideBlend.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1083, column 48 - line 1104, column 12): " + [ p.tokenInsideBlend.constructor.name ]);
                 };
             };
         };
@@ -2387,7 +2344,7 @@ var drawTypewriter = function (dictMonadDraw) {
                                             $tco_done = true;
                                             return i;
                                         };
-                                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1646, column 5 - line 1649, column 22): " + [ i.constructor.name ]);
+                                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1628, column 5 - line 1631, column 22): " + [ i.constructor.name ]);
                                     };
                                     while (!$tco_done) {
                                         $tco_result = $tco_loop($copy_i);
@@ -2405,7 +2362,7 @@ var drawTypewriter = function (dictMonadDraw) {
                                         return easedAt(i) > 0.0;
                                     })(Data_Array.range(settledCount)(charCount - 1 | 0));
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1651, column 3 - line 1654, column 47): " + [  ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1633, column 3 - line 1636, column 47): " + [  ]);
                             })();
                             return discard1(when(settledCount > 0)(drawText({
                                 x: textLeft,
@@ -2461,7 +2418,7 @@ var pickActiveLabel = function (progress) {
                                         return;
                                     };
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1574, column 17 - line 1578, column 47): " + [ v.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1556, column 17 - line 1560, column 47): " + [ v.constructor.name ]);
                             };
                             while (!$tco_done) {
                                 $tco_result = $tco_loop($tco_var_i, $tco_var_acc, $copy_ws);
@@ -2481,7 +2438,7 @@ var pickActiveLabel = function (progress) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return 1.0;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1584, column 18 - line 1586, column 19): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1566, column 18 - line 1568, column 19): " + [ v.constructor.name ]);
                 })();
                 var sliceEnd = (activeStartWeight + activeWeight) / totalWeight;
                 var phaseInLabel = (function () {
@@ -2491,7 +2448,7 @@ var pickActiveLabel = function (progress) {
                     if (Data_Boolean.otherwise) {
                         return clamp01((motionT - sliceStart) / (sliceEnd - sliceStart));
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1589, column 3 - line 1591, column 77): " + [  ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1571, column 3 - line 1573, column 77): " + [  ]);
                 })();
                 var line = (function () {
                     var v = Data_Array.index(labels)(activeIdx);
@@ -2501,7 +2458,7 @@ var pickActiveLabel = function (progress) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return "";
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1580, column 10 - line 1582, column 18): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1562, column 10 - line 1564, column 18): " + [ v.constructor.name ]);
                 })();
                 return {
                     line: line,
@@ -2555,7 +2512,7 @@ var collectFillingRects = function (dictMonadDraw) {
         return function (state) {
             var one = function (v) {
                 if (v.value1 instanceof Markgraf_Animation_State.Filling && !Data_Array["null"](v.value1.value0.labels)) {
-                    var v1 = lookup1(v.value1.value0.node)(layout.nodes);
+                    var v1 = lookup(v.value1.value0.node)(layout.nodes);
                     if (v1 instanceof Data_Maybe.Just) {
                         return bind1(fillingLabelRect1(v1.value0)(v.value1.value0.progress)(v.value1.value0.labels))(function (rect) {
                             return pure(new Data_Maybe.Just(new Data_Tuple.Tuple(v.value0, rect)));
@@ -2564,12 +2521,12 @@ var collectFillingRects = function (dictMonadDraw) {
                     if (v1 instanceof Data_Maybe.Nothing) {
                         return pure(Data_Maybe.Nothing.value);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1347, column 32 - line 1351, column 34): " + [ v1.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1360, column 32 - line 1364, column 34): " + [ v1.constructor.name ]);
                 };
                 return pure(Data_Maybe.Nothing.value);
             };
-            return map2(function ($804) {
-                return fromFoldable(Data_Array.catMaybes($804));
+            return map2(function ($810) {
+                return fromFoldable(Data_Array.catMaybes($810));
             })(traverse1(one)(toUnfoldable(state.tokens)));
         };
     };
@@ -2605,7 +2562,7 @@ var naturalLabelRect = function (dictMonadDraw) {
         };
     };
 };
-var collectNaturalRects = function (dictMonadDraw) {
+var collectTravellingChips = function (dictMonadDraw) {
     var Monad0 = dictMonadDraw.Monad0();
     var Bind1 = Monad0.Bind1();
     var bind1 = Control_Bind.bind(Bind1);
@@ -2618,49 +2575,68 @@ var collectNaturalRects = function (dictMonadDraw) {
         return function (state) {
             var one = function (v) {
                 if (v.value1 instanceof Markgraf_Animation_State.Travelling && !Data_Array["null"](v.value1.value0.labels)) {
-                    var v1 = lookup1(v.value1.value0.target)(layout.nodes);
-                    var v2 = lookup1(v.value1.value0.source)(layout.nodes);
-                    var v3 = lookup2(v.value1.value0.edge)(layout.edges);
+                    var v1 = lookup(v.value1.value0.target)(layout.nodes);
+                    var v2 = lookup(v.value1.value0.source)(layout.nodes);
+                    var v3 = lookup1(v.value1.value0.edge)(layout.edges);
                     if (v3 instanceof Data_Maybe.Just && (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just)) {
-                        return bind1(naturalLabelRect1(Markgraf_Animation_Render_ShapeGeometry.orientPath(v.value1.value0.direction)(v3.value0))(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost)(v.value1.value0.labels))(function (rect) {
-                            return pure(new Data_Maybe.Just(new Data_Tuple.Tuple(v.value0, rect)));
+                        var path = Markgraf_Animation_Render_ShapeGeometry.orientPath(v.value1.value0.direction)(v3.value0);
+                        var token = tokenCenter(path)(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost);
+                        return bind1(naturalLabelRect1(path)(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost)(v.value1.value0.labels))(function (rect) {
+                            return pure(new Data_Maybe.Just(new Data_Tuple.Tuple(v.value0, {
+                                id: v.value0,
+                                rect: rect,
+                                token: token
+                            })));
                         });
                     };
                     return pure(Data_Maybe.Nothing.value);
                 };
                 return pure(Data_Maybe.Nothing.value);
             };
-            return map2(function ($805) {
-                return fromFoldable(Data_Array.catMaybes($805));
+            return map2(function ($811) {
+                return fromFoldable(Data_Array.catMaybes($811));
             })(traverse1(one)(toUnfoldable(state.tokens)));
         };
     };
 };
-var tokenLabelTargets = function (dictMonadDraw) {
+var tokenLabelTargetsInViewport = function (dictMonadDraw) {
     var Monad0 = dictMonadDraw.Monad0();
     var bind1 = Control_Bind.bind(Monad0.Bind1());
-    var collectNaturalRects1 = collectNaturalRects(dictMonadDraw);
+    var collectTravellingChips1 = collectTravellingChips(dictMonadDraw);
     var collectFillingRects1 = collectFillingRects(dictMonadDraw);
     var pure = Control_Applicative.pure(Monad0.Applicative0());
-    return function (layout) {
-        return function (state) {
-            var visibleNode = function (v) {
-                var v1 = lookup1(v.value0)(state.nodes);
-                if (v1 instanceof Data_Maybe.Just && Markgraf_Animation_Render_FrameReadout.nodeAlpha(v1.value0) > 0.0) {
-                    return new Data_Maybe.Just(Markgraf_Animation_Render_ShapeGeometry.toRect(v.value1));
+    return function (viewport) {
+        return function (layout) {
+            return function (state) {
+                var visibleNode = function (v) {
+                    var v1 = lookup(v.value0)(state.nodes);
+                    if (v1 instanceof Data_Maybe.Just && Markgraf_Animation_Render_FrameReadout.nodeAlpha(v1.value0) > 0.0) {
+                        return new Data_Maybe.Just(Markgraf_Animation_Render_ShapeGeometry.toRect(v.value1));
+                    };
+                    return Data_Maybe.Nothing.value;
                 };
-                return Data_Maybe.Nothing.value;
-            };
-            return bind1(collectNaturalRects1(layout)(state))(function (naturalRects) {
-                return bind1(collectFillingRects1(layout)(state))(function (fillingRects) {
-                    var sortedIds = sort(fromFoldable1(Data_Map.keys(naturalRects)));
-                    var nodeObstacles = Data_Array.mapMaybe(visibleNode)(toUnfoldable(layout.nodes));
-                    var fillingObstacles = fromFoldable2(Data_Map_Internal.values(fillingRects));
-                    return pure(resolveChain(sortedIds)(naturalRects)(append1(nodeObstacles)(fillingObstacles)));
+                return bind1(collectTravellingChips1(layout)(state))(function (travellingChips) {
+                    return bind1(collectFillingRects1(layout)(state))(function (fillingRects) {
+                        var sortedIds = sort(fromFoldable1(Data_Map.keys(travellingChips)));
+                        var safeViewport = {
+                            x: viewport.vx,
+                            y: viewport.vy,
+                            w: viewport.vw,
+                            h: viewport.vh
+                        };
+                        var nodeObstacles = Data_Array.mapMaybe(visibleNode)(toUnfoldable(layout.nodes));
+                        var fillingObstacles = fromFoldable2(Data_Map_Internal.values(fillingRects));
+                        var fixedObstacles = append1(nodeObstacles)(fillingObstacles);
+                        var chips = Data_Array.mapMaybe(Data_Function.flip(lookup2)(travellingChips))(sortedIds);
+                        return pure(Markgraf_Animation_Render_TokenChipPlacement.placeTokenChips(safeViewport)(fixedObstacles)(chips));
+                    });
                 });
-            });
+            };
         };
     };
+};
+var tokenLabelTargets = function (dictMonadDraw) {
+    return tokenLabelTargetsInViewport(dictMonadDraw)(unboundedTokenLabelViewport);
 };
 var bubblePopParams = function (progress) {
     return function (holdPre) {
@@ -2687,7 +2663,7 @@ var bubblePopParams = function (progress) {
                 if (Data_Boolean.otherwise) {
                     return 1.0;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1515, column 3 - line 1518, column 22): " + [  ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1497, column 3 - line 1500, column 22): " + [  ]);
             })();
             var fadeAlpha = (function () {
                 if (popAtStart) {
@@ -2699,7 +2675,7 @@ var bubblePopParams = function (progress) {
                 if (Data_Boolean.otherwise) {
                     return 1.0;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1520, column 3 - line 1523, column 22): " + [  ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1502, column 3 - line 1505, column 22): " + [  ]);
             })();
             var chainedAtStart = inRamp && isChained(holdPre);
             var chainedAtEnd = outRamp && isChained(holdPost);
@@ -2713,7 +2689,7 @@ var bubblePopParams = function (progress) {
                 if (Data_Boolean.otherwise) {
                     return 1.0;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1511, column 3 - line 1514, column 22): " + [  ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1493, column 3 - line 1496, column 22): " + [  ]);
             })();
             return {
                 popScale: popScale,
@@ -2723,20 +2699,17 @@ var bubblePopParams = function (progress) {
         };
     };
 };
-var drawFillingLabel = function (dictMonadDraw) {
-    var Bind1 = (dictMonadDraw.Monad0()).Bind1();
-    var bind1 = Control_Bind.bind(Bind1);
-    var measureText = Markgraf_Animation_Render_Draw.measureText(dictMonadDraw);
+var drawFillingLabelAt = function (dictMonadDraw) {
     var withBubblePop1 = withBubblePop(dictMonadDraw);
-    var discard1 = discard(Bind1);
+    var discard1 = discard((dictMonadDraw.Monad0()).Bind1());
     var drawRoundedRect = Markgraf_Animation_Render_Draw.drawRoundedRect(dictMonadDraw);
     var strokePath = Markgraf_Animation_Render_Draw.strokePath(dictMonadDraw);
     var drawText = Markgraf_Animation_Render_Draw.drawText(dictMonadDraw);
     return function (p) {
-        return function (_layout) {
-            return function (pos) {
-                return function (progress) {
-                    return function (labels) {
+        return function (pos) {
+            return function (progress) {
+                return function (labels) {
+                    return function (chipRect) {
                         var pop = bubblePopParams(progress)(0.0)(0.0);
                         var font = {
                             family: p.fontFamily,
@@ -2744,64 +2717,67 @@ var drawFillingLabel = function (dictMonadDraw) {
                             weight: 500
                         };
                         var active = pickActiveLabel(progress)(0.0)(0.0)(Data_Array.concatMap(labelLines)(labels));
-                        return bind1(measureText(font)(active.line))(function (labelW) {
-                            var labelH = 11.0 * 1.2;
-                            var cx = pos.x + pos.w / 2.0;
-                            var bw = labelW + 2.0 * 14.0;
-                            var chipLeft = cx - bw / 2.0;
-                            var bh = labelH + 2.0 * 6.0;
-                            var by = pos.y - bh - Markgraf_Animation_TokenChip.fillGap;
-                            var chipBottom = by + bh;
-                            var chipRect = {
-                                x: cx - bw / 2.0,
-                                y: by,
-                                w: bw,
-                                h: bh,
-                                label: ""
-                            };
-                            var leader = [ Markgraf_Animation_Render_Op.pathOpMove, cx, by + bh, Markgraf_Animation_Render_Op.pathOpLine, cx, pos.y ];
-                            var shadowRect = {
-                                x: cx - bw / 2.0,
-                                y: by + 1.5,
-                                w: bw,
-                                h: bh,
-                                label: ""
-                            };
-                            var anchor = {
-                                x: cx,
-                                y: by + bh / 2.0
-                            };
-                            return withBubblePop1(pop)(chipLeft)(chipBottom)(anchor)(discard1(drawRoundedRect(Markgraf_Animation_Render_ShapeGeometry.toRect(shadowRect))(6.0)(new Data_Maybe.Just({
-                                color: p.chipShadow,
+                        var node = nodeCenter(pos);
+                        var shadowRect = {
+                            x: chipRect.x,
+                            y: chipRect.y + 1.5,
+                            w: chipRect.w,
+                            h: chipRect.h,
+                            label: ""
+                        };
+                        var anchor = {
+                            x: chipRect.x + chipRect.w / 2.0,
+                            y: chipRect.y + chipRect.h / 2.0
+                        };
+                        var leader = [ Markgraf_Animation_Render_Op.pathOpMove, anchor.x, chipRect.y + chipRect.h, Markgraf_Animation_Render_Op.pathOpLine, node.x, pos.y ];
+                        return withBubblePop1(pop)(chipRect.x)(chipRect.y + chipRect.h)(anchor)(discard1(drawRoundedRect(Markgraf_Animation_Render_ShapeGeometry.toRect(shadowRect))(6.0)(new Data_Maybe.Just({
+                            color: p.chipShadow,
+                            flat: true
+                        }))(Data_Maybe.Nothing.value))(function () {
+                            return discard1(drawRoundedRect(Markgraf_Animation_Render_ShapeGeometry.toRect(chipRect))(6.0)(new Data_Maybe.Just({
+                                color: p.chip,
                                 flat: true
-                            }))(Data_Maybe.Nothing.value))(function () {
-                                return discard1(drawRoundedRect(Markgraf_Animation_Render_ShapeGeometry.toRect(chipRect))(6.0)(new Data_Maybe.Just({
-                                    color: p.chip,
-                                    flat: true
-                                }))(new Data_Maybe.Just({
+                            }))(new Data_Maybe.Just({
+                                color: p.chipHairline,
+                                width: 1.0,
+                                lineJoin: Markgraf_Animation_Render_Op.RoundJoin.value,
+                                lineCap: Markgraf_Animation_Render_Op.ButtCap.value
+                            })))(function () {
+                                return discard1(strokePath(leader)({
                                     color: p.chipHairline,
                                     width: 1.0,
                                     lineJoin: Markgraf_Animation_Render_Op.RoundJoin.value,
                                     lineCap: Markgraf_Animation_Render_Op.ButtCap.value
-                                })))(function () {
-                                    return discard1(strokePath(leader)({
-                                        color: p.chipHairline,
-                                        width: 1.0,
-                                        lineJoin: Markgraf_Animation_Render_Op.RoundJoin.value,
-                                        lineCap: Markgraf_Animation_Render_Op.ButtCap.value
-                                    }))(function () {
-                                        return drawText({
-                                            x: cx,
-                                            y: anchor.y,
-                                            content: active.line,
-                                            font: font,
-                                            color: p.chipText,
-                                            align: Markgraf_Animation_Render_Op.AlignCenter.value,
-                                            baseline: Markgraf_Animation_Render_Op.BaselineMiddle.value
-                                        });
+                                }))(function () {
+                                    return drawText({
+                                        x: anchor.x,
+                                        y: anchor.y,
+                                        content: active.line,
+                                        font: font,
+                                        color: p.chipText,
+                                        align: Markgraf_Animation_Render_Op.AlignCenter.value,
+                                        baseline: Markgraf_Animation_Render_Op.BaselineMiddle.value
                                     });
                                 });
-                            }));
+                            });
+                        }));
+                    };
+                };
+            };
+        };
+    };
+};
+var drawFillingLabel = function (dictMonadDraw) {
+    var bind1 = Control_Bind.bind((dictMonadDraw.Monad0()).Bind1());
+    var fillingLabelRect1 = fillingLabelRect(dictMonadDraw);
+    var drawFillingLabelAt1 = drawFillingLabelAt(dictMonadDraw);
+    return function (p) {
+        return function (_layout) {
+            return function (pos) {
+                return function (progress) {
+                    return function (labels) {
+                        return bind1(fillingLabelRect1(pos)(progress)(labels))(function (chipRect) {
+                            return drawFillingLabelAt1(p)(pos)(progress)(labels)(chipRect);
                         });
                     };
                 };
@@ -2887,24 +2863,24 @@ var drawTokenLabelsAt = function (dictMonadDraw) {
                 return function (positions) {
                     var drawOne = function (v) {
                         if (v.value1 instanceof Markgraf_Animation_State.Travelling && !Data_Array["null"](v.value1.value0.labels)) {
-                            var v1 = lookup1(v.value1.value0.target)(layout.nodes);
-                            var v2 = lookup1(v.value1.value0.source)(layout.nodes);
-                            var v3 = lookup2(v.value1.value0.edge)(layout.edges);
-                            var v4 = lookup(v.value0)(positions);
+                            var v1 = lookup(v.value1.value0.target)(layout.nodes);
+                            var v2 = lookup(v.value1.value0.source)(layout.nodes);
+                            var v3 = lookup1(v.value1.value0.edge)(layout.edges);
+                            var v4 = lookup2(v.value0)(positions);
                             if (v4 instanceof Data_Maybe.Just && (v3 instanceof Data_Maybe.Just && (v2 instanceof Data_Maybe.Just && v1 instanceof Data_Maybe.Just))) {
                                 return drawTokenLabel1(p)(Markgraf_Animation_Render_ShapeGeometry.orientPath(v.value1.value0.direction)(v3.value0))(v2.value0)(v1.value0)(v.value1.value0.progress)(v.value1.value0.holdPre)(v.value1.value0.holdPost)(v.value1.value0.labels)(v4.value0);
                             };
                             return pure(Data_Unit.unit);
                         };
                         if (v.value1 instanceof Markgraf_Animation_State.Filling && !Data_Array["null"](v.value1.value0.labels)) {
-                            var v1 = lookup1(v.value1.value0.node)(layout.nodes);
+                            var v1 = lookup(v.value1.value0.node)(layout.nodes);
                             if (v1 instanceof Data_Maybe.Just) {
                                 return drawFillingLabel1(p)(layout)(v1.value0)(v.value1.value0.progress)(v.value1.value0.labels);
                             };
                             if (v1 instanceof Data_Maybe.Nothing) {
                                 return pure(Data_Unit.unit);
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1383, column 32 - line 1385, column 31): " + [ v1.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 1402, column 32 - line 1404, column 31): " + [ v1.constructor.name ]);
                         };
                         return pure(Data_Unit.unit);
                     };
@@ -2928,6 +2904,22 @@ var drawTokenLabels = function (dictMonadDraw) {
                 return bind1(tokenLabelTargets1(layout)(state))(function (targets) {
                     return drawTokenLabelsAt1(p)(layout)(state)(targets);
                 });
+            };
+        };
+    };
+};
+var drawTokenLabelsInViewport = function (dictMonadDraw) {
+    var bind1 = Control_Bind.bind((dictMonadDraw.Monad0()).Bind1());
+    var tokenLabelTargetsInViewport1 = tokenLabelTargetsInViewport(dictMonadDraw);
+    var drawTokenLabelsAt1 = drawTokenLabelsAt(dictMonadDraw);
+    return function (p) {
+        return function (viewport) {
+            return function (layout) {
+                return function (state) {
+                    return bind1(tokenLabelTargetsInViewport1(viewport)(layout)(state))(function (targets) {
+                        return drawTokenLabelsAt1(p)(layout)(state)(targets);
+                    });
+                };
             };
         };
     };
@@ -2996,8 +2988,8 @@ var drawArrowHead = function (dictMonadDraw) {
                     lineJoin: Markgraf_Animation_Render_Op.RoundJoin.value,
                     lineCap: Markgraf_Animation_Render_Op.RoundCap.value
                 };
-                var $714 = len <= 1.0e-4;
-                if ($714) {
+                var $720 = len <= 1.0e-4;
+                if ($720) {
                     return pure(Data_Unit.unit);
                 };
                 if (p.wobble) {
@@ -3026,12 +3018,12 @@ var drawEdge = function (dictMonadDraw) {
     var when = Control_Applicative.when(Applicative0);
     var drawArrowHead1 = drawArrowHead(dictMonadDraw);
     return function (p) {
-        return function (_eid) {
+        return function (shouldDrawArrowHead) {
             return function (path) {
                 return function (v) {
                     var densified = Markgraf_Animation_Render_ShapeGeometry.densifyCorners(cornerRadius)(path);
-                    var $722 = v.hi <= v.lo;
-                    if ($722) {
+                    var $728 = v.hi <= v.lo;
+                    if ($728) {
                         return pure(Data_Unit.unit);
                     };
                     var v1 = Markgraf_Animation_Render_ShapeGeometry.slicePath(densified)(v.lo)(v.hi);
@@ -3073,7 +3065,7 @@ var drawEdge = function (dictMonadDraw) {
                         };
                         return strokePath(Markgraf_Animation_Render_ShapeGeometry.polylineCmds(v1))(style);
                     })())(function () {
-                        return when(v.hi >= 1.0 - tipEpsilon)(drawArrowHead1(p)(shiftedPts));
+                        return when(shouldDrawArrowHead && v.hi >= 1.0 - tipEpsilon)(drawArrowHead1(p)(shiftedPts));
                     });
                 };
             };
@@ -3116,7 +3108,7 @@ var drawEdges = function (dictMonadDraw) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return path;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 385, column 18 - line 387, column 20): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 388, column 18 - line 390, column 20): " + [ v.constructor.name ]);
                 };
                 var snapNear = function (path) {
                     var v = Data_Array.head(path);
@@ -3128,17 +3120,17 @@ var drawEdges = function (dictMonadDraw) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return path;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 382, column 19 - line 384, column 20): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 385, column 19 - line 387, column 20): " + [ v.constructor.name ]);
                 };
-                var snapEndpoints = function ($806) {
-                    return snapFar(snapNear($806));
+                var snapEndpoints = function ($812) {
+                    return snapFar(snapNear($812));
                 };
                 var drawOne = function (v) {
-                    var v1 = lookup2(v.value0)(state.edges);
+                    var v1 = lookup1(v.value0)(state.edges);
                     if (v1 instanceof Data_Maybe.Just) {
-                        var fade = Data_Maybe.fromMaybe(1.0)(lookup2(v.value0)(state.edgeFadeAlpha));
+                        var fade = Data_Maybe.fromMaybe(1.0)(lookup1(v.value0)(state.edgeFadeAlpha));
                         return when(fade > 0.0)(discard1(pushAlpha(fade))(function () {
-                            return discard1(drawEdge1(p)(un(Markgraf_Graph.EdgeId)(v.value0))(snapEndpoints(v.value1))(Markgraf_Animation_Render_FrameReadout.edgePortion(v1.value0)))(function () {
+                            return discard1(drawEdge1(p)(Markgraf_Graph.edgeHasArrowhead(v.value0))(snapEndpoints(v.value1))(Markgraf_Animation_Render_FrameReadout.edgePortion(v1.value0)))(function () {
                                 return popAlpha;
                             });
                         }));
@@ -3146,7 +3138,7 @@ var drawEdges = function (dictMonadDraw) {
                     if (v1 instanceof Data_Maybe.Nothing) {
                         return pure(Data_Unit.unit);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 370, column 27 - line 377, column 25): " + [ v1.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 373, column 27 - line 380, column 25): " + [ v1.constructor.name ]);
                 };
                 return traverse_1(drawOne)(toUnfoldable(layout.edges));
             };
@@ -3164,7 +3156,7 @@ var arrivalProgress = function (layout) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return false;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 730, column 22 - line 732, column 21): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 733, column 22 - line 735, column 21): " + [ v.constructor.name ]);
             };
         };
         var pathEndAngle = function (path) {
@@ -3176,7 +3168,7 @@ var arrivalProgress = function (layout) {
             return 0.0;
         };
         var noOutgoing = function (node) {
-            var v = lookup1(node)(layout.nodes);
+            var v = lookup(node)(layout.nodes);
             if (v instanceof Data_Maybe.Nothing) {
                 return false;
             };
@@ -3185,7 +3177,7 @@ var arrivalProgress = function (layout) {
                     return startsAt(v.value0)(v1.value1);
                 })(toUnfoldable(layout.edges));
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 718, column 21 - line 723, column 8): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 721, column 21 - line 726, column 8): " + [ v.constructor.name ]);
         };
         var merge = function (info) {
             return function (v) {
@@ -3196,8 +3188,8 @@ var arrivalProgress = function (layout) {
                     return new Data_Maybe.Just({
                         t: max(v.value0.t)(info.t),
                         angle: (function () {
-                            var $754 = info.t >= v.value0.t;
-                            if ($754) {
+                            var $760 = info.t >= v.value0.t;
+                            if ($760) {
                                 return info.angle;
                             };
                             return v.value0.angle;
@@ -3206,17 +3198,17 @@ var arrivalProgress = function (layout) {
                         frameHash: v.value0.frameHash
                     });
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 698, column 16 - line 705, column 8): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 701, column 16 - line 708, column 8): " + [ v.constructor.name ]);
             };
         };
         var hashStr = (function () {
-            var $807 = foldl(function (h) {
+            var $813 = foldl(function (h) {
                 return function (c) {
                     return (h * 31 | 0) + Data_Char.toCharCode(c) | 0;
                 };
             })(5381);
-            return function ($808) {
-                return $807(Data_String_CodeUnits.toCharArray($808));
+            return function ($814) {
+                return $813(Data_String_CodeUnits.toCharArray($814));
             };
         })();
         var fh = hashStr(state.frameTitle);
@@ -3229,11 +3221,11 @@ var arrivalProgress = function (layout) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return false;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 733, column 22 - line 735, column 21): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 736, column 22 - line 738, column 21): " + [ v.constructor.name ]);
             };
         };
         var noIncoming = function (node) {
-            var v = lookup1(node)(layout.nodes);
+            var v = lookup(node)(layout.nodes);
             if (v instanceof Data_Maybe.Nothing) {
                 return false;
             };
@@ -3242,14 +3234,14 @@ var arrivalProgress = function (layout) {
                     return endsAtNp(v.value0)(v1.value1);
                 })(toUnfoldable(layout.edges));
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 724, column 21 - line 729, column 8): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 727, column 21 - line 732, column 8): " + [ v.constructor.name ]);
         };
         var isEndpoint = function (node) {
             return noOutgoing(node) || noIncoming(node);
         };
         var endsAt = function (node) {
             return function (path) {
-                var v = lookup1(node)(layout.nodes);
+                var v = lookup(node)(layout.nodes);
                 var v1 = Data_Array.last(path);
                 if (v1 instanceof Data_Maybe.Just && v instanceof Data_Maybe.Just) {
                     return v1.value0.x >= v.value0.x && (v1.value0.x <= v.value0.x + v.value0.w && (v1.value0.y >= v.value0.y && v1.value0.y <= v.value0.y + v.value0.h));
@@ -3259,8 +3251,8 @@ var arrivalProgress = function (layout) {
         };
         var incomingEdges = function (node) {
             return Data_Array.mapMaybe(function (v) {
-                var $768 = endsAt(node)(v.value1);
-                if ($768) {
+                var $774 = endsAt(node)(v.value1);
+                if ($774) {
                     return new Data_Maybe.Just(v.value1);
                 };
                 return Data_Maybe.Nothing.value;
@@ -3274,10 +3266,10 @@ var arrivalProgress = function (layout) {
             if (v instanceof Data_Maybe.Nothing) {
                 return 0.0;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 741, column 24 - line 743, column 19): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 744, column 24 - line 746, column 19): " + [ v.constructor.name ]);
         };
         var edgeStartAngle = function (eid) {
-            var v = lookup2(eid)(layout.edges);
+            var v = lookup1(eid)(layout.edges);
             if (v instanceof Data_Maybe.Just) {
                 var v1 = Data_Array.index(v.value0)(1);
                 var v2 = Data_Array.head(v.value0);
@@ -3289,17 +3281,17 @@ var arrivalProgress = function (layout) {
             if (v instanceof Data_Maybe.Nothing) {
                 return 0.0;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 736, column 24 - line 740, column 19): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 739, column 24 - line 743, column 19): " + [ v.constructor.name ]);
         };
         var edgeEndAngle = function (eid) {
-            var v = lookup2(eid)(layout.edges);
+            var v = lookup1(eid)(layout.edges);
             if (v instanceof Data_Maybe.Just) {
                 return pathEndAngle(v.value0);
             };
             if (v instanceof Data_Maybe.Nothing) {
                 return 0.0;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 749, column 22 - line 751, column 19): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 752, column 22 - line 754, column 19): " + [ v.constructor.name ]);
         };
         var extract = function (v) {
             if (v.value1 instanceof Markgraf_Animation_State.Filling) {
@@ -3360,15 +3352,15 @@ var drawNodesV = function (dictMonadDraw) {
                 return function (layout) {
                     return function (state) {
                         var labelFadeFor = function (nid) {
-                            return Data_Maybe.fromMaybe(1.0)(lookup1(nid)(state.nodeLabelFadeAlpha));
+                            return Data_Maybe.fromMaybe(1.0)(lookup(nid)(state.nodeLabelFadeAlpha));
                         };
                         var fh = arrivalFrameHash(state);
                         var fadeFor = function (nid) {
-                            return Data_Maybe.fromMaybe(1.0)(lookup1(nid)(state.nodeFadeAlpha));
+                            return Data_Maybe.fromMaybe(1.0)(lookup(nid)(state.nodeFadeAlpha));
                         };
                         var arrivals = arrivalProgress(layout)(state);
                         var effective = function (nid) {
-                            var v = lookup1(nid)(arrivals);
+                            var v = lookup(nid)(arrivals);
                             if (v instanceof Data_Maybe.Just) {
                                 return new Data_Maybe.Just(v.value0);
                             };
@@ -3383,14 +3375,14 @@ var drawNodesV = function (dictMonadDraw) {
                             return Data_Maybe.Nothing.value;
                         };
                         var drawOne = function (v) {
-                            var v1 = lookup1(v.value0)(state.nodes);
+                            var v1 = lookup(v.value0)(state.nodes);
                             if (v1 instanceof Data_Maybe.Just) {
                                 return drawOneNode1(labelVis)(inkBoost)(p)(fadeFor(v.value0))(labelFadeFor(v.value0))(effective(v.value0))(v.value0)(v.value1)(v1.value0);
                             };
                             if (v1 instanceof Data_Maybe.Nothing) {
                                 return pure(Data_Unit.unit);
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 598, column 26 - line 600, column 25): " + [ v1.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Layers (line 601, column 26 - line 603, column 25): " + [ v1.constructor.name ]);
                         };
                         return traverse_1(drawOne)(toUnfoldable(layout.nodes));
                     };
@@ -3418,7 +3410,9 @@ export {
     drawTokensInsideNodes,
     drawTokenLabels,
     drawTokenLabelsAt,
+    drawTokenLabelsInViewport,
     tokenLabelTargets,
+    tokenLabelTargetsInViewport,
     tokenShape,
     PolyShape,
     CircleShape,

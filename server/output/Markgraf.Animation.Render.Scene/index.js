@@ -7,9 +7,11 @@ import * as Data_Eq from "../Data.Eq/index.js";
 import * as Data_Foldable from "../Data.Foldable/index.js";
 import * as Data_Map_Internal from "../Data.Map.Internal/index.js";
 import * as Data_Maybe from "../Data.Maybe/index.js";
+import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Unit from "../Data.Unit/index.js";
 import * as Markgraf_Animation_Camera_Focus from "../Markgraf.Animation.Camera.Focus/index.js";
+import * as Markgraf_Animation_Camera_Policy from "../Markgraf.Animation.Camera.Policy/index.js";
 import * as Markgraf_Animation_Interpret from "../Markgraf.Animation.Interpret/index.js";
 import * as Markgraf_Animation_Layout from "../Markgraf.Animation.Layout/index.js";
 import * as Markgraf_Animation_Render_Draw from "../Markgraf.Animation.Render.Draw/index.js";
@@ -56,7 +58,7 @@ var titleLevel = function (rs) {
     if (v instanceof Data_Maybe.Nothing) {
         return Markgraf_Animation_Interpret.lastLevel(rs);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 302, column 17 - line 304, column 26): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 305, column 17 - line 307, column 26): " + [ v.constructor.name ]);
 };
 var titleFont = function (weight) {
     return function (size) {
@@ -71,8 +73,8 @@ var sceneViewport = function (cfg) {
     return function (layout) {
         return function (state) {
             var titleHeadroom = (function () {
-                var $132 = state.frameTitle === "";
-                if ($132) {
+                var $133 = state.frameTitle === "";
+                if ($133) {
                     return 0.0;
                 };
                 return 40.0;
@@ -103,13 +105,13 @@ var outerViewport = function (cfg) {
             return clamp(0.0)(1.0)(b.w / rootW);
         })();
         var headroom = (function () {
-            var $135 = (Markgraf_Animation_Interpret.lastLevel(rs)).state.frameTitle === "";
-            if ($135) {
+            var $136 = (Markgraf_Animation_Interpret.lastLevel(rs)).state.frameTitle === "";
+            if ($136) {
                 return 0.0;
             };
             return 40.0;
         })() * frac;
-        var pad = cfg.padding * frac;
+        var pad = cfg.padding * frac * frac;
         var content = {
             vx: b.x - pad,
             vy: b.y - pad - headroom,
@@ -140,14 +142,30 @@ var nodeRectClip = function (parent) {
                     h: v1.value0.h
                 }));
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 495, column 15 - line 497, column 100): " + [ v1.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 498, column 15 - line 500, column 100): " + [ v1.constructor.name ]);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 493, column 23 - line 497, column 100): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 496, column 23 - line 500, column 100): " + [ v.constructor.name ]);
     };
 };
 var nodeBaseFontPx = 11.0;
-var minLabelPx = 5.0;
+var minLabelPx = /* #__PURE__ */ Data_Newtype.un()(Markgraf_Animation_Camera_Policy.VisibleLabelPx)(Markgraf_Animation_Camera_Policy.minimumVisibleLabelPx);
 var minInkPx = 1.0;
+var levelLabelViewport = function (outer) {
+    return function (level) {
+        var b = Markgraf_Animation_Layout.unplaceBBox(level.segment.placement)({
+            x: outer.vx,
+            y: outer.vy,
+            w: outer.vw,
+            h: outer.vh
+        });
+        return {
+            vx: b.x,
+            vy: b.y,
+            vw: b.w,
+            vh: b.h
+        };
+    };
+};
 var enteredNode = function (child) {
     return Data_Array.last(child.segment.path);
 };
@@ -177,7 +195,7 @@ var drawWatermark = function (dictMonadDraw) {
                     baseline: Markgraf_Animation_Render_Op.BaselineTop.value
                 });
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 539, column 1 - line 539, column 71): " + [ tag.constructor.name, vp.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 542, column 1 - line 542, column 71): " + [ tag.constructor.name, vp.constructor.name ]);
         };
     };
 };
@@ -237,7 +255,7 @@ var drawTitleCard = function (dictMonadDraw) {
                     });
                 });
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 605, column 1 - line 605, column 71): " + [ title.constructor.name, vp.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 608, column 1 - line 608, column 71): " + [ title.constructor.name, vp.constructor.name ]);
         };
     };
 };
@@ -297,12 +315,12 @@ var drawFrameTitle = function (dictMonadDraw) {
                     });
                 });
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 555, column 1 - line 555, column 72): " + [ title.constructor.name, vp.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 558, column 1 - line 558, column 72): " + [ title.constructor.name, vp.constructor.name ]);
         };
     };
 };
 var renderSceneViewport = function (dictMonadDraw) {
-    var drawTokenLabels = Markgraf_Animation_Render_Layers.drawTokenLabels(dictMonadDraw);
+    var drawTokenLabelsInViewport = Markgraf_Animation_Render_Layers.drawTokenLabelsInViewport(dictMonadDraw);
     var drawTokenLabelsAt = Markgraf_Animation_Render_Layers.drawTokenLabelsAt(dictMonadDraw);
     var Monad0 = dictMonadDraw.Monad0();
     var discard1 = discard(Monad0.Bind1());
@@ -332,12 +350,12 @@ var renderSceneViewport = function (dictMonadDraw) {
                                     var p = Markgraf_Animation_Render_Layers.palette(cfg.theme);
                                     var drawLabels = (function () {
                                         if (labelMode instanceof ResolvedLabels) {
-                                            return drawTokenLabels(p)(layout)(state);
+                                            return drawTokenLabelsInViewport(p)(viewport)(layout)(state);
                                         };
                                         if (labelMode instanceof SpringLabels) {
                                             return drawTokenLabelsAt(p)(layout)(state)(labelMode.value0);
                                         };
-                                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 162, column 16 - line 164, column 80): " + [ labelMode.constructor.name ]);
+                                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 165, column 16 - line 167, column 80): " + [ labelMode.constructor.name ]);
                                     })();
                                     return discard1(drawBackground(p)(cfg.transparentBg)(bgTileScale)(viewport))(function () {
                                         return discard1(when(contentAlpha > 0.0)(discard1(when(contentAlpha < 1.0)(pushAlpha(contentAlpha)))(function () {
@@ -394,7 +412,7 @@ var renderScene = function (dictMonadDraw) {
                 if (Data_Boolean.otherwise) {
                     return renderSceneViewport1(cfg)(1.0)(1.0)(0.0)(sceneViewport(cfg)(layout)(state))(layout)(state)(ResolvedLabels.value);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 60, column 1 - line 72, column 12): " + [ cfg.constructor.name, layout.constructor.name, state.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 63, column 1 - line 75, column 12): " + [ cfg.constructor.name, layout.constructor.name, state.constructor.name ]);
             };
         };
     };
@@ -416,7 +434,7 @@ var renderSceneAt = function (dictMonadDraw) {
                     if (Data_Boolean.otherwise) {
                         return renderSceneViewport1(cfg)(1.0)(1.0)(0.0)(sceneViewport(cfg)(layout)(state))(layout)(state)(new SpringLabels(positions));
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 82, column 1 - line 95, column 12): " + [ cfg.constructor.name, layout.constructor.name, state.constructor.name, positions.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 85, column 1 - line 98, column 12): " + [ cfg.constructor.name, layout.constructor.name, state.constructor.name, positions.constructor.name ]);
                 };
             };
         };
@@ -446,7 +464,7 @@ var drawMinis = function (dictMonadDraw) {
                         if (v instanceof Data_Maybe.Nothing) {
                             return false;
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 474, column 24 - line 478, column 21): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 477, column 24 - line 481, column 21): " + [ v.constructor.name ]);
                     };
                     return for_(parent.minis)(function (v) {
                         return when(v.bgAlpha > 0.0 && containerShowing(v))(drawChildLevel(dictMonadDraw)(cfg)(page)(cameraZoom)(Data_Map_Internal.empty)(parent)(v));
@@ -464,7 +482,7 @@ var drawChildLevel = function (dictMonadDraw) {
     var pushTransform = Markgraf_Animation_Render_Draw.pushTransform(dictMonadDraw);
     var drawShape = Markgraf_Animation_Render_Draw.drawShape(dictMonadDraw);
     var popTransform = Markgraf_Animation_Render_Draw.popTransform(dictMonadDraw);
-    var drawTokenLabels = Markgraf_Animation_Render_Layers.drawTokenLabels(dictMonadDraw);
+    var drawTokenLabelsInViewport = Markgraf_Animation_Render_Layers.drawTokenLabelsInViewport(dictMonadDraw);
     var drawTokenLabelsAt = Markgraf_Animation_Render_Layers.drawTokenLabelsAt(dictMonadDraw);
     var pushAlpha = Markgraf_Animation_Render_Draw.pushAlpha(dictMonadDraw);
     var when = Control_Applicative.when(Applicative0);
@@ -515,8 +533,8 @@ var drawChildLevel = function (dictMonadDraw) {
                             var effectiveScale = scaleOf(child.segment.placement) * cameraZoom;
                             var inkBoost = min(8.0)(max(1.0)(minInkPx / (1.25 * max(1.0e-6)(effectiveScale))));
                             var labelVis = (function () {
-                                var $164 = Markgraf_Animation_Render_Layers.legibleAtScale(minLabelPx)(nodeBaseFontPx)(effectiveScale);
-                                if ($164) {
+                                var $165 = Markgraf_Animation_Render_Layers.legibleAtScale(minLabelPx)(nodeBaseFontPx)(effectiveScale);
+                                if ($165) {
                                     return Markgraf_Animation_Render_Layers.LabelsShown.value;
                                 };
                                 return Markgraf_Animation_Render_Layers.LabelsHidden.value;
@@ -540,20 +558,20 @@ var drawChildLevel = function (dictMonadDraw) {
                                         });
                                     });
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 396, column 15 - line 412, column 19): " + [ enteredPos.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 399, column 15 - line 415, column 19): " + [ enteredPos.constructor.name ]);
                             })();
                             var drawChildLabels = (function () {
                                 if (labelVis instanceof Markgraf_Animation_Render_Layers.LabelsHidden) {
                                     return pure(Data_Unit.unit);
                                 };
                                 if (labelVis instanceof Markgraf_Animation_Render_Layers.LabelsShown) {
-                                    var $168 = Data_Map_Internal.isEmpty(positions);
-                                    if ($168) {
-                                        return drawTokenLabels(p)(child.segment.layout)(child.state);
+                                    var $169 = Data_Map_Internal.isEmpty(positions);
+                                    if ($169) {
+                                        return drawTokenLabelsInViewport(p)(levelLabelViewport(page.viewport)(child))(child.segment.layout)(child.state);
                                     };
                                     return drawTokenLabelsAt(p)(child.segment.layout)(child.state)(positions);
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 427, column 21 - line 431, column 61): " + [ labelVis.constructor.name ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 430, column 21 - line 434, column 61): " + [ labelVis.constructor.name ]);
                             })();
                             var clipPath = nodeRectClip(parent)(enteredNode(child));
                             return discard1(pushAlpha(child.bgAlpha))(function () {
@@ -625,8 +643,8 @@ var renderLevelsDrawAt = function (dictMonadDraw) {
                 if (Data_Boolean.otherwise) {
                     var outer = outerViewport(cfg)(rs);
                     var childPositions = function (child) {
-                        var $172 = eq(child.role)(Markgraf_Animation_Interpret.Active.value);
-                        if ($172) {
+                        var $173 = eq(child.role)(Markgraf_Animation_Interpret.Active.value);
+                        if ($173) {
                             return positions;
                         };
                         return Data_Map_Internal.empty;
@@ -655,22 +673,22 @@ var renderLevelsDrawAt = function (dictMonadDraw) {
                                     return drawDeeper(v2.value0.head)(v2.value0.tail);
                                 });
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 276, column 34 - line 287, column 32): " + [ v2.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 279, column 34 - line 290, column 32): " + [ v2.constructor.name ]);
                         };
                     };
                     var renderRoot = function (root) {
                         return function (rootIsDeepest) {
                             var titleState = (titleLevel(rs)).state;
                             var labelMode = (function () {
-                                var $180 = rootIsDeepest && !Data_Map_Internal.isEmpty(positions);
-                                if ($180) {
+                                var $181 = rootIsDeepest && !Data_Map_Internal.isEmpty(positions);
+                                if ($181) {
                                     return new SpringLabels(positions);
                                 };
                                 return ResolvedLabels.value;
                             })();
                             var contentAlpha = (function () {
-                                var $181 = drawsOwnDiagram(root);
-                                if ($181) {
+                                var $182 = drawsOwnDiagram(root);
+                                if ($182) {
                                     return root.bgAlpha;
                                 };
                                 return 0.0;
@@ -689,9 +707,9 @@ var renderLevelsDrawAt = function (dictMonadDraw) {
                             });
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 213, column 7 - line 223, column 33): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 216, column 7 - line 226, column 33): " + [ v.constructor.name ]);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 193, column 1 - line 205, column 12): " + [ cfg.constructor.name, positions.constructor.name, rs.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Render.Scene (line 196, column 1 - line 208, column 12): " + [ cfg.constructor.name, positions.constructor.name, rs.constructor.name ]);
             };
         };
     };
@@ -708,6 +726,7 @@ export {
     renderLevelsDraw,
     renderLevelsDrawAt,
     sceneViewport,
-    outerViewport
+    outerViewport,
+    levelLabelViewport
 };
 //# sourceMappingURL=index.js.map

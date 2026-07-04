@@ -11,6 +11,7 @@ import * as Data_String_Common from "../Data.String.Common/index.js";
 import * as Markgraf_Animation_Surface from "../Markgraf.Animation.Surface/index.js";
 import * as Markgraf_Animation_SurfaceText from "../Markgraf.Animation.SurfaceText/index.js";
 import * as Markgraf_Graph from "../Markgraf.Graph/index.js";
+var append = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupString);
 var un = /* #__PURE__ */ Data_Newtype.un();
 var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var show = /* #__PURE__ */ Data_Show.show(Data_Show.showInt);
@@ -21,17 +22,23 @@ var quote = /* #__PURE__ */ (function () {
         return "\"" + (s + "\"");
     };
     var $$escape = (function () {
-        var $89 = Data_String_Common.replaceAll("\x0a")("\\n");
-        var $90 = Data_String_Common.replaceAll("\"")("\\\"");
-        var $91 = Data_String_Common.replaceAll("\\")("\\\\");
-        return function ($92) {
-            return $89($90($91($92)));
+        var $84 = Data_String_Common.replaceAll("\x0a")("\\n");
+        var $85 = Data_String_Common.replaceAll("\"")("\\\"");
+        var $86 = Data_String_Common.replaceAll("\\")("\\\\");
+        return function ($87) {
+            return $84($85($86($87)));
         };
     })();
-    return function ($93) {
-        return wrap($$escape($93));
+    return function ($88) {
+        return wrap($$escape($88));
     };
 })();
+var printShape = function (v) {
+    if (v instanceof Markgraf_Graph.Rectangle) {
+        return "";
+    };
+    return " {shape: " + (Markgraf_Graph.shapeName(v) + "}");
+};
 var printLabel = function (s) {
     var hasPipe = Data_String_CodeUnits.contains("|")(s);
     var hasNewline = Data_String_CodeUnits.contains("\x0a")(s);
@@ -48,7 +55,7 @@ var printLabel = function (s) {
             if (v instanceof Data_Maybe.Nothing) {
                 return false;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 124, column 23 - line 126, column 23): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 130, column 23 - line 132, column 23): " + [ v.constructor.name ]);
         };
         var v = Data_String_CodeUnits.toCharArray(s);
         if (v.length === 0) {
@@ -56,8 +63,8 @@ var printLabel = function (s) {
         };
         return Data_Array.all(safeChar)(v) && (trimmed && noBadHead(v));
     })();
-    var $30 = hasNewline && !hasPipe;
-    if ($30) {
+    var $27 = hasNewline && !hasPipe;
+    if ($27) {
         return " |" + (s + "|");
     };
     if (colonSafe) {
@@ -65,51 +72,63 @@ var printLabel = function (s) {
     };
     return " " + quote(s);
 };
+var pad = function (n) {
+    return Data_String_CodeUnits.fromCharArray(Data_Array.replicate(n * 2 | 0)(" "));
+};
+var linkArrow = function (directed) {
+    if (directed) {
+        return " -> ";
+    };
+    return " -- ";
+};
 var printOp = function (v) {
     if (v instanceof Markgraf_Animation_Surface.AddNode) {
-        return "+node " + (un(Markgraf_Graph.NodeId)(v.value0.id) + printLabel(v.value0.label));
+        return "+ " + (un(Markgraf_Graph.NodeId)(v.value0.id) + (printLabel(v.value0.label) + printShape(v.value0.shape)));
     };
     if (v instanceof Markgraf_Animation_Surface.DelNode) {
         var printVia = function (v1) {
             return " via " + (un(Markgraf_Graph.NodeId)(v1.from) + (" " + un(Markgraf_Graph.NodeId)(v1.to)));
         };
-        return "-node " + (un(Markgraf_Graph.NodeId)(v.value0.id) + Data_String_Common.joinWith("")(map(printVia)(v.value0.via)));
+        return "- " + (un(Markgraf_Graph.NodeId)(v.value0.id) + Data_String_Common.joinWith("")(map(printVia)(v.value0.via)));
     };
     if (v instanceof Markgraf_Animation_Surface.ModNode) {
         if (v.value0.label instanceof Data_Maybe.Just) {
-            return "~node " + (un(Markgraf_Graph.NodeId)(v.value0.id) + printLabel(v.value0.label.value0));
+            return "~ " + (un(Markgraf_Graph.NodeId)(v.value0.id) + printLabel(v.value0.label.value0));
         };
         if (v.value0.label instanceof Data_Maybe.Nothing) {
-            return "~node " + un(Markgraf_Graph.NodeId)(v.value0.id);
+            return "~ " + un(Markgraf_Graph.NodeId)(v.value0.id);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 84, column 28 - line 86, column 40): " + [ v.value0.label.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 82, column 28 - line 84, column 36): " + [ v.value0.label.constructor.name ]);
     };
     if (v instanceof Markgraf_Animation_Surface.AddEdge) {
-        return "+edge " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (" " + (un(Markgraf_Graph.NodeId)(v.value0.to) + Data_Maybe.maybe("")(function (l) {
-            return " " + quote(un(Markgraf_Graph.Label)(l));
-        })(v.value0.label))));
+        return "+ " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (linkArrow(v.value0.directed) + (un(Markgraf_Graph.NodeId)(v.value0.to) + Data_Maybe.maybe("")((function () {
+            var $89 = un(Markgraf_Graph.Label);
+            return function ($90) {
+                return printLabel($89($90));
+            };
+        })())(v.value0.label))));
     };
     if (v instanceof Markgraf_Animation_Surface.DelEdge) {
-        return "-edge " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (" " + un(Markgraf_Graph.NodeId)(v.value0.to)));
+        return "- " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (linkArrow(v.value0.directed) + un(Markgraf_Graph.NodeId)(v.value0.to)));
     };
     if (v instanceof Markgraf_Animation_Surface.RepointEdge) {
-        return "~edge " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (" " + (un(Markgraf_Graph.NodeId)(v.value0.to) + (" -> " + (un(Markgraf_Graph.NodeId)(v.value0.newFrom) + (" " + un(Markgraf_Graph.NodeId)(v.value0.newTo)))))));
+        return "~ " + (un(Markgraf_Graph.NodeId)(v.value0.from) + (" -> " + (un(Markgraf_Graph.NodeId)(v.value0.to) + (" => " + (un(Markgraf_Graph.NodeId)(v.value0.newFrom) + (" -> " + un(Markgraf_Graph.NodeId)(v.value0.newTo)))))));
     };
     if (v instanceof Markgraf_Animation_Surface.Token) {
-        return un(Markgraf_Graph.NodeId)(v.value0.from) + (" -> " + (un(Markgraf_Graph.NodeId)(v.value0.to) + Data_String_Common.joinWith("")(map(function (l) {
-            return " " + quote(un(Markgraf_Graph.Label)(l));
-        })(v.value0.labels))));
+        return un(Markgraf_Graph.NodeId)(v.value0.from) + (" ~> " + (un(Markgraf_Graph.NodeId)(v.value0.to) + Data_String_Common.joinWith("")(map((function () {
+            var $91 = un(Markgraf_Graph.Label);
+            return function ($92) {
+                return printLabel($91($92));
+            };
+        })())(v.value0.labels))));
     };
     if (v instanceof Markgraf_Animation_Surface.Enter) {
-        return "enter " + un(Markgraf_Graph.NodeId)(v.value0.id);
+        return "into " + un(Markgraf_Graph.NodeId)(v.value0.id);
     };
     if (v instanceof Markgraf_Animation_Surface.Exit) {
-        return "exit";
+        return "out";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 78, column 11 - line 101, column 17): " + [ v.constructor.name ]);
-};
-var pad = function (n) {
-    return Data_String_CodeUnits.fromCharArray(Data_Array.replicate(n * 2 | 0)(" "));
+    throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 76, column 11 - line 99, column 16): " + [ v.constructor.name ]);
 };
 var printBlock = function (indent) {
     return function (block) {
@@ -128,7 +147,7 @@ var printBlock = function (indent) {
         if (block instanceof Markgraf_Animation_Surface.Seq) {
             return pad(indent) + ("seq {\x0a" + (Data_String_Common.joinWith("\x0a")(map(printBlock(indent + 1 | 0))(block.value0)) + ("\x0a" + (pad(indent) + "}"))));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 60, column 27 - line 75, column 13): " + [ block.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 58, column 27 - line 73, column 13): " + [ block.constructor.name ]);
     };
 };
 var printBody = function (indent) {
@@ -139,50 +158,12 @@ var printBody = function (indent) {
         return printBlock(indent)(block);
     };
 };
-var isDigit = function (c) {
-    return c >= "0" && c <= "9";
-};
-var isAlpha = function (c) {
-    return c >= "a" && c <= "z" || c >= "A" && c <= "Z";
-};
-var identChar = function (c) {
-    return isAlpha(c) || (isDigit(c) || (c === "_" || c === "-"));
-};
-var isIdent = function (s) {
-    var v = Data_String_CodeUnits.toCharArray(s);
-    if (v.length === 0) {
-        return false;
-    };
-    var headOk = (function () {
-        var v1 = Data_Array.head(v);
-        if (v1 instanceof Data_Maybe.Just) {
-            return isAlpha(v1.value0) || v1.value0 === "_";
-        };
-        if (v1 instanceof Data_Maybe.Nothing) {
-            return false;
-        };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 142, column 14 - line 144, column 23): " + [ v1.constructor.name ]);
-    })();
-    return Data_Array.all(identChar)(v) && headOk;
-};
 var printFrameAt = function (indent) {
     return function (v) {
-        var nameStr = (function () {
-            if (v.name instanceof Data_Maybe.Just) {
-                var $78 = isIdent(v.name.value0);
-                if ($78) {
-                    return v.name.value0;
-                };
-                return quote(v.name.value0);
-            };
-            if (v.name instanceof Data_Maybe.Nothing) {
-                return quote("");
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 49, column 13 - line 51, column 24): " + [ v.name.constructor.name ]);
-        })();
+        var nameStr = Data_Maybe.maybe("")(append(" "))(v.name);
         var keyword = (function () {
             if (v.kind instanceof Markgraf_Animation_Surface.AnimatedKeyframe) {
-                return "keyframe";
+                return "scene";
             };
             if (v.kind instanceof Markgraf_Animation_Surface.Still) {
                 return "still";
@@ -193,7 +174,7 @@ var printFrameAt = function (indent) {
             throw new Error("Failed pattern match at Markgraf.Animation.SurfacePrint (line 45, column 13 - line 48, column 21): " + [ v.kind.constructor.name ]);
         })();
         var body = printBody(indent + 1 | 0)(v.ops);
-        return pad(indent) + (keyword + (" " + (nameStr + (" {\x0a" + (body + ("\x0a" + (pad(indent) + "}")))))));
+        return pad(indent) + (keyword + (nameStr + (" {\x0a" + (body + ("\x0a" + (pad(indent) + "}"))))));
     };
 };
 var printInside = function (indent) {
@@ -204,8 +185,8 @@ var printInside = function (indent) {
 var printDocument = function (indent) {
     return function (s) {
         var header = (function () {
-            var $88 = s.seed === 0;
-            if ($88) {
+            var $83 = s.seed === 0;
+            if ($83) {
                 return "";
             };
             return pad(indent) + ("seed " + show(s.seed));

@@ -1609,7 +1609,7 @@ var renderTerminal = function (cfg) {
                         return drawNativeNode(env)(layout)(v.value0)(v.value1)(state);
                     })(nodeList)();
                     traverse_(function (v) {
-                        return drawArrowhead(env)(v.value1)(edgeProg(v.value0));
+                        return when(Markgraf_Graph.edgeHasArrowhead(v.value0))(drawArrowhead(env)(v.value1)(edgeProg(v.value0)));
                     })(edgeList)();
                     traverse_(function (v) {
                         return drawNativeToken(env)(layout)(v.value1);

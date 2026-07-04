@@ -3,11 +3,11 @@
 ```markgraf
 seed 1
 
-keyframe first {
-  +node api "API"
-  +node db "Database"
-  +edge api db
+scene first {
+  + api: API
+  + db: Database
+  + api -> db
 
-  api -> db |SELECT user|
+  api ~> db |SELECT user|
 }
 ```

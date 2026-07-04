@@ -261,7 +261,7 @@ var segmentForPath = function (sch) {
             if (v instanceof Data_Maybe.Nothing) {
                 return Data_Array.find(onPath)(sch.segments);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 439, column 3 - line 441, column 42): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 437, column 3 - line 439, column 42): " + [ v.constructor.name ]);
         };
     };
 };
@@ -282,7 +282,7 @@ var sceneEndKeyframe = function (carried) {
         if (span.scene instanceof Markgraf_Animation_Spec.ExitNode) {
             return carried;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 599, column 33 - line 604, column 22): " + [ span.scene.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 597, column 33 - line 602, column 22): " + [ span.scene.constructor.name ]);
     };
 };
 var scaleOf = function (placement) {
@@ -345,7 +345,7 @@ var mapNodePhase = function (progress) {
         if (v instanceof Markgraf_Animation_Schedule.PlopOut) {
             return new Markgraf_Animation_State.PloppingOut(progress);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 755, column 25 - line 757, column 34): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 753, column 25 - line 755, column 34): " + [ v.constructor.name ]);
     };
 };
 var mapEdgePhase = function (progress) {
@@ -356,7 +356,7 @@ var mapEdgePhase = function (progress) {
         if (v instanceof Markgraf_Animation_Schedule.Extend) {
             return new Markgraf_Animation_State.Extending(v.value0, progress);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 799, column 25 - line 801, column 39): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 797, column 25 - line 799, column 39): " + [ v.constructor.name ]);
     };
 };
 var lookupNodes = function (seg) {
@@ -418,7 +418,7 @@ var keyframeForSegment = function (seg) {
                 if (v.value0.scene instanceof Markgraf_Animation_Spec.ExitNode) {
                     return new Markgraf_Animation_Schedule.AtKeyframe(seg.initialKeyframe);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 588, column 20 - line 593, column 51): " + [ v.value0.scene.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 586, column 20 - line 591, column 51): " + [ v.value0.scene.constructor.name ]);
             };
             if (v instanceof Data_Maybe.Nothing) {
                 var v1 = Data_Array.last(seg.spans);
@@ -428,11 +428,11 @@ var keyframeForSegment = function (seg) {
                 if (v1 instanceof Data_Maybe.Nothing) {
                     return new Markgraf_Animation_Schedule.AtKeyframe(seg.initialKeyframe);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 594, column 18 - line 596, column 50): " + [ v1.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 592, column 18 - line 594, column 50): " + [ v1.constructor.name ]);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 587, column 17 - line 596, column 50): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 585, column 17 - line 594, column 50): " + [ v.constructor.name ]);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 584, column 1 - line 584, column 63): " + [ seg.constructor.name, t.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 582, column 1 - line 582, column 63): " + [ seg.constructor.name, t.constructor.name ]);
     };
 };
 var journeysOf = /* #__PURE__ */ (function () {
@@ -589,7 +589,7 @@ var frameTitleForSegment = function (seg) {
         if (v instanceof Markgraf_Animation_Schedule.InTransition) {
             return hideSyntheticId(v.value1);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 562, column 30 - line 564, column 53): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 560, column 30 - line 562, column 53): " + [ v.constructor.name ]);
     };
 };
 var frameKindForSegment = function (seg) {
@@ -602,7 +602,7 @@ var frameKindForSegment = function (seg) {
             if (v instanceof Data_Maybe.Nothing) {
                 return Markgraf_Animation_Spec.Animated.value;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 578, column 16 - line 580, column 24): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 576, column 16 - line 578, column 24): " + [ v.constructor.name ]);
         };
         return kindOf((function () {
             var v = keyframeForSegment(seg)(t);
@@ -612,12 +612,12 @@ var frameKindForSegment = function (seg) {
             if (v instanceof Markgraf_Animation_Schedule.InTransition) {
                 return v.value1;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 574, column 36 - line 576, column 26): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 572, column 36 - line 574, column 26): " + [ v.constructor.name ]);
         })());
     };
 };
-var frameFadeStart = 0.55;
-var frameFadeBand = 0.3;
+var frameFadeStart = labelFadeStart;
+var frameFadeBand = labelFadeBand;
 var findActiveWindow = function (windows) {
     return function (t) {
         return function (pred) {
@@ -716,7 +716,7 @@ var edgesTouching = function (layout) {
             };
             return Data_Array.mapMaybe(touching)(toUnfoldable(layout.edges));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 413, column 28 - line 423, column 16): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 411, column 28 - line 421, column 16): " + [ v.constructor.name ]);
     };
 };
 var diveEasing = /* #__PURE__ */ (function () {
@@ -731,7 +731,7 @@ var currentKeyframeNodes = function (seg) {
         if (v instanceof Markgraf_Animation_Schedule.InTransition) {
             return append(lookupNodes(seg)(v.value0))(lookupNodes(seg)(v.value1));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 858, column 30 - line 860, column 73): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 856, column 30 - line 858, column 73): " + [ v.constructor.name ]);
     };
 };
 var currentKeyframeEdges = function (seg) {
@@ -743,7 +743,7 @@ var currentKeyframeEdges = function (seg) {
         if (v instanceof Markgraf_Animation_Schedule.InTransition) {
             return append1(lookupEdges(seg)(v.value0))(lookupEdges(seg)(v.value1));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 863, column 30 - line 865, column 73): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 861, column 30 - line 863, column 73): " + [ v.constructor.name ]);
     };
 };
 var clampToBBox = function (rootLayout) {
@@ -830,7 +830,7 @@ var resolveEdge = function (sch) {
                             return Markgraf_Animation_State.Retracted.value;
                         };
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 776, column 42 - line 782, column 29): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 774, column 42 - line 780, column 29): " + [ v.constructor.name ]);
                 };
             };
         };
@@ -869,7 +869,7 @@ var resolveNode = function (windows) {
                         return Markgraf_Animation_State.Hidden.value;
                     };
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 732, column 38 - line 738, column 26): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 730, column 38 - line 736, column 26): " + [ v.constructor.name ]);
             };
         };
     };
@@ -908,7 +908,7 @@ var tokenIdAndState = function (sch) {
                             holdPost: w.target.value7
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 828, column 7 - line 840, column 14): " + [  ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 826, column 7 - line 838, column 14): " + [  ]);
                 })();
                 return new Data_Tuple.Tuple(w.target.value0, state);
             };
@@ -927,7 +927,7 @@ var tokenIdAndState = function (sch) {
                             labels: w.target.value2
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 845, column 7 - line 852, column 14): " + [  ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 843, column 7 - line 850, column 14): " + [  ]);
                 })();
                 return new Data_Tuple.Tuple(w.target.value0, state);
             };
@@ -1052,7 +1052,7 @@ var preDiveBlink = function (sch) {
                 if (v instanceof Data_Maybe.Nothing) {
                     return level;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 463, column 32 - line 465, column 19): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Interpret (line 461, column 32 - line 463, column 19): " + [ v.constructor.name ]);
             };
         };
     };

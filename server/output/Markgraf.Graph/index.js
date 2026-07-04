@@ -6,6 +6,7 @@ import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Ordering from "../Data.Ordering/index.js";
 import * as Data_Semigroup from "../Data.Semigroup/index.js";
 import * as Data_Show from "../Data.Show/index.js";
+import * as Data_String_CodeUnits from "../Data.String.CodeUnits/index.js";
 import * as Markgraf_Grid from "../Markgraf.Grid/index.js";
 import * as Yoga_JSON from "../Yoga.JSON/index.js";
 import * as Yoga_JSON_Derive from "../Yoga.JSON.Derive/index.js";
@@ -457,7 +458,7 @@ var showSide = {
         if (v instanceof West) {
             return "West";
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 165, column 1 - line 169, column 21): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 166, column 1 - line 170, column 21): " + [ v.constructor.name ]);
     }
 };
 var showShape = {
@@ -483,7 +484,7 @@ var showShape = {
         if (v instanceof Cloud) {
             return "Cloud";
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 70, column 1 - line 77, column 23): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 71, column 1 - line 78, column 23): " + [ v.constructor.name ]);
     }
 };
 var showPortId = Data_Show.showString;
@@ -499,7 +500,7 @@ var showLayerPin = {
         if (v instanceof SpecificLayer) {
             return "(SpecificLayer " + (show(v.value0) + ")");
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 235, column 1 - line 238, column 62): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 236, column 1 - line 239, column 62): " + [ v.constructor.name ]);
     }
 };
 var showLabel = Data_Show.showString;
@@ -520,7 +521,7 @@ var showJustify = {
         if (v instanceof SpaceAround) {
             return "SpaceAround";
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 216, column 1 - line 221, column 35): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 217, column 1 - line 222, column 35): " + [ v.constructor.name ]);
     }
 };
 var showEdgeId = Data_Show.showString;
@@ -532,7 +533,7 @@ var showAxis = {
         if (v instanceof Vertical) {
             return "Vertical";
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 183, column 1 - line 185, column 29): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 184, column 1 - line 186, column 29): " + [ v.constructor.name ]);
     }
 };
 var showAlignment = {
@@ -546,7 +547,7 @@ var showAlignment = {
         if (v instanceof End) {
             return "End";
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 199, column 1 - line 202, column 19): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 200, column 1 - line 203, column 19): " + [ v.constructor.name ]);
     }
 };
 var semigroupNodeId = Data_Semigroup.semigroupString;
@@ -602,7 +603,7 @@ var genericSide_ = {
         if (x instanceof Data_Generic_Rep.Inr && (x.value0 instanceof Data_Generic_Rep.Inr && x.value0.value0 instanceof Data_Generic_Rep.Inr)) {
             return West.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 163, column 1 - line 163, column 31): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 164, column 1 - line 164, column 31): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof North) {
@@ -617,7 +618,7 @@ var genericSide_ = {
         if (x instanceof West) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value)));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 163, column 1 - line 163, column 31): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 164, column 1 - line 164, column 31): " + [ x.constructor.name ]);
     }
 };
 var genericShape_ = {
@@ -643,7 +644,7 @@ var genericShape_ = {
         if (x instanceof Data_Generic_Rep.Inr && (x.value0 instanceof Data_Generic_Rep.Inr && (x.value0.value0 instanceof Data_Generic_Rep.Inr && (x.value0.value0.value0 instanceof Data_Generic_Rep.Inr && (x.value0.value0.value0.value0 instanceof Data_Generic_Rep.Inr && x.value0.value0.value0.value0.value0 instanceof Data_Generic_Rep.Inr))))) {
             return Cloud.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 68, column 1 - line 68, column 32): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 69, column 1 - line 69, column 32): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof Rectangle) {
@@ -667,7 +668,7 @@ var genericShape_ = {
         if (x instanceof Cloud) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value))))));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 68, column 1 - line 68, column 32): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 69, column 1 - line 69, column 32): " + [ x.constructor.name ]);
     }
 };
 var genericLayerPin_ = {
@@ -681,7 +682,7 @@ var genericLayerPin_ = {
         if (x instanceof Data_Generic_Rep.Inr && x.value0 instanceof Data_Generic_Rep.Inr) {
             return new SpecificLayer(x.value0.value0);
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 233, column 1 - line 233, column 35): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 234, column 1 - line 234, column 35): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof FirstLayer) {
@@ -693,7 +694,7 @@ var genericLayerPin_ = {
         if (x instanceof SpecificLayer) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(x.value0));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 233, column 1 - line 233, column 35): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 234, column 1 - line 234, column 35): " + [ x.constructor.name ]);
     }
 };
 var readForeignLayerPin = {
@@ -719,7 +720,7 @@ var genericJustify_ = {
         if (x instanceof Data_Generic_Rep.Inr && (x.value0 instanceof Data_Generic_Rep.Inr && (x.value0.value0 instanceof Data_Generic_Rep.Inr && x.value0.value0.value0 instanceof Data_Generic_Rep.Inr))) {
             return SpaceAround.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 214, column 1 - line 214, column 34): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 215, column 1 - line 215, column 34): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof JustifyStart) {
@@ -737,7 +738,7 @@ var genericJustify_ = {
         if (x instanceof SpaceAround) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value))));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 214, column 1 - line 214, column 34): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 215, column 1 - line 215, column 34): " + [ x.constructor.name ]);
     }
 };
 var genericConstraints_ = {
@@ -757,7 +758,7 @@ var genericConstraints_ = {
         if (x instanceof Data_Generic_Rep.Inr && (x.value0 instanceof Data_Generic_Rep.Inr && (x.value0.value0 instanceof Data_Generic_Rep.Inr && x.value0.value0.value0 instanceof Data_Generic_Rep.Inr))) {
             return new RelativePosition(x.value0.value0.value0.value0);
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 254, column 1 - line 254, column 38): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 255, column 1 - line 255, column 38): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof AlignGroup) {
@@ -775,7 +776,7 @@ var genericConstraints_ = {
         if (x instanceof RelativePosition) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(x.value0))));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 254, column 1 - line 254, column 38): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 255, column 1 - line 255, column 38): " + [ x.constructor.name ]);
     }
 };
 var genericAxis_ = {
@@ -786,7 +787,7 @@ var genericAxis_ = {
         if (x instanceof Data_Generic_Rep.Inr) {
             return Vertical.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 181, column 1 - line 181, column 31): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 182, column 1 - line 182, column 31): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof Horizontal) {
@@ -795,7 +796,7 @@ var genericAxis_ = {
         if (x instanceof Vertical) {
             return new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value);
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 181, column 1 - line 181, column 31): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 182, column 1 - line 182, column 31): " + [ x.constructor.name ]);
     }
 };
 var genericAlignment_ = {
@@ -809,7 +810,7 @@ var genericAlignment_ = {
         if (x instanceof Data_Generic_Rep.Inr && x.value0 instanceof Data_Generic_Rep.Inr) {
             return End.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 197, column 1 - line 197, column 36): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 198, column 1 - line 198, column 36): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof Start) {
@@ -821,7 +822,7 @@ var genericAlignment_ = {
         if (x instanceof End) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value));
         };
-        throw new Error("Failed pattern match at Markgraf.Graph (line 197, column 1 - line 197, column 36): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Graph (line 198, column 1 - line 198, column 36): " + [ x.constructor.name ]);
     }
 };
 var eqSide = {
@@ -1256,7 +1257,7 @@ var shapeName = function (v) {
     if (v instanceof Cloud) {
         return "cloud";
     };
-    throw new Error("Failed pattern match at Markgraf.Graph (line 133, column 13 - line 140, column 19): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Graph (line 134, column 13 - line 141, column 19): " + [ v.constructor.name ]);
 };
 var readEnum = function (dictGeneric) {
     var genericReadForeignEnum = Yoga_JSON_Generics_EnumSumRep.genericReadForeignEnum(dictGeneric);
@@ -1314,6 +1315,16 @@ var parseShape = function (s) {
         return new Data_Maybe.Just(Cloud.value);
     };
     return Data_Maybe.Nothing.value;
+};
+var edgeHasArrowhead = function (v) {
+    var v1 = Data_String_CodeUnits.stripPrefix("conn:")(v);
+    if (v1 instanceof Data_Maybe.Just) {
+        return false;
+    };
+    if (v1 instanceof Data_Maybe.Nothing) {
+        return true;
+    };
+    throw new Error("Failed pattern match at Markgraf.Graph (line 291, column 36 - line 293, column 18): " + [ v1.constructor.name ]);
 };
 var documentWaveDrop = 5.0e-2;
 var cylinderBottomDrop = 5.0;
@@ -1395,6 +1406,7 @@ export {
     LayerConstraint,
     OrderConstraint,
     RelativePosition,
+    edgeHasArrowhead,
     readEnum,
     writeEnum,
     newtypeNodeId_,

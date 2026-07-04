@@ -12,6 +12,7 @@ import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Number from "../Data.Number/index.js";
 import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Semigroup from "../Data.Semigroup/index.js";
+import * as Data_Unfoldable from "../Data.Unfoldable/index.js";
 import * as Markgraf_Animation_Layout from "../Markgraf.Animation.Layout/index.js";
 import * as Markgraf_Animation_Render_Draw from "../Markgraf.Animation.Render.Draw/index.js";
 import * as Markgraf_Animation_Render_FrameReadout from "../Markgraf.Animation.Render.FrameReadout/index.js";
@@ -32,6 +33,7 @@ var mapFlipped = /* #__PURE__ */ Data_Functor.mapFlipped(Data_Maybe.functorMaybe
 var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordEdgeId);
 var lookup1 = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordNodeId);
 var fromFoldable = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
+var toUnfoldable = /* #__PURE__ */ Data_Map_Internal.toUnfoldable(Data_Unfoldable.unfoldableArray);
 var comparing = /* #__PURE__ */ Data_Ord.comparing(Data_Ord.ordNumber);
 var tokenSize = 11.0;
 var southShade = 0.66;
@@ -92,7 +94,7 @@ var polyPath = function (pts) {
             return [ Markgraf_Animation_Render_Op.pathOpLine, q.x, q.y ];
         })(v.value0.tail))([ Markgraf_Animation_Render_Op.pathOpClose ]));
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 332, column 16 - line 337, column 25): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 334, column 16 - line 339, column 25): " + [ v.constructor.name ]);
 };
 var orient = function (v) {
     return function (v1) {
@@ -102,7 +104,7 @@ var orient = function (v) {
         if (v instanceof Markgraf_Animation_Spec.Backward) {
             return Data_Array.reverse(v1);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 233, column 1 - line 233, column 44): " + [ v.constructor.name, v1.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 235, column 1 - line 235, column 44): " + [ v.constructor.name, v1.constructor.name ]);
     };
 };
 var travelPoint = function (dir) {
@@ -132,7 +134,7 @@ var openPolyPath = function (pts) {
             return [ Markgraf_Animation_Render_Op.pathOpLine, q.x, q.y ];
         })(v.value0.tail));
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 295, column 20 - line 299, column 61): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 297, column 20 - line 301, column 61): " + [ v.constructor.name ]);
 };
 var nodeCenter = function (np) {
     return {
@@ -176,7 +178,7 @@ var isoViewport = function (pts) {
             maxY: v.value0.head.y
         })(v.value0.tail));
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 350, column 19 - line 353, column 91): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Isometric (line 352, column 19 - line 355, column 91): " + [ v.constructor.name ]);
 };
 var eastShade = 0.82;
 var drawSlab = function (dictMonadDraw) {
@@ -405,18 +407,20 @@ var edgeSegments = function (dictMonadDraw) {
     var drawEdgeSeg1 = drawEdgeSeg(dictMonadDraw);
     return function (cfg) {
         return function (p) {
-            return function (path) {
-                var segs = Data_Array.zip(path)(Data_Array.drop(1)(path));
-                var lastIx = Data_Array.length(segs) - 1 | 0;
-                var toDrawn = function (i) {
-                    return function (v) {
-                        return {
-                            depth: (v.value0.x + v.value0.y + v.value1.x + v.value1.y) / 2.0,
-                            draw: drawEdgeSeg1(cfg)(p)(i === lastIx)(v.value0)(v.value1)
+            return function (shouldDrawArrowHead) {
+                return function (path) {
+                    var segs = Data_Array.zip(path)(Data_Array.drop(1)(path));
+                    var lastIx = Data_Array.length(segs) - 1 | 0;
+                    var toDrawn = function (i) {
+                        return function (v) {
+                            return {
+                                depth: (v.value0.x + v.value0.y + v.value1.x + v.value1.y) / 2.0,
+                                draw: drawEdgeSeg1(cfg)(p)(shouldDrawArrowHead && i === lastIx)(v.value0)(v.value1)
+                            };
                         };
                     };
+                    return Data_Array.mapWithIndex(toDrawn)(segs);
                 };
-                return Data_Array.mapWithIndex(toDrawn)(segs);
             };
         };
     };
@@ -441,7 +445,9 @@ var renderSceneIso = function (dictMonadDraw) {
                         };
                     })(slabsOf(cfg)(layout));
                     var tokenDrawns = Data_Array.mapMaybe(tokenDrawn1(cfg)(p)(layout))(fromFoldable(Data_Map_Internal.values(state.tokens)));
-                    var edgeDrawns = Data_Array.concatMap(edgeSegments1(cfg)(p))(fromFoldable(Data_Map_Internal.values(layout.edges)));
+                    var edgeDrawns = Data_Array.concatMap(function (v) {
+                        return edgeSegments1(cfg)(p)(Markgraf_Graph.edgeHasArrowhead(v.value0))(v.value1);
+                    })(toUnfoldable(layout.edges));
                     var renderables = append(edgeDrawns)(append(slabDrawns)(tokenDrawns));
                     return discard1(drawBackground(p)(cfg.transparentBg)(1.0)(isoViewport(isoFramePoints(cfg)(layout))))(function () {
                         return traverse_(function (v) {

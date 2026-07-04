@@ -225,6 +225,20 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       background: #fff;
     }
 
+    #preview.preview-error {
+      box-sizing: border-box;
+      min-width: 100%;
+      min-height: 180px;
+      padding: 12px;
+      border: 1px solid var(--vscode-inputValidation-errorBorder);
+      border-radius: 8px;
+      background: var(--vscode-inputValidation-errorBackground);
+      color: var(--vscode-inputValidation-errorForeground);
+      white-space: pre-wrap;
+      font: 12px var(--vscode-editor-font-family);
+      line-height: 1.45;
+    }
+
     #preview.markgraf-embed [data-mg="play-overlay"] {
       display: none;
     }
@@ -391,18 +405,32 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 
       const parsed = window.markgraf.tryParse(source);
       if (!parsed.ok) {
-        previewBlocked = true;
+        showParseError(parsed.error ?? "Markgraf preview failed to parse.");
         return;
       }
 
+      showPreview(source);
+      restoreFrame();
+    };
+
+    const showParseError = message => {
+      previewBlocked = true;
+      element.innerHTML = "";
+      element.className = "preview-error";
+      element.removeAttribute("data-markgraf");
+      element.removeAttribute("data-markgraf-theme");
+      element.removeAttribute("data-markgraf-mounted");
+      element.textContent = message;
+    };
+
+    const showPreview = source => {
       previewBlocked = false;
       element.innerHTML = "";
-      element.classList.add("markgraf-embed");
+      element.className = "markgraf-embed";
       element.setAttribute("data-markgraf", "");
       element.setAttribute("data-markgraf-theme", currentTheme);
       element.setAttribute("data-markgraf-mounted", "1");
       window.markgraf.mount(element, source);
-      restoreFrame();
     };
 
     const rememberFrame = () => {

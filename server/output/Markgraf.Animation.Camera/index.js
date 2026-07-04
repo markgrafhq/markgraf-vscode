@@ -4,20 +4,26 @@ import * as Data_Array from "../Data.Array/index.js";
 import * as Data_Boolean from "../Data.Boolean/index.js";
 import * as Data_Eq from "../Data.Eq/index.js";
 import * as Data_Foldable from "../Data.Foldable/index.js";
+import * as Data_FoldableWithIndex from "../Data.FoldableWithIndex/index.js";
 import * as Data_Functor from "../Data.Functor/index.js";
 import * as Data_Maybe from "../Data.Maybe/index.js";
+import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Number from "../Data.Number/index.js";
 import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Semigroup from "../Data.Semigroup/index.js";
+import * as Data_Tuple from "../Data.Tuple/index.js";
 import * as Markgraf_Animation_Camera_Composition from "../Markgraf.Animation.Camera.Composition/index.js";
 import * as Markgraf_Animation_Camera_Focus from "../Markgraf.Animation.Camera.Focus/index.js";
+import * as Markgraf_Animation_Camera_Policy from "../Markgraf.Animation.Camera.Policy/index.js";
 import * as Markgraf_Animation_Easing from "../Markgraf.Animation.Easing/index.js";
 import * as Markgraf_Animation_Layout from "../Markgraf.Animation.Layout/index.js";
-var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
 var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
-var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
-var mapFlipped = /* #__PURE__ */ Data_Functor.mapFlipped(Data_Maybe.functorMaybe);
+var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
+var un = /* #__PURE__ */ Data_Newtype.un();
 var bind = /* #__PURE__ */ Control_Bind.bind(Data_Maybe.bindMaybe);
+var foldlWithIndex = /* #__PURE__ */ Data_FoldableWithIndex.foldlWithIndex(Data_FoldableWithIndex.foldableWithIndexArray);
+var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
+var compare = /* #__PURE__ */ Data_Ord.compare(/* #__PURE__ */ Data_Tuple.ordTuple(Data_Ord.ordInt)(Data_Ord.ordNumber));
 var append = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
 var sort = /* #__PURE__ */ Data_Array.sort(Data_Ord.ordNumber);
 var foldl = /* #__PURE__ */ Data_Foldable.foldl(Data_Foldable.foldableArray);
@@ -52,6 +58,41 @@ var LogLerp = /* #__PURE__ */ (function () {
     LogLerp.value = new LogLerp();
     return LogLerp;
 })();
+var StagedLogLerp = /* #__PURE__ */ (function () {
+    function StagedLogLerp() {
+
+    };
+    StagedLogLerp.value = new StagedLogLerp();
+    return StagedLogLerp;
+})();
+var Overview = /* #__PURE__ */ (function () {
+    function Overview() {
+
+    };
+    Overview.value = new Overview();
+    return Overview;
+})();
+var DiveHome = /* #__PURE__ */ (function () {
+    function DiveHome() {
+
+    };
+    DiveHome.value = new DiveHome();
+    return DiveHome;
+})();
+var DiveTransition = /* #__PURE__ */ (function () {
+    function DiveTransition() {
+
+    };
+    DiveTransition.value = new DiveTransition();
+    return DiveTransition;
+})();
+var ActionFocus = /* #__PURE__ */ (function () {
+    function ActionFocus() {
+
+    };
+    ActionFocus.value = new ActionFocus();
+    return ActionFocus;
+})();
 var showCameraInterp = {
     show: function (v) {
         if (v instanceof LinearLerp) {
@@ -60,7 +101,27 @@ var showCameraInterp = {
         if (v instanceof LogLerp) {
             return "LogLerp";
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 90, column 1 - line 92, column 27): " + [ v.constructor.name ]);
+        if (v instanceof StagedLogLerp) {
+            return "StagedLogLerp";
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 122, column 1 - line 125, column 39): " + [ v.constructor.name ]);
+    }
+};
+var showCameraIntent = {
+    show: function (v) {
+        if (v instanceof Overview) {
+            return "Overview";
+        };
+        if (v instanceof DiveHome) {
+            return "DiveHome";
+        };
+        if (v instanceof DiveTransition) {
+            return "DiveTransition";
+        };
+        if (v instanceof ActionFocus) {
+            return "ActionFocus";
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 108, column 1 - line 112, column 35): " + [ v.constructor.name ]);
     }
 };
 var eqSpanKind = {
@@ -86,11 +147,47 @@ var eqCameraInterp = {
             if (x instanceof LogLerp && y instanceof LogLerp) {
                 return true;
             };
+            if (x instanceof StagedLogLerp && y instanceof StagedLogLerp) {
+                return true;
+            };
             return false;
         };
     }
 };
+var eqCameraIntent = {
+    eq: function (x) {
+        return function (y) {
+            if (x instanceof Overview && y instanceof Overview) {
+                return true;
+            };
+            if (x instanceof DiveHome && y instanceof DiveHome) {
+                return true;
+            };
+            if (x instanceof DiveTransition && y instanceof DiveTransition) {
+                return true;
+            };
+            if (x instanceof ActionFocus && y instanceof ActionFocus) {
+                return true;
+            };
+            return false;
+        };
+    }
+};
+var eq3 = /* #__PURE__ */ Data_Eq.eq(eqCameraIntent);
 var zoomEpsilon = 1.0e-6;
+var viewportAt = function (layout) {
+    return function (cam) {
+        var layB = Markgraf_Animation_Layout.bbox(layout);
+        var viewH = layB.h / max(zoomEpsilon)(cam.zoom);
+        var viewW = layB.w / max(zoomEpsilon)(cam.zoom);
+        return {
+            x: cam.center.x - viewW / 2.0,
+            y: cam.center.y - viewH / 2.0,
+            w: viewW,
+            h: viewH
+        };
+    };
+};
 var transitionDurationFor = function (cfg) {
     return function (a) {
         return function (b) {
@@ -98,29 +195,40 @@ var transitionDurationFor = function (cfg) {
             var dx = b.center.x - a.center.x;
             var panDistance = Data_Number.sqrt(dx * dx + dy * dy);
             var panTime = (function () {
-                var $58 = cfg.panSpeed <= 0.0;
-                if ($58) {
+                var $76 = cfg.panSpeed <= 0.0;
+                if ($76) {
                     return cfg.minTransition;
                 };
                 return panDistance / cfg.panSpeed;
             })();
             var abs = function (n) {
-                var $59 = n < 0.0;
-                if ($59) {
+                var $77 = n < 0.0;
+                if ($77) {
                     return -n;
                 };
                 return n;
             };
             var zoomDelta = abs(b.zoom - a.zoom);
             var zoomTime = (function () {
-                var $60 = cfg.zoomSpeed <= 0.0;
-                if ($60) {
+                var $78 = cfg.zoomSpeed <= 0.0;
+                if ($78) {
                     return cfg.minTransition;
                 };
                 return zoomDelta / cfg.zoomSpeed;
             })();
             return clamp(cfg.minTransition)(cfg.maxTransition)(max(panTime)(zoomTime));
         };
+    };
+};
+var stripFocus = function (span) {
+    return {
+        startT: span.startT,
+        endT: span.endT,
+        fromCam: span.fromCam,
+        toCam: span.toCam,
+        easing: span.easing,
+        interp: span.interp,
+        intent: span.intent
     };
 };
 var sortUnique = /* #__PURE__ */ (function () {
@@ -143,13 +251,50 @@ var sameCamera = function (a) {
 var nearlyEqualCamera = function (a) {
     return function (b) {
         var absN = function (n) {
-            var $63 = n < 0.0;
-            if ($63) {
+            var $81 = n < 0.0;
+            if ($81) {
                 return -n;
             };
             return n;
         };
         return absN(a.center.x - b.center.x) < 8.0 && (absN(a.center.y - b.center.y) < 8.0 && absN(a.zoom - b.zoom) < 8.0e-2);
+    };
+};
+var nearlyEqualBBox = function (a) {
+    return function (b) {
+        var absN = function (n) {
+            var $82 = n < 0.0;
+            if ($82) {
+                return -n;
+            };
+            return n;
+        };
+        return absN(a.x - b.x) < 1.0e-3 && (absN(a.y - b.y) < 1.0e-3 && (absN(a.w - b.w) < 1.0e-3 && absN(a.h - b.h) < 1.0e-3));
+    };
+};
+var nearlyEqualFocus = function (a) {
+    return function (b) {
+        if (a instanceof Data_Maybe.Just && b instanceof Data_Maybe.Just) {
+            return nearlyEqualBBox(a.value0)(b.value0);
+        };
+        if (a instanceof Data_Maybe.Nothing && b instanceof Data_Maybe.Nothing) {
+            return true;
+        };
+        return false;
+    };
+};
+var liftCameraToRootInLayout = function (rootLayout) {
+    return function (childLayout) {
+        return function (v) {
+            return function (cam) {
+                var rootB = Markgraf_Animation_Layout.bbox(rootLayout);
+                var childB = Markgraf_Animation_Layout.bbox(childLayout);
+                return {
+                    center: Markgraf_Animation_Layout.applyPlacement(v)(cam.center),
+                    zoom: (cam.zoom * rootB.w) / max(zoomEpsilon)(v.scale * childB.w)
+                };
+            };
+        };
     };
 };
 var liftCameraToRoot = function (v) {
@@ -167,19 +312,28 @@ var lerpN = function (a) {
         };
     };
 };
+var logLerpCameraAt = function (a) {
+    return function (b) {
+        return function (centerU) {
+            return function (zoomU) {
+                var safeZoom = function (z) {
+                    return max(zoomEpsilon)(z);
+                };
+                return {
+                    center: {
+                        x: lerpN(a.center.x)(b.center.x)(centerU),
+                        y: lerpN(a.center.y)(b.center.y)(centerU)
+                    },
+                    zoom: Data_Number.exp(lerpN(Data_Number.log(safeZoom(a.zoom)))(Data_Number.log(safeZoom(b.zoom)))(zoomU))
+                };
+            };
+        };
+    };
+};
 var logLerpCamera = function (a) {
     return function (b) {
         return function (u) {
-            var safeZoom = function (z) {
-                return max(zoomEpsilon)(z);
-            };
-            return {
-                center: {
-                    x: lerpN(a.center.x)(b.center.x)(u),
-                    y: lerpN(a.center.y)(b.center.y)(u)
-                },
-                zoom: Data_Number.exp(lerpN(Data_Number.log(safeZoom(a.zoom)))(Data_Number.log(safeZoom(b.zoom)))(u))
-            };
+            return logLerpCameraAt(a)(b)(u)(u);
         };
     };
 };
@@ -196,200 +350,28 @@ var lerpCamera = function (a) {
         };
     };
 };
-var resolveSpan = function (_cfg) {
-    return function (t) {
-        return function (span) {
-            var raw = (function () {
-                var $66 = span.endT <= span.startT;
-                if ($66) {
-                    return 1.0;
-                };
-                return (t - span.startT) / (span.endT - span.startT);
-            })();
-            var eased = Markgraf_Animation_Easing.apply(span.easing)(clamp(0.0)(1.0)(raw));
-            if (span.interp instanceof LinearLerp) {
-                return lerpCamera(span.fromCam)(span.toCam)(eased);
-            };
-            if (span.interp instanceof LogLerp) {
-                return logLerpCamera(span.fromCam)(span.toCam)(eased);
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 335, column 5 - line 337, column 61): " + [ span.interp.constructor.name ]);
-        };
+var intentRank = function (v) {
+    if (v instanceof DiveTransition) {
+        return 3;
     };
-};
-var insertLeadIns = function (cfg) {
-    return function (_layout) {
-        return function (_fitAllCam) {
-            return function (spans) {
-                var leadDur = function (prev) {
-                    return function (cur) {
-                        return min(transitionDurationFor(cfg)(prev.toCam)(cur.toCam))(prev.endT - prev.startT);
-                    };
-                };
-                var shrunkPrev = function (prev) {
-                    return function (cur) {
-                        return {
-                            startT: prev.startT,
-                            toCam: prev.toCam,
-                            easing: prev.easing,
-                            fromCam: prev.fromCam,
-                            interp: prev.interp,
-                            endT: cur.startT - leadDur(prev)(cur)
-                        };
-                    };
-                };
-                var isHold = function (s) {
-                    return sameCamera(s.fromCam)(s.toCam);
-                };
-                var directTween = function (prev) {
-                    return function (cur) {
-                        return {
-                            startT: cur.startT - leadDur(prev)(cur),
-                            endT: cur.startT,
-                            fromCam: prev.toCam,
-                            toCam: cur.toCam,
-                            easing: cur.easing,
-                            interp: LinearLerp.value
-                        };
-                    };
-                };
-                var step = function (st) {
-                    return function (cur) {
-                        if (st.pending instanceof Data_Maybe.Nothing) {
-                            return {
-                                acc: st.acc,
-                                pending: new Data_Maybe.Just(cur)
-                            };
-                        };
-                        if (st.pending instanceof Data_Maybe.Just) {
-                            var $69 = !isHold(cur) || (nearlyEqualCamera(st.pending.value0.toCam)(cur.toCam) || leadDur(st.pending.value0)(cur) <= 0.0);
-                            if ($69) {
-                                return {
-                                    acc: Data_Array.snoc(st.acc)(st.pending.value0),
-                                    pending: new Data_Maybe.Just(cur)
-                                };
-                            };
-                            return {
-                                acc: Data_Array.snoc(Data_Array.snoc(st.acc)(shrunkPrev(st.pending.value0)(cur)))(directTween(st.pending.value0)(cur)),
-                                pending: new Data_Maybe.Just(cur)
-                            };
-                        };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 269, column 17 - line 277, column 10): " + [ st.pending.constructor.name ]);
-                    };
-                };
-                var v = Data_Array.foldl(step)({
-                    acc: [  ],
-                    pending: Data_Maybe.Nothing.value
-                })(spans);
-                if (v.pending instanceof Data_Maybe.Nothing) {
-                    return v.acc;
-                };
-                if (v.pending instanceof Data_Maybe.Just) {
-                    return Data_Array.snoc(v.acc)(v.pending.value0);
-                };
-                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 265, column 3 - line 267, column 45): " + [ v.constructor.name ]);
-            };
-        };
+    if (v instanceof ActionFocus) {
+        return 2;
     };
+    if (v instanceof DiveHome) {
+        return 1;
+    };
+    if (v instanceof Overview) {
+        return 0;
+    };
+    throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 447, column 14 - line 451, column 16): " + [ v.constructor.name ]);
 };
-var fillInTweens = function (cfg) {
-    return function (layout) {
-        return function (fitAllCam) {
-            return function (raw) {
-                var viewportAt = function (cam) {
-                    var layB = Markgraf_Animation_Layout.bbox(layout);
-                    var viewH = layB.h / max(zoomEpsilon)(cam.zoom);
-                    var viewW = layB.w / max(zoomEpsilon)(cam.zoom);
-                    return {
-                        x: cam.center.x - viewW / 2.0,
-                        y: cam.center.y - viewH / 2.0,
-                        w: viewW,
-                        h: viewH
-                    };
-                };
-                var isSettled = function (s) {
-                    return eq2(s.kind)(Hold.value);
-                };
-                var growFocusBBox = function (amount) {
-                    return function (box) {
-                        return {
-                            x: box.x - amount,
-                            y: box.y - amount,
-                            w: box.w + amount * 2.0,
-                            h: box.h + amount * 2.0
-                        };
-                    };
-                };
-                var findNextSettled = function (i) {
-                    return mapFlipped(bind(Data_Array.findIndex(isSettled)(Data_Array.drop(i + 1 | 0)(raw)))(function (idx) {
-                        return Data_Array.index(raw)((i + 1 | 0) + idx | 0);
-                    }))(function (v) {
-                        return v.fromCam;
-                    });
-                };
-                var findAdjacent = function (i) {
-                    return mapFlipped(bind(Data_Array.findLastIndex(isSettled)(Data_Array.take(i)(raw)))(Data_Array.index(raw)))(function (v) {
-                        return v.toCam;
-                    });
-                };
-                var containsBBox = function (outer) {
-                    return function (inner) {
-                        return inner.x >= outer.x && (inner.y >= outer.y && (inner.x + inner.w <= outer.x + outer.w && inner.y + inner.h <= outer.y + outer.h));
-                    };
-                };
-                var containsAtZoom = function (previous) {
-                    return function (zoom) {
-                        return function (focus) {
-                            return containsBBox(viewportAt({
-                                center: previous.center,
-                                zoom: zoom
-                            }))(growFocusBBox(cfg.padding)(focus));
-                        };
-                    };
-                };
-                var stabilizedHold = function (s) {
-                    return function (previous) {
-                        if (s.focus instanceof Data_Maybe.Just && containsAtZoom(previous)(s.toCam.zoom)(s.focus.value0)) {
-                            return {
-                                zoom: s.toCam.zoom,
-                                center: previous.center
-                            };
-                        };
-                        return s.toCam;
-                    };
-                };
-                var holdSpan = function (s) {
-                    return function (previous) {
-                        return {
-                            startT: s.startT,
-                            endT: s.endT,
-                            fromCam: stabilizedHold(s)(previous),
-                            toCam: stabilizedHold(s)(previous),
-                            easing: s.easing,
-                            interp: LinearLerp.value
-                        };
-                    };
-                };
-                var resolve = function (i) {
-                    return function (s) {
-                        if (s.kind instanceof Hold) {
-                            return holdSpan(s)(Data_Maybe.fromMaybe(fitAllCam)(findAdjacent(i)));
-                        };
-                        if (s.kind instanceof Gap) {
-                            return {
-                                startT: s.startT,
-                                endT: s.endT,
-                                fromCam: Data_Maybe.fromMaybe(fitAllCam)(findAdjacent(i)),
-                                toCam: Data_Maybe.fromMaybe(Data_Maybe.fromMaybe(fitAllCam)(findAdjacent(i)))(findNextSettled(i)),
-                                easing: s.easing,
-                                interp: LinearLerp.value
-                            };
-                        };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 184, column 17 - line 193, column 8): " + [ s.kind.constructor.name ]);
-                    };
-                };
-                return Data_Array.mapWithIndex(resolve)(raw);
-            };
+var growFocusBBox = function (amount) {
+    return function (box) {
+        return {
+            x: box.x - amount,
+            y: box.y - amount,
+            w: box.w + amount * 2.0,
+            h: box.h + amount * 2.0
         };
     };
 };
@@ -417,15 +399,79 @@ var expDecayCamera = function (decay) {
         };
     };
 };
+var divePanFraction = 0.28;
+var stagedEarly = function (u) {
+    return Markgraf_Animation_Easing.apply(Markgraf_Animation_Easing.EaseInOutCubic.value)(clamp(0.0)(1.0)(u / divePanFraction));
+};
+var stagedLate = function (u) {
+    return Markgraf_Animation_Easing.apply(Markgraf_Animation_Easing.EaseInOutCubic.value)(clamp(0.0)(1.0)((u - divePanFraction) / (1.0 - divePanFraction)));
+};
+var diveZoomProgress = function (a) {
+    return function (b) {
+        return function (u) {
+            var $94 = b.zoom >= a.zoom;
+            if ($94) {
+                return stagedLate(u);
+            };
+            return stagedEarly(u);
+        };
+    };
+};
+var diveCenterProgress = function (a) {
+    return function (b) {
+        return function (u) {
+            var $95 = b.zoom >= a.zoom;
+            if ($95) {
+                return stagedEarly(u);
+            };
+            return stagedLate(u);
+        };
+    };
+};
+var stagedLogLerpCamera = function (a) {
+    return function (b) {
+        return function (u) {
+            var zoomU = diveZoomProgress(a)(b)(u);
+            var centerU = diveCenterProgress(a)(b)(u);
+            return logLerpCameraAt(a)(b)(centerU)(zoomU);
+        };
+    };
+};
+var resolveSpan = function (_cfg) {
+    return function (t) {
+        return function (span) {
+            var raw = (function () {
+                var $96 = span.endT <= span.startT;
+                if ($96) {
+                    return 1.0;
+                };
+                return (t - span.startT) / (span.endT - span.startT);
+            })();
+            var eased = Markgraf_Animation_Easing.apply(span.easing)(clamp(0.0)(1.0)(raw));
+            if (span.interp instanceof LinearLerp) {
+                return lerpCamera(span.fromCam)(span.toCam)(eased);
+            };
+            if (span.interp instanceof LogLerp) {
+                return logLerpCamera(span.fromCam)(span.toCam)(eased);
+            };
+            if (span.interp instanceof StagedLogLerp) {
+                return stagedLogLerpCamera(span.fromCam)(span.toCam)(raw);
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 461, column 5 - line 464, column 71): " + [ span.interp.constructor.name ]);
+        };
+    };
+};
+var defaultCameraViewport = {
+    widthPx: 0.0,
+    heightPx: 0.0
+};
 var defaultCameraConfig = /* #__PURE__ */ (function () {
     return {
-        padding: 24.0,
+        padding: un(Markgraf_Animation_Camera_Policy.CameraPaddingWorld)(Markgraf_Animation_Camera_Policy.defaultCameraPaddingWorld),
         easing: Markgraf_Animation_Easing.Linear.value,
-        minLabelPx: 0.0,
-        diveLabelPx: 0.0,
-        labelBasePx: 11.0,
-        viewportWidthPx: 0.0,
-        viewportHeightPx: 0.0,
+        minimumReadableLabelPx: un(Markgraf_Animation_Camera_Policy.ReadableLabelPx)(Markgraf_Animation_Camera_Policy.minimumReadableLabelPx),
+        minimumVisibleLabelPx: un(Markgraf_Animation_Camera_Policy.VisibleLabelPx)(Markgraf_Animation_Camera_Policy.minimumVisibleLabelPx),
+        labelBasePx: un(Markgraf_Animation_Camera_Policy.BaseLabelWorldPx)(Markgraf_Animation_Camera_Policy.defaultBaseLabelWorldPx),
         panSpeed: 1500.0,
         zoomSpeed: 4.0,
         minTransition: 0.15,
@@ -433,14 +479,258 @@ var defaultCameraConfig = /* #__PURE__ */ (function () {
         cameraDecay: 6.0
     };
 })();
+var containsBBox = function (outer) {
+    return function (inner) {
+        return inner.x >= outer.x && (inner.y >= outer.y && (inner.x + inner.w <= outer.x + outer.w && inner.y + inner.h <= outer.y + outer.h));
+    };
+};
+var containsFocusAtCamera = function (cfg) {
+    return function (_cameraViewport) {
+        return function (layout) {
+            return function (cam) {
+                return function (focus) {
+                    return containsBBox(viewportAt(layout)(cam))(growFocusBBox(cfg.padding)(focus));
+                };
+            };
+        };
+    };
+};
+var fillInTweens = function (cfg) {
+    return function (cameraViewport) {
+        return function (layout) {
+            return function (fitAllCam) {
+                return function (raw) {
+                    var isSettled = function (s) {
+                        return eq2(s.kind)(Hold.value);
+                    };
+                    var findNextSettledSpan = function (i) {
+                        return bind(Data_Array.findIndex(isSettled)(Data_Array.drop(i + 1 | 0)(raw)))(function (idx) {
+                            return Data_Array.index(raw)((i + 1 | 0) + idx | 0);
+                        });
+                    };
+                    var containsAtZoom = function (previous) {
+                        return function (zoom) {
+                            return function (focus) {
+                                return containsFocusAtCamera(cfg)(cameraViewport)(layout)({
+                                    center: previous.center,
+                                    zoom: zoom
+                                })(focus);
+                            };
+                        };
+                    };
+                    var containsAtCamera = function (cam) {
+                        return function (focus) {
+                            return containsFocusAtCamera(cfg)(cameraViewport)(layout)(cam)(focus);
+                        };
+                    };
+                    var focusVisibleIn = function (cam) {
+                        return function (v) {
+                            if (v instanceof Data_Maybe.Just) {
+                                return containsAtCamera(cam)(v.value0);
+                            };
+                            if (v instanceof Data_Maybe.Nothing) {
+                                return false;
+                            };
+                            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 261, column 24 - line 263, column 21): " + [ v.constructor.name ]);
+                        };
+                    };
+                    var gapTarget = function (previous) {
+                        return function (i) {
+                            var v = findNextSettledSpan(i);
+                            if (v instanceof Data_Maybe.Just && focusVisibleIn(previous)(v.value0.focus)) {
+                                return previous;
+                            };
+                            if (v instanceof Data_Maybe.Just) {
+                                return v.value0.fromCam;
+                            };
+                            if (v instanceof Data_Maybe.Nothing) {
+                                return previous;
+                            };
+                            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 257, column 26 - line 260, column 24): " + [ v.constructor.name ]);
+                        };
+                    };
+                    var stabilizedHold = function (s) {
+                        return function (previous) {
+                            if (s.focus instanceof Data_Maybe.Just && (eq3(s.intent)(ActionFocus.value) && containsAtZoom(previous)(s.toCam.zoom)(s.focus.value0))) {
+                                return {
+                                    zoom: s.toCam.zoom,
+                                    center: previous.center
+                                };
+                            };
+                            if (s.focus instanceof Data_Maybe.Just && eq3(s.intent)(ActionFocus.value)) {
+                                return s.toCam;
+                            };
+                            if (s.focus instanceof Data_Maybe.Just && containsAtCamera(previous)(s.focus.value0)) {
+                                return previous;
+                            };
+                            if (s.focus instanceof Data_Maybe.Just && containsAtZoom(previous)(s.toCam.zoom)(s.focus.value0)) {
+                                return {
+                                    zoom: s.toCam.zoom,
+                                    center: previous.center
+                                };
+                            };
+                            return s.toCam;
+                        };
+                    };
+                    var holdSpan = function (s) {
+                        return function (previous) {
+                            var stabilized = stabilizedHold(s)(previous);
+                            return {
+                                startT: s.startT,
+                                endT: s.endT,
+                                fromCam: stabilized,
+                                toCam: stabilized,
+                                easing: s.easing,
+                                interp: LinearLerp.value,
+                                focus: s.focus,
+                                intent: s.intent
+                            };
+                        };
+                    };
+                    var resolve = function (previous) {
+                        return function (i) {
+                            return function (s) {
+                                if (s.kind instanceof Hold) {
+                                    return holdSpan(s)(previous);
+                                };
+                                if (s.kind instanceof Gap) {
+                                    return {
+                                        startT: s.startT,
+                                        endT: s.endT,
+                                        fromCam: previous,
+                                        toCam: gapTarget(previous)(i),
+                                        easing: s.easing,
+                                        interp: LinearLerp.value,
+                                        focus: Data_Maybe.Nothing.value,
+                                        intent: s.intent
+                                    };
+                                };
+                                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 224, column 26 - line 235, column 8): " + [ s.kind.constructor.name ]);
+                            };
+                        };
+                    };
+                    var step = function (i) {
+                        return function (st) {
+                            return function (s) {
+                                var span = resolve(st.prev)(i)(s);
+                                return {
+                                    acc: Data_Array.snoc(st.acc)(span),
+                                    prev: span.toCam
+                                };
+                            };
+                        };
+                    };
+                    return (function (v) {
+                        return v.acc;
+                    })(foldlWithIndex(step)({
+                        acc: [  ],
+                        prev: fitAllCam
+                    })(raw));
+                };
+            };
+        };
+    };
+};
+var insertLeadIns = function (cfg) {
+    return function (cameraViewport) {
+        return function (layout) {
+            return function (_fitAllCam) {
+                return function (spans) {
+                    var leadDur = function (prev) {
+                        return function (cur) {
+                            return min(transitionDurationFor(cfg)(prev.toCam)(cur.toCam))(prev.endT - prev.startT);
+                        };
+                    };
+                    var shrunkPrev = function (prev) {
+                        return function (cur) {
+                            return {
+                                startT: prev.startT,
+                                toCam: prev.toCam,
+                                easing: prev.easing,
+                                focus: prev.focus,
+                                fromCam: prev.fromCam,
+                                intent: prev.intent,
+                                interp: prev.interp,
+                                endT: cur.startT - leadDur(prev)(cur)
+                            };
+                        };
+                    };
+                    var isHold = function (s) {
+                        return sameCamera(s.fromCam)(s.toCam);
+                    };
+                    var focusVisibleIn = function (cam) {
+                        return function (v) {
+                            if (v instanceof Data_Maybe.Just) {
+                                return containsFocusAtCamera(cfg)(cameraViewport)(layout)(cam)(v.value0);
+                            };
+                            if (v instanceof Data_Maybe.Nothing) {
+                                return false;
+                            };
+                            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 382, column 24 - line 384, column 21): " + [ v.constructor.name ]);
+                        };
+                    };
+                    var directTween = function (prev) {
+                        return function (cur) {
+                            return {
+                                startT: cur.startT - leadDur(prev)(cur),
+                                endT: cur.startT,
+                                fromCam: prev.toCam,
+                                toCam: cur.toCam,
+                                easing: cur.easing,
+                                interp: LinearLerp.value,
+                                focus: cur.focus,
+                                intent: cur.intent
+                            };
+                        };
+                    };
+                    var step = function (st) {
+                        return function (cur) {
+                            if (st.pending instanceof Data_Maybe.Nothing) {
+                                return {
+                                    acc: st.acc,
+                                    pending: new Data_Maybe.Just(cur)
+                                };
+                            };
+                            if (st.pending instanceof Data_Maybe.Just) {
+                                var $112 = !isHold(cur) || (focusVisibleIn(st.pending.value0.toCam)(cur.focus) || (nearlyEqualCamera(st.pending.value0.toCam)(cur.toCam) || leadDur(st.pending.value0)(cur) <= 0.0));
+                                if ($112) {
+                                    return {
+                                        acc: Data_Array.snoc(st.acc)(st.pending.value0),
+                                        pending: new Data_Maybe.Just(cur)
+                                    };
+                                };
+                                return {
+                                    acc: Data_Array.snoc(Data_Array.snoc(st.acc)(shrunkPrev(st.pending.value0)(cur)))(directTween(st.pending.value0)(cur)),
+                                    pending: new Data_Maybe.Just(cur)
+                                };
+                            };
+                            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 372, column 17 - line 380, column 10): " + [ st.pending.constructor.name ]);
+                        };
+                    };
+                    var v = Data_Array.foldl(step)({
+                        acc: [  ],
+                        pending: Data_Maybe.Nothing.value
+                    })(spans);
+                    if (v.pending instanceof Data_Maybe.Nothing) {
+                        return v.acc;
+                    };
+                    if (v.pending instanceof Data_Maybe.Just) {
+                        return Data_Array.snoc(v.acc)(v.pending.value0);
+                    };
+                    throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 368, column 3 - line 370, column 45): " + [ v.constructor.name ]);
+                };
+            };
+        };
+    };
+};
 var computeZoomCover = function (layout) {
     return function (box) {
         return function (padding) {
             var paddedW = box.w + padding * 2.0;
             var paddedH = box.h + padding * 2.0;
             var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $80 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($80) {
+            var $120 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
+            if ($120) {
                 return 1.0;
             };
             return max(layB.w / paddedW)(layB.h / paddedH);
@@ -453,21 +743,49 @@ var computeZoom = function (layout) {
             var paddedW = box.w + padding * 2.0;
             var paddedH = box.h + padding * 2.0;
             var layB = Markgraf_Animation_Layout.bbox(layout);
-            var $81 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
-            if ($81) {
+            var $121 = paddedW <= 0.0 || (paddedH <= 0.0 || (layB.w <= 0.0 || layB.h <= 0.0));
+            if ($121) {
                 return 1.0;
             };
             return min(layB.w / paddedW)(layB.h / paddedH);
         };
     };
 };
+var combineFocus = function (a) {
+    return function (b) {
+        if (a instanceof Data_Maybe.Just && b instanceof Data_Maybe.Just) {
+            return new Data_Maybe.Just(Markgraf_Animation_Camera_Focus.combineBBoxes([ a.value0, b.value0 ]));
+        };
+        if (a instanceof Data_Maybe.Just && b instanceof Data_Maybe.Nothing) {
+            return new Data_Maybe.Just(a.value0);
+        };
+        if (a instanceof Data_Maybe.Nothing && b instanceof Data_Maybe.Just) {
+            return new Data_Maybe.Just(b.value0);
+        };
+        if (a instanceof Data_Maybe.Nothing && b instanceof Data_Maybe.Nothing) {
+            return Data_Maybe.Nothing.value;
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 282, column 20 - line 286, column 30): " + [ a.constructor.name, b.constructor.name ]);
+    };
+};
 var coalesceHolds = /* #__PURE__ */ (function () {
+    var mergeableFocus = function (prev) {
+        return function (cur) {
+            if (eq3(prev.intent)(ActionFocus.value) || eq3(cur.intent)(ActionFocus.value)) {
+                return eq3(prev.intent)(cur.intent) && nearlyEqualFocus(prev.focus)(cur.focus);
+            };
+            if (Data_Boolean.otherwise) {
+                return true;
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 333, column 3 - line 335, column 23): " + [ prev.constructor.name, cur.constructor.name ]);
+        };
+    };
     var isStill = function (s) {
         return sameCamera(s.fromCam)(s.toCam);
     };
     var mergeable = function (prev) {
         return function (cur) {
-            return isStill(prev) && (isStill(cur) && nearlyEqualCamera(prev.toCam)(cur.toCam));
+            return isStill(prev) && (isStill(cur) && (mergeableFocus(prev)(cur) && nearlyEqualCamera(prev.toCam)(cur.toCam)));
         };
     };
     var step = function (acc) {
@@ -477,10 +795,12 @@ var coalesceHolds = /* #__PURE__ */ (function () {
                 return Data_Array.snoc(Data_Array.dropEnd(1)(acc))({
                     fromCam: v.value0.fromCam,
                     toCam: v.value0.toCam,
+                    intent: v.value0.intent,
                     easing: v.value0.easing,
                     interp: v.value0.interp,
                     startT: v.value0.startT,
-                    endT: cur.endT
+                    endT: cur.endT,
+                    focus: combineFocus(v.value0.focus)(cur.focus)
                 });
             };
             return Data_Array.snoc(acc)(cur);
@@ -494,6 +814,14 @@ var clampZoomWithFloor = function (v) {
             return max(floor)(z);
         };
     };
+};
+var chooseSpanByIntentPrecedence = function (spans) {
+    var compareSpan = function (a) {
+        return function (b) {
+            return compare(new Data_Tuple.Tuple(intentRank(b.intent), b.startT))(new Data_Tuple.Tuple(intentRank(a.intent), a.startT));
+        };
+    };
+    return Data_Array.head(Data_Array.sortBy(compareSpan)(spans));
 };
 var bboxToCameraWithFloor = function (cfg) {
     return function (layout) {
@@ -518,78 +846,124 @@ var bboxToCamera = function (cfg) {
     };
 };
 var buildCameraSpansFromIntervals = function (cfg) {
-    return function (layout) {
-        return function (totalDuration) {
-            return function (intervals) {
-                var rawTimes = append([ 0.0, totalDuration ])(Data_Array.concatMap(function (i) {
-                    return [ i.startT, i.endT ];
-                })(intervals));
-                var fitAllCam = bboxToCamera(cfg)(layout)(Markgraf_Animation_Layout.bbox(layout));
-                var boundaries = Data_Array.filter(function (t) {
-                    return t >= 0.0 && t <= totalDuration;
-                })(sortUnique(sort(rawTimes)));
-                var activeAt = function (t) {
-                    return Data_Array.filter(function (iv) {
-                        return iv.startT <= t && t < iv.endT;
-                    })(intervals);
-                };
-                var topPri = function (t) {
-                    return foldl(max1)(0)(map(function (v) {
-                        return v.priority;
-                    })(activeAt(t)));
-                };
-                var winningStaticAt = function (t) {
-                    return map(function (v) {
-                        return v.bbox;
-                    })(Data_Array.filter(function (iv) {
-                        return iv.priority === topPri(t);
-                    })(activeAt(t)));
-                };
-                var actionActiveAt = function (t) {
-                    return Data_Array.any(function (iv) {
-                        return iv.priority >= 1;
-                    })(activeAt(t));
-                };
-                var heldCam = function (bs) {
-                    return function (t) {
-                        if (actionActiveAt(t)) {
-                            return Markgraf_Animation_Camera_Composition.actionCamera(cfg)(layout)(Markgraf_Animation_Camera_Focus.combineBBoxes(bs));
-                        };
-                        if (Data_Boolean.otherwise) {
-                            return bboxToCameraWithFloor(cfg)(layout)(Markgraf_Animation_Camera_Focus.combineBBoxes(bs))(0.0);
-                        };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 166, column 3 - line 168, column 74): " + [ bs.constructor.name, t.constructor.name ]);
+    return function (cameraViewport) {
+        return function (layout) {
+            return function (totalDuration) {
+                return function (intervals) {
+                    var rawTimes = append([ 0.0, totalDuration ])(Data_Array.concatMap(function (i) {
+                        return [ i.startT, i.endT ];
+                    })(intervals));
+                    var fitAllCam = bboxToCamera(cfg)(layout)(Markgraf_Animation_Layout.bbox(layout));
+                    var boundaries = Data_Array.filter(function (t) {
+                        return t >= 0.0 && t <= totalDuration;
+                    })(sortUnique(sort(rawTimes)));
+                    var activeAt = function (t) {
+                        return Data_Array.filter(function (iv) {
+                            return iv.startT <= t && t < iv.endT;
+                        })(intervals);
                     };
-                };
-                var segmentFor = function (v) {
-                    var midpoint = (v.value0 + v.value1) / 2.0;
-                    var $87 = v.value1 <= v.value0;
-                    if ($87) {
-                        return Data_Maybe.Nothing.value;
+                    var topPri = function (t) {
+                        return foldl(max1)(0)(map(function (v) {
+                            return v.priority;
+                        })(activeAt(t)));
                     };
-                    var v1 = winningStaticAt(midpoint);
-                    if (v1.length === 0) {
+                    var winningStaticAt = function (t) {
+                        return map(function (v) {
+                            return v.bbox;
+                        })(Data_Array.filter(function (iv) {
+                            return iv.priority === topPri(t);
+                        })(activeAt(t)));
+                    };
+                    var actionActiveAt = function (t) {
+                        return Data_Array.any(function (iv) {
+                            return iv.priority >= 1;
+                        })(activeAt(t));
+                    };
+                    var heldCam = function (bs) {
+                        return function (t) {
+                            if (actionActiveAt(t)) {
+                                return Markgraf_Animation_Camera_Composition.actionCamera(cfg)(cameraViewport)(layout)(Markgraf_Animation_Camera_Focus.combineBBoxes(bs));
+                            };
+                            if (Data_Boolean.otherwise) {
+                                return bboxToCamera(cfg)(layout)(Markgraf_Animation_Camera_Focus.combineBBoxes(bs));
+                            };
+                            throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 205, column 3 - line 207, column 61): " + [ bs.constructor.name, t.constructor.name ]);
+                        };
+                    };
+                    var segmentFor = function (v) {
+                        var midpoint = (v.value0 + v.value1) / 2.0;
+                        var $135 = v.value1 <= v.value0;
+                        if ($135) {
+                            return Data_Maybe.Nothing.value;
+                        };
+                        var v1 = winningStaticAt(midpoint);
+                        if (v1.length === 0) {
+                            return new Data_Maybe.Just({
+                                kind: Gap.value,
+                                startT: v.value0,
+                                endT: v.value1,
+                                fromCam: fitAllCam,
+                                toCam: fitAllCam,
+                                easing: cfg.easing,
+                                focus: Data_Maybe.Nothing.value,
+                                intent: Overview.value
+                            });
+                        };
                         return new Data_Maybe.Just({
-                            kind: Gap.value,
+                            kind: Hold.value,
                             startT: v.value0,
                             endT: v.value1,
-                            fromCam: fitAllCam,
-                            toCam: fitAllCam,
+                            fromCam: heldCam(v1)(midpoint),
+                            toCam: heldCam(v1)(midpoint),
                             easing: cfg.easing,
-                            focus: Data_Maybe.Nothing.value
+                            focus: new Data_Maybe.Just(Markgraf_Animation_Camera_Focus.combineBBoxes(v1)),
+                            intent: (function () {
+                                var $137 = actionActiveAt(midpoint);
+                                if ($137) {
+                                    return ActionFocus.value;
+                                };
+                                return Overview.value;
+                            })()
                         });
                     };
-                    return new Data_Maybe.Just({
-                        kind: Hold.value,
-                        startT: v.value0,
-                        endT: v.value1,
-                        fromCam: heldCam(v1)(midpoint),
-                        toCam: heldCam(v1)(midpoint),
-                        easing: cfg.easing,
-                        focus: new Data_Maybe.Just(Markgraf_Animation_Camera_Focus.combineBBoxes(v1))
-                    });
+                    return map(stripFocus)(insertLeadIns(cfg)(cameraViewport)(layout)(fitAllCam)(coalesceHolds(fillInTweens(cfg)(cameraViewport)(layout)(fitAllCam)(Data_Array.mapMaybe(segmentFor)(Data_Array.zip(boundaries)(Data_Array.drop(1)(boundaries)))))));
                 };
-                return insertLeadIns(cfg)(layout)(fitAllCam)(coalesceHolds(fillInTweens(cfg)(layout)(fitAllCam)(Data_Array.mapMaybe(segmentFor)(Data_Array.zip(boundaries)(Data_Array.drop(1)(boundaries))))));
+            };
+        };
+    };
+};
+var cameraAtWithIntent = function (cfg) {
+    return function (layout) {
+        return function (spans) {
+            return function (t) {
+                var inSpan = function (s) {
+                    return t >= s.startT && t < s.endT;
+                };
+                var chosenActiveSpan = chooseSpanByIntentPrecedence(Data_Array.filter(inSpan)(spans));
+                if (chosenActiveSpan instanceof Data_Maybe.Just) {
+                    return {
+                        camera: resolveSpan(cfg)(t)(chosenActiveSpan.value0),
+                        intent: chosenActiveSpan.value0.intent
+                    };
+                };
+                if (chosenActiveSpan instanceof Data_Maybe.Nothing) {
+                    var v = Data_Array.last(spans);
+                    if (v instanceof Data_Maybe.Just && t >= v.value0.endT) {
+                        return {
+                            camera: v.value0.toCam,
+                            intent: v.value0.intent
+                        };
+                    };
+                    return {
+                        camera: Data_Maybe.fromMaybe(bboxToCamera(cfg)(layout)(Markgraf_Animation_Layout.bbox(layout)))(map1(function (v1) {
+                            return v1.fromCam;
+                        })(Data_Array.head(spans))),
+                        intent: Data_Maybe.maybe(Overview.value)(function (v1) {
+                            return v1.intent;
+                        })(Data_Array.head(spans))
+                    };
+                };
+                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 429, column 41 - line 436, column 8): " + [ chosenActiveSpan.constructor.name ]);
             };
         };
     };
@@ -598,23 +972,7 @@ var cameraAt = function (cfg) {
     return function (layout) {
         return function (spans) {
             return function (t) {
-                var inSpan = function (s) {
-                    return t >= s.startT && t < s.endT;
-                };
-                var v = Data_Array.find(inSpan)(spans);
-                if (v instanceof Data_Maybe.Just) {
-                    return resolveSpan(cfg)(t)(v.value0);
-                };
-                if (v instanceof Data_Maybe.Nothing) {
-                    var v1 = Data_Array.last(spans);
-                    if (v1 instanceof Data_Maybe.Just && t >= v1.value0.endT) {
-                        return v1.value0.toCam;
-                    };
-                    return Data_Maybe.fromMaybe(bboxToCamera(cfg)(layout)(Markgraf_Animation_Layout.bbox(layout)))(map1(function (v2) {
-                        return v2.fromCam;
-                    })(Data_Array.head(spans)));
-                };
-                throw new Error("Failed pattern match at Markgraf.Animation.Camera (line 318, column 31 - line 323, column 37): " + [ v.constructor.name ]);
+                return (cameraAtWithIntent(cfg)(layout)(spans)(t)).camera;
             };
         };
     };
@@ -644,7 +1002,8 @@ var buildCameraSpans = function (cfg) {
                                 fromCam: st.prev,
                                 toCam: target,
                                 easing: cfg.easing,
-                                interp: LinearLerp.value
+                                interp: LinearLerp.value,
+                                intent: Overview.value
                             };
                             return {
                                 acc: Data_Array.snoc(st.acc)(cs),
@@ -667,11 +1026,18 @@ var buildCameraSpans = function (cfg) {
 var bboxToActionCamera = Markgraf_Animation_Camera_Composition.actionCamera;
 export {
     defaultCameraConfig,
+    defaultCameraViewport,
+    Overview,
+    DiveHome,
+    DiveTransition,
+    ActionFocus,
     LinearLerp,
     LogLerp,
+    StagedLogLerp,
     buildCameraSpans,
     buildCameraSpansFromIntervals,
     cameraAt,
+    cameraAtWithIntent,
     computeZoom,
     computeZoomCover,
     clampZoomWithFloor,
@@ -681,6 +1047,9 @@ export {
     lerpCamera,
     logLerpCamera,
     liftCameraToRoot,
+    liftCameraToRootInLayout,
+    eqCameraIntent,
+    showCameraIntent,
     eqCameraInterp,
     showCameraInterp
 };

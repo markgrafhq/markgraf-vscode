@@ -19,6 +19,7 @@ import * as Data_Map from "../Data.Map/index.js";
 import * as Data_Map_Internal from "../Data.Map.Internal/index.js";
 import * as Data_Maybe from "../Data.Maybe/index.js";
 import * as Data_Newtype from "../Data.Newtype/index.js";
+import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Semigroup from "../Data.Semigroup/index.js";
 import * as Data_Set from "../Data.Set/index.js";
 import * as Data_Show from "../Data.Show/index.js";
@@ -62,8 +63,25 @@ var fromIsSymbol = {
 var eq3 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(toIsSymbol)(Markgraf_Graph.eqNodeId))()(fromIsSymbol)(Markgraf_Graph.eqNodeId))));
 var eqMaybe = /* #__PURE__ */ Data_Maybe.eqMaybe(Data_Eq.eqString);
 var eq4 = /* #__PURE__ */ Data_Eq.eq(eqMaybe);
-var eq5 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Maybe.eqMaybe(Markgraf_Graph.eqLabel));
-var eq6 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(Markgraf_Graph.eqLabel));
+var eq6 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Maybe.eqMaybe(Markgraf_Graph.eqLabel));
+var eq7 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(Markgraf_Graph.eqLabel));
+var eq9 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons({
+    reflectSymbol: function () {
+        return "line";
+    }
+})(Data_Eq.eqInt))()({
+    reflectSymbol: function () {
+        return "endLine";
+    }
+})(Data_Eq.eqInt))()({
+    reflectSymbol: function () {
+        return "endColumn";
+    }
+})(Data_Eq.eqInt))()({
+    reflectSymbol: function () {
+        return "column";
+    }
+})(Data_Eq.eqInt))));
 var opsIsSymbol = {
     reflectSymbol: function () {
         return "ops";
@@ -81,41 +99,19 @@ var kindIsSymbol = {
 };
 var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var un = /* #__PURE__ */ Data_Newtype.un();
+var lessThanOrEq = /* #__PURE__ */ Data_Ord.lessThanOrEq(Markgraf_Graph.ordNodeId);
 var monadStateStateT = /* #__PURE__ */ Control_Monad_State_Trans.monadStateStateT(Data_Identity.monadIdentity);
 var modify_ = /* #__PURE__ */ Control_Monad_State_Class.modify_(monadStateStateT);
-var discard = /* #__PURE__ */ Control_Bind.discard(Control_Bind.discardUnit);
-var bindStateT = /* #__PURE__ */ Control_Monad_State_Trans.bindStateT(Data_Identity.monadIdentity);
-var discard1 = /* #__PURE__ */ discard(bindStateT);
-var bind = /* #__PURE__ */ Control_Bind.bind(bindStateT);
-var get = /* #__PURE__ */ Control_Monad_State_Class.get(monadStateStateT);
-var applicativeStateT = /* #__PURE__ */ Control_Monad_State_Trans.applicativeStateT(Data_Identity.monadIdentity);
-var pure = /* #__PURE__ */ Control_Applicative.pure(applicativeStateT);
-var member = /* #__PURE__ */ Data_Set.member(Markgraf_Graph.ordNodeId);
-var member1 = /* #__PURE__ */ Data_Map_Internal.member(Markgraf_Graph.ordNodeId);
-var elem = /* #__PURE__ */ Data_Array.elem(Markgraf_Graph.eqNodeId);
-var show = /* #__PURE__ */ Data_Show.show(Data_Show.showInt);
-var eq8 = /* #__PURE__ */ Data_Eq.eq(Markgraf_Animation_Spec.eqKeyframeId);
-var put = /* #__PURE__ */ Control_Monad_State_Class.put(monadStateStateT);
-var insert = /* #__PURE__ */ Data_Map_Internal.insert(Markgraf_Graph.ordNodeId);
-var traverse_ = /* #__PURE__ */ Data_Foldable.traverse_(applicativeStateT)(Data_Foldable.foldableArray);
-var discard2 = /* #__PURE__ */ discard(Data_Either.bindEither);
-var when = /* #__PURE__ */ Control_Applicative.when(Data_Either.applicativeEither);
-var member2 = /* #__PURE__ */ Data_Set.member(Markgraf_Graph.ordEdgeId);
-var notEq = /* #__PURE__ */ Data_Eq.notEq(Markgraf_Graph.eqEdgeId);
-var pure1 = /* #__PURE__ */ Control_Applicative.pure(Data_Either.applicativeEither);
-var insert1 = /* #__PURE__ */ Data_Set.insert(Markgraf_Graph.ordEdgeId);
-var $$delete = /* #__PURE__ */ Data_Set["delete"](Markgraf_Graph.ordEdgeId);
-var bind1 = /* #__PURE__ */ Control_Bind.bind(/* #__PURE__ */ Control_Monad_Except_Trans.bindExceptT(Data_Identity.monadIdentity));
+var bind = /* #__PURE__ */ Control_Bind.bind(/* #__PURE__ */ Control_Monad_Except_Trans.bindExceptT(Data_Identity.monadIdentity));
 var readImpl = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignObject(Yoga_JSON.readForeignForeign));
 var readImpl1 = /* #__PURE__ */ Yoga_JSON.readImpl(Markgraf_Graph.readForeignNodeId);
-var pure2 = /* #__PURE__ */ Control_Applicative.pure(/* #__PURE__ */ Control_Monad_Except_Trans.applicativeExceptT(Data_Identity.monadIdentity));
+var pure = /* #__PURE__ */ Control_Applicative.pure(/* #__PURE__ */ Control_Monad_Except_Trans.applicativeExceptT(Data_Identity.monadIdentity));
 var map1 = /* #__PURE__ */ Data_Functor.map(/* #__PURE__ */ Control_Monad_Except_Trans.functorExceptT(Data_Identity.functorIdentity));
 var readImpl2 = /* #__PURE__ */ Yoga_JSON.readImpl(Yoga_JSON.readForeignString);
 var readForeignRecord = /* #__PURE__ */ Yoga_JSON.readForeignRecord();
 var readForeignFieldsCons = /* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(fromIsSymbol)(Markgraf_Graph.readForeignNodeId);
 var readForeignFieldsCons1 = /* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(toIsSymbol)(Markgraf_Graph.readForeignNodeId)(Yoga_JSON.readForeignFieldsNilRowRo)()();
-var readForeignRecord1 = /* #__PURE__ */ readForeignRecord(/* #__PURE__ */ readForeignFieldsCons(readForeignFieldsCons1)()());
-var readImpl3 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignArray(readForeignRecord1));
+var readImpl3 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignArray(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ readForeignFieldsCons(readForeignFieldsCons1)()())));
 var readImpl4 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignArray(Yoga_JSON.readForeignString));
 var readForeignMaybe = /* #__PURE__ */ Yoga_JSON.readForeignMaybe(Yoga_JSON.readForeignString);
 var readImpl5 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons({
@@ -127,8 +123,7 @@ var readImpl5 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ readForeignRe
         return "label";
     }
 })(readForeignMaybe)(Yoga_JSON.readForeignFieldsNilRowRo)()())()()));
-var readImpl6 = /* #__PURE__ */ Yoga_JSON.readImpl(readForeignRecord1);
-var readImpl7 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ readForeignFieldsCons(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons({
+var readImpl6 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ readForeignFieldsCons(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons({
     reflectSymbol: function () {
         return "newFrom";
     }
@@ -137,13 +132,34 @@ var readImpl7 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ readForeignRe
         return "newTo";
     }
 })(Markgraf_Graph.readForeignNodeId)(readForeignFieldsCons1)()())()())()()));
-var readImpl8 = /* #__PURE__ */ Yoga_JSON.readImpl(Yoga_JSON.readForeignInt);
-var show1 = /* #__PURE__ */ Data_Show.show(/* #__PURE__ */ Data_List_Types.showNonEmptyList(Foreign.showForeignError));
+var readImpl7 = /* #__PURE__ */ Yoga_JSON.readImpl(Yoga_JSON.readForeignInt);
+var show = /* #__PURE__ */ Data_Show.show(/* #__PURE__ */ Data_List_Types.showNonEmptyList(Foreign.showForeignError));
+var bindStateT = /* #__PURE__ */ Control_Monad_State_Trans.bindStateT(Data_Identity.monadIdentity);
+var bind1 = /* #__PURE__ */ Control_Bind.bind(bindStateT);
+var get = /* #__PURE__ */ Control_Monad_State_Class.get(monadStateStateT);
+var applicativeStateT = /* #__PURE__ */ Control_Monad_State_Trans.applicativeStateT(Data_Identity.monadIdentity);
+var pure1 = /* #__PURE__ */ Control_Applicative.pure(applicativeStateT);
+var member = /* #__PURE__ */ Data_Map_Internal.member(Markgraf_Graph.ordNodeId);
+var insert = /* #__PURE__ */ Data_Map_Internal.insert(Markgraf_Graph.ordNodeId);
+var traverse_ = /* #__PURE__ */ Data_Foldable.traverse_(applicativeStateT);
+var traverse_1 = /* #__PURE__ */ traverse_(Data_Foldable.foldableArray);
+var show1 = /* #__PURE__ */ Data_Show.show(Data_Show.showInt);
+var eq10 = /* #__PURE__ */ Data_Eq.eq(Markgraf_Animation_Spec.eqKeyframeId);
+var put = /* #__PURE__ */ Control_Monad_State_Class.put(monadStateStateT);
+var discard = /* #__PURE__ */ Control_Bind.discard(Control_Bind.discardUnit);
+var discard1 = /* #__PURE__ */ discard(bindStateT);
+var member1 = /* #__PURE__ */ Data_Set.member(Markgraf_Graph.ordNodeId);
+var elem = /* #__PURE__ */ Data_Array.elem(Markgraf_Graph.eqNodeId);
 var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordEdgeId);
 var fromFoldable = /* #__PURE__ */ Data_Array.fromFoldable(Data_Foldable.foldableArray);
 var toUnfoldable = /* #__PURE__ */ Data_Set.toUnfoldable(Data_Unfoldable.unfoldableArray);
+var member2 = /* #__PURE__ */ Data_Set.member(Markgraf_Graph.ordEdgeId);
 var mapFlipped = /* #__PURE__ */ Data_Functor.mapFlipped(Data_Functor.functorArray);
+var discard2 = /* #__PURE__ */ discard(Data_Either.bindEither);
+var when = /* #__PURE__ */ Control_Applicative.when(Data_Either.applicativeEither);
 var member3 = /* #__PURE__ */ Data_Map_Internal.member(Markgraf_Graph.ordEdgeId);
+var pure2 = /* #__PURE__ */ Control_Applicative.pure(Data_Either.applicativeEither);
+var insert1 = /* #__PURE__ */ Data_Set.insert(Markgraf_Graph.ordEdgeId);
 var insert2 = /* #__PURE__ */ Data_Map_Internal.insert(Markgraf_Graph.ordEdgeId);
 var bind2 = /* #__PURE__ */ Control_Bind.bind(Data_Either.bindEither);
 var foldM = /* #__PURE__ */ Data_Foldable.foldM(Data_Foldable.foldableArray);
@@ -153,10 +169,14 @@ var difference = /* #__PURE__ */ Data_Set.difference(Markgraf_Graph.ordEdgeId);
 var fromFoldable1 = /* #__PURE__ */ Data_Set.fromFoldable(Data_Foldable.foldableArray)(Markgraf_Graph.ordEdgeId);
 var fromFoldable2 = /* #__PURE__ */ Data_Set.fromFoldable(Data_Set.foldableSet)(Markgraf_Graph.ordEdgeId);
 var fromFoldable3 = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
+var notEq = /* #__PURE__ */ Data_Eq.notEq(Markgraf_Graph.eqEdgeId);
+var $$delete = /* #__PURE__ */ Data_Set["delete"](Markgraf_Graph.ordEdgeId);
 var insert3 = /* #__PURE__ */ Data_Set.insert(Markgraf_Graph.ordNodeId);
 var delete1 = /* #__PURE__ */ Data_Set["delete"](Markgraf_Graph.ordNodeId);
 var union1 = /* #__PURE__ */ Data_Map_Internal.union(Markgraf_Graph.ordEdgeId);
-var eq9 = /* #__PURE__ */ Data_Eq.eq(Markgraf_Animation_Spec.eqKeyframeKind);
+var traverse_2 = /* #__PURE__ */ traverse_(Data_Foldable.foldableMaybe);
+var eq11 = /* #__PURE__ */ Data_Eq.eq(Markgraf_Animation_Spec.eqKeyframeKind);
+var bind3 = /* #__PURE__ */ Control_Bind.bind(Data_Maybe.bindMaybe);
 var append1 = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
 var foldM2 = /* #__PURE__ */ foldM(/* #__PURE__ */ Control_Monad_State_Trans.monadStateT(Data_Identity.monadIdentity));
 var when1 = /* #__PURE__ */ Control_Applicative.when(applicativeStateT);
@@ -302,7 +322,7 @@ var genericFrameKind_ = {
         if (x instanceof Data_Generic_Rep.Inr && x.value0 instanceof Data_Generic_Rep.Inr) {
             return Title.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 83, column 1 - line 83, column 36): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 84, column 1 - line 84, column 36): " + [ x.constructor.name ]);
     },
     from: function (x) {
         if (x instanceof AnimatedKeyframe) {
@@ -314,7 +334,7 @@ var genericFrameKind_ = {
         if (x instanceof Title) {
             return new Data_Generic_Rep.Inr(new Data_Generic_Rep.Inr(Data_Generic_Rep.NoArguments.value));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 83, column 1 - line 83, column 36): " + [ x.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 84, column 1 - line 84, column 36): " + [ x.constructor.name ]);
     }
 };
 var readForeignFrameKind = {
@@ -336,16 +356,16 @@ var eqOp = {
                 return eq(x.value0.id)(y.value0.id) && eq4(x.value0.label)(y.value0.label);
             };
             if (x instanceof AddEdge && y instanceof AddEdge) {
-                return eq(x.value0.from)(y.value0.from) && eq5(x.value0.label)(y.value0.label) && eq(x.value0.to)(y.value0.to);
+                return x.value0.directed === y.value0.directed && eq(x.value0.from)(y.value0.from) && eq6(x.value0.label)(y.value0.label) && eq(x.value0.to)(y.value0.to);
             };
             if (x instanceof DelEdge && y instanceof DelEdge) {
-                return eq(x.value0.from)(y.value0.from) && eq(x.value0.to)(y.value0.to);
+                return x.value0.directed === y.value0.directed && eq(x.value0.from)(y.value0.from) && eq(x.value0.to)(y.value0.to);
             };
             if (x instanceof RepointEdge && y instanceof RepointEdge) {
                 return eq(x.value0.from)(y.value0.from) && eq(x.value0.newFrom)(y.value0.newFrom) && eq(x.value0.newTo)(y.value0.newTo) && eq(x.value0.to)(y.value0.to);
             };
             if (x instanceof Token && y instanceof Token) {
-                return eq(x.value0.from)(y.value0.from) && eq6(x.value0.labels)(y.value0.labels) && eq(x.value0.to)(y.value0.to);
+                return eq(x.value0.from)(y.value0.from) && eq7(x.value0.labels)(y.value0.labels) && eq(x.value0.to)(y.value0.to);
             };
             if (x instanceof Enter && y instanceof Enter) {
                 return eq(x.value0.id)(y.value0.id);
@@ -357,7 +377,7 @@ var eqOp = {
         };
     }
 };
-var eq10 = /* #__PURE__ */ Data_Eq.eq(eqOp);
+var eq12 = /* #__PURE__ */ Data_Eq.eq(eqOp);
 var eqFrameKind = {
     eq: function (x) {
         return function (y) {
@@ -384,19 +404,25 @@ var eqBlock = {
                 return Data_Eq.eq(Data_Eq.eqArray(eqBlock))(x.value0)(y.value0);
             };
             if (x instanceof Leaf && y instanceof Leaf) {
-                return x.value0.column === y.value0.column && x.value0.line === y.value0.line && eq10(x.value0.op)(y.value0.op);
+                return x.value0.column === y.value0.column && x.value0.endColumn === y.value0.endColumn && x.value0.endLine === y.value0.endLine && x.value0.line === y.value0.line && eq12(x.value0.op)(y.value0.op) && eq9(x.value0.operands)(y.value0.operands) && (x.value0.span.column === y.value0.span.column && x.value0.span.endColumn === y.value0.span.endColumn && x.value0.span.endLine === y.value0.span.endLine && x.value0.span.line === y.value0.span.line);
             };
             return false;
         };
     }
 };
-var eq11 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(opsIsSymbol)(eqBlock))()(nameIsSymbol)(eqMaybe))()(kindIsSymbol)(eqFrameKind))));
+var eq13 = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(/* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(opsIsSymbol)(eqBlock))()(nameIsSymbol)(eqMaybe))()(kindIsSymbol)(eqFrameKind))));
 var eqInterior = {
     eq: function (x) {
         return function (y) {
-            return eq11(x.doc.frames)(y.doc.frames) && Data_Eq.eq(Data_Eq.eqArray(eqInterior))(x.doc.interiors)(y.doc.interiors) && x.doc.seed === y.doc.seed && eq(x.node)(y.node);
+            return eq13(x.doc.frames)(y.doc.frames) && Data_Eq.eq(Data_Eq.eqArray(eqInterior))(x.doc.interiors)(y.doc.interiors) && x.doc.seed === y.doc.seed && eq(x.node)(y.node);
         };
     }
+};
+var zeroSpan = {
+    line: 0,
+    column: 0,
+    endLine: 0,
+    endColumn: 0
 };
 var upsertNode = function (nid) {
     return function (node) {
@@ -410,15 +436,15 @@ var upsertNode = function (nid) {
             if (v instanceof Data_Maybe.Nothing) {
                 return Data_Array.snoc(nodes)(new Data_Tuple.Tuple(nid, node));
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 516, column 29 - line 518, column 40): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 546, column 29 - line 548, column 40): " + [ v.constructor.name ]);
         };
     };
 };
 var updateNodeLabel = function (nid) {
     return function (newLabel) {
         return map(function (v) {
-            var $349 = eq(v.value0)(nid);
-            if ($349) {
+            var $369 = eq(v.value0)(nid);
+            if ($369) {
                 return new Data_Tuple.Tuple(v.value0, {
                     id: v.value1.id,
                     ports: v.value1.ports,
@@ -436,156 +462,35 @@ var synthEdgeId = function (from) {
         return un(Markgraf_Graph.NodeId)(from) + ("->" + un(Markgraf_Graph.NodeId)(to));
     };
 };
-var setError = function (msg) {
-    return modify_(function (s) {
-        if (s.error instanceof Data_Maybe.Just) {
-            return s;
+var synthConnId = function (from) {
+    return function (to) {
+        var $372 = lessThanOrEq(from)(to);
+        if ($372) {
+            return "conn:" + (un(Markgraf_Graph.NodeId)(from) + ("--" + un(Markgraf_Graph.NodeId)(to)));
         };
-        if (s.error instanceof Data_Maybe.Nothing) {
-            var $354 = {};
-            for (var $355 in s) {
-                if ({}.hasOwnProperty.call(s, $355)) {
-                    $354[$355] = s[$355];
-                };
-            };
-            $354.error = new Data_Maybe.Just({
-                msg: msg,
-                line: s.currentLine,
-                column: s.currentColumn
-            });
-            return $354;
-        };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 608, column 30 - line 610, column 86): " + [ s.error.constructor.name ]);
-    });
-};
-var runDive = function (l) {
-    return discard1(modify_(function (s) {
-        var $357 = {};
-        for (var $358 in s) {
-            if ({}.hasOwnProperty.call(s, $358)) {
-                $357[$358] = s[$358];
-            };
-        };
-        $357.currentLine = l.line;
-        $357.currentColumn = l.column;
-        return $357;
-    }))(function () {
-        return bind(get)(function (s) {
-            if (s.error instanceof Data_Maybe.Just) {
-                return pure(Data_Unit.unit);
-            };
-            if (s.error instanceof Data_Maybe.Nothing) {
-                if (l.op instanceof Enter) {
-                    if (!member(l.op.value0.id)(s.currNodes)) {
-                        return setError("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": does not exist"));
-                    };
-                    if (!member1(l.op.value0.id)(s.interiorOf)) {
-                        return setError("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": it has no `inside` block"));
-                    };
-                    if (elem(l.op.value0.id)(s.enterStack)) {
-                        return setError("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": already entered"));
-                    };
-                    if (Data_Boolean.otherwise) {
-                        return modify_(function (s$prime) {
-                            var $363 = {};
-                            for (var $364 in s$prime) {
-                                if ({}.hasOwnProperty.call(s$prime, $364)) {
-                                    $363[$364] = s$prime[$364];
-                                };
-                            };
-                            $363.enterStack = Data_Array.snoc(s$prime.enterStack)(l.op.value0.id);
-                            $363.scenes = Data_Array.snoc(s$prime.scenes)(new Markgraf_Animation_Spec.EnterNode(l.op.value0.id));
-                            return $363;
-                        });
-                    };
-                };
-                if (l.op instanceof Exit) {
-                    var v = Data_Array.unsnoc(s.enterStack);
-                    if (v instanceof Data_Maybe.Nothing) {
-                        return setError("`exit` without a matching `enter`");
-                    };
-                    if (v instanceof Data_Maybe.Just) {
-                        return modify_(function (s$prime) {
-                            var $368 = {};
-                            for (var $369 in s$prime) {
-                                if ({}.hasOwnProperty.call(s$prime, $369)) {
-                                    $368[$369] = s$prime[$369];
-                                };
-                            };
-                            $368.enterStack = v.value0.init;
-                            $368.scenes = Data_Array.snoc(s$prime.scenes)(Markgraf_Animation_Spec.ExitNode.value);
-                            return $368;
-                        });
-                    };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 440, column 15 - line 445, column 12): " + [ v.constructor.name ]);
-                };
-                return pure(Data_Unit.unit);
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 426, column 3 - line 446, column 21): " + [ s.error.constructor.name ]);
-        });
-    });
-};
-var renameKfForFlow = function (frameName) {
-    return bind(get)(function (s) {
-        var newKfId = (function () {
-            if (frameName instanceof Data_Maybe.Just && !Data_String_Common["null"](frameName.value0)) {
-                return frameName.value0;
-            };
-            return "kf-" + show(s.kfCounter);
-        })();
-        var $375 = Data_Array.any(function (kf) {
-            return eq8(kf.id)(newKfId);
-        })(s.keyframes);
-        if ($375) {
-            return setError("duplicate frame name " + un(Markgraf_Animation_Spec.KeyframeId)(newKfId));
-        };
-        var newKf = {
-            id: newKfId,
-            nodes: s.currNodes,
-            edges: s.currEdges,
-            kind: Markgraf_Animation_Spec.Animated.value
-        };
-        return put((function () {
-            var $376 = {};
-            for (var $377 in s) {
-                if ({}.hasOwnProperty.call(s, $377)) {
-                    $376[$377] = s[$377];
-                };
-            };
-            $376.keyframes = Data_Array.snoc(s.keyframes)(newKf);
-            $376.kfCounter = s.kfCounter + 1 | 0;
-            $376.currentKf = new Data_Maybe.Just(newKfId);
-            return $376;
-        })());
-    });
-};
-var registerInteriors = /* #__PURE__ */ (function () {
-    var register = function (v) {
-        return bind(get)(function (s) {
-            if (s.error instanceof Data_Maybe.Just) {
-                return pure(Data_Unit.unit);
-            };
-            if (s.error instanceof Data_Maybe.Nothing) {
-                var $382 = member1(v.node)(s.interiorOf);
-                if ($382) {
-                    return setError("node " + (un(Markgraf_Graph.NodeId)(v.node) + " has more than one `inside` block"));
-                };
-                return modify_(function (s$prime) {
-                    var $383 = {};
-                    for (var $384 in s$prime) {
-                        if ({}.hasOwnProperty.call(s$prime, $384)) {
-                            $383[$384] = s$prime[$384];
-                        };
-                    };
-                    $383.interiorOf = insert(v.node)(v.doc)(s$prime.interiorOf);
-                    return $383;
-                });
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 304, column 5 - line 310, column 81): " + [ s.error.constructor.name ]);
-        });
+        return "conn:" + (un(Markgraf_Graph.NodeId)(to) + ("--" + un(Markgraf_Graph.NodeId)(from)));
     };
-    return traverse_(register);
-})();
+};
+var setCurrentSpan = function (span) {
+    return modify_(function (s) {
+        var $373 = {};
+        for (var $374 in s) {
+            if ({}.hasOwnProperty.call(s, $374)) {
+                $373[$374] = s[$374];
+            };
+        };
+        $373.currentSpan = span;
+        return $373;
+    });
+};
+var setCurrentLeaf = function (l) {
+    return setCurrentSpan(l.span);
+};
+var operandSpan = function (index) {
+    return function (l) {
+        return Data_Maybe.fromMaybe(l.span)(Data_Array.index(l.operands)(index));
+    };
+};
 var nodeIdsMissing = function (fromMissing) {
     return function (toMissing) {
         return function (t) {
@@ -601,7 +506,7 @@ var nodeIdsMissing = function (fromMissing) {
             if (!fromMissing && !toMissing) {
                 return "";
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 820, column 42 - line 824, column 21): " + [ fromMissing.constructor.name, toMissing.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 912, column 42 - line 916, column 21): " + [ fromMissing.constructor.name, toMissing.constructor.name ]);
         };
     };
 };
@@ -651,30 +556,6 @@ var mkEdge = function (id) {
         };
     };
 };
-var planRepoint = function (s) {
-    return function (r) {
-        var arrow = function (a) {
-            return function (b) {
-                return un(Markgraf_Graph.NodeId)(a) + ("\u2192" + un(Markgraf_Graph.NodeId)(b));
-            };
-        };
-        var oldId = synthEdgeId(r.from)(r.to);
-        var newId = synthEdgeId(r.newFrom)(r.newTo);
-        return discard2(when(!member2(oldId)(s.currEdges))(new Data_Either.Left("cannot repoint " + (arrow(r.from)(r.to) + ": edge does not exist"))))(function () {
-            return discard2(when(!member(r.newFrom)(s.currNodes))(new Data_Either.Left("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + (": unknown node " + un(Markgraf_Graph.NodeId)(r.newFrom))))))))(function () {
-                return discard2(when(!member(r.newTo)(s.currNodes))(new Data_Either.Left("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + (": unknown node " + un(Markgraf_Graph.NodeId)(r.newTo))))))))(function () {
-                    return discard2(when(notEq(oldId)(newId) && member2(newId)(s.currEdges))(new Data_Either.Left("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + ": target edge already exists"))))))(function () {
-                        return pure1({
-                            nextCurrEdges: insert1(newId)($$delete(oldId)(s.currEdges)),
-                            newId: newId,
-                            newEdge: mkEdge(newId)(r.newFrom)(r.newTo)(Data_Maybe.Nothing.value)
-                        });
-                    });
-                });
-            });
-        });
-    };
-};
 var missingList = function (fromMissing) {
     return function (toMissing) {
         return function (from) {
@@ -691,7 +572,7 @@ var missingList = function (fromMissing) {
                 if (!fromMissing && !toMissing) {
                     return "";
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 827, column 45 - line 831, column 21): " + [ fromMissing.constructor.name, toMissing.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 919, column 45 - line 923, column 21): " + [ fromMissing.constructor.name, toMissing.constructor.name ]);
             };
         };
     };
@@ -737,8 +618,7 @@ var initialState = /* #__PURE__ */ (function () {
         kfCounter: 0,
         eventCounter: 0,
         currentKf: Data_Maybe.Nothing.value,
-        currentLine: 0,
-        currentColumn: 0,
+        currentSpan: zeroSpan,
         error: Data_Maybe.Nothing.value,
         enterStack: [  ],
         interiorOf: Data_Map_Internal.empty
@@ -751,50 +631,59 @@ var frameLabel = function (v) {
     return "";
 };
 var failMsg = /* #__PURE__ */ (function () {
-    var $548 = Foreign.fail(Data_Identity.monadIdentity);
-    return function ($549) {
-        return $548(Foreign.ForeignError.create($549));
+    var $570 = Foreign.fail(Data_Identity.monadIdentity);
+    return function ($571) {
+        return $570(Foreign.ForeignError.create($571));
     };
 })();
-var readAddEdge = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(failMsg("+edge missing 'from'"))(readImpl1)(Foreign_Object.lookup("from")(v)))(function (from) {
-            return bind1(Data_Maybe.maybe(failMsg("+edge missing 'to'"))(readImpl1)(Foreign_Object.lookup("to")(v)))(function (to) {
-                return bind1(Data_Maybe.maybe(pure2(Data_Maybe.Nothing.value))((function () {
-                    var $550 = map1(function ($552) {
-                        return Data_Maybe.Just.create(Markgraf_Graph.Label($552));
-                    });
-                    return function ($551) {
-                        return $550(readImpl2($551));
-                    };
-                })())(Foreign_Object.lookup("label")(v)))(function (label) {
-                    return pure2({
-                        from: from,
-                        to: to,
-                        label: label
+var readAddEdge = function (directed) {
+    return function (f) {
+        var opName = (function () {
+            if (directed) {
+                return "+edge";
+            };
+            return "+conn";
+        })();
+        return bind(readImpl(f))(function (v) {
+            return bind(Data_Maybe.maybe(failMsg(opName + " missing 'from'"))(readImpl1)(Foreign_Object.lookup("from")(v)))(function (from) {
+                return bind(Data_Maybe.maybe(failMsg(opName + " missing 'to'"))(readImpl1)(Foreign_Object.lookup("to")(v)))(function (to) {
+                    return bind(Data_Maybe.maybe(pure(Data_Maybe.Nothing.value))((function () {
+                        var $572 = map1(function ($574) {
+                            return Data_Maybe.Just.create(Markgraf_Graph.Label($574));
+                        });
+                        return function ($573) {
+                            return $572(readImpl2($573));
+                        };
+                    })())(Foreign_Object.lookup("label")(v)))(function (label) {
+                        return pure({
+                            from: from,
+                            to: to,
+                            label: label,
+                            directed: directed
+                        });
                     });
                 });
             });
         });
-    });
+    };
 };
 var readAddNode = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(failMsg("+node missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
-            return bind1(Data_Maybe.maybe(failMsg("+node missing 'label'"))(readImpl2)(Foreign_Object.lookup("label")(v)))(function (label) {
-                return bind1((function () {
+    return bind(readImpl(f))(function (v) {
+        return bind(Data_Maybe.maybe(failMsg("+node missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
+            return bind(Data_Maybe.maybe(failMsg("+node missing 'label'"))(readImpl2)(Foreign_Object.lookup("label")(v)))(function (label) {
+                return bind((function () {
                     var v1 = Foreign_Object.lookup("shape")(v);
                     if (v1 instanceof Data_Maybe.Nothing) {
-                        return pure2(Markgraf_Graph.Rectangle.value);
+                        return pure(Markgraf_Graph.Rectangle.value);
                     };
                     if (v1 instanceof Data_Maybe.Just) {
-                        return bind1(readImpl2(v1.value0))(function (v2) {
-                            return Data_Maybe.maybe(failMsg("+node has unknown shape: " + v2))(pure2)(Markgraf_Graph.parseShape(v2));
+                        return bind(readImpl2(v1.value0))(function (v2) {
+                            return Data_Maybe.maybe(failMsg("+node has unknown shape: " + v2))(pure)(Markgraf_Graph.parseShape(v2));
                         });
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 194, column 12 - line 198, column 83): " + [ v1.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 222, column 12 - line 226, column 83): " + [ v1.constructor.name ]);
                 })())(function (shape) {
-                    return pure2({
+                    return pure({
                         id: id,
                         label: label,
                         shape: shape
@@ -804,11 +693,32 @@ var readAddNode = function (f) {
         });
     });
 };
+var readDelEdge = function (directed) {
+    return function (f) {
+        var opName = (function () {
+            if (directed) {
+                return "-edge";
+            };
+            return "-conn";
+        })();
+        return bind(readImpl(f))(function (v) {
+            return bind(Data_Maybe.maybe(failMsg(opName + " missing 'from'"))(readImpl1)(Foreign_Object.lookup("from")(v)))(function (from) {
+                return bind(Data_Maybe.maybe(failMsg(opName + " missing 'to'"))(readImpl1)(Foreign_Object.lookup("to")(v)))(function (to) {
+                    return pure({
+                        from: from,
+                        to: to,
+                        directed: directed
+                    });
+                });
+            });
+        });
+    };
+};
 var readDelNode = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(failMsg("-node missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
-            return bind1(Data_Maybe.maybe(pure2([  ]))(readImpl3)(Foreign_Object.lookup("via")(v)))(function (via) {
-                return pure2({
+    return bind(readImpl(f))(function (v) {
+        return bind(Data_Maybe.maybe(failMsg("-node missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
+            return bind(Data_Maybe.maybe(pure([  ]))(readImpl3)(Foreign_Object.lookup("via")(v)))(function (via) {
+                return pure({
                     id: id,
                     via: via
                 });
@@ -817,23 +727,23 @@ var readDelNode = function (f) {
     });
 };
 var readEnter = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(failMsg("enter missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
-            return pure2({
+    return bind(readImpl(f))(function (v) {
+        return bind(Data_Maybe.maybe(failMsg("enter missing 'id'"))(readImpl1)(Foreign_Object.lookup("id")(v)))(function (id) {
+            return pure({
                 id: id
             });
         });
     });
 };
 var readToken = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(failMsg("token missing 'from'"))(readImpl1)(Foreign_Object.lookup("from")(v)))(function (from) {
-            return bind1(Data_Maybe.maybe(failMsg("token missing 'to'"))(readImpl1)(Foreign_Object.lookup("to")(v)))(function (to) {
-                return bind1((function () {
+    return bind(readImpl(f))(function (v) {
+        return bind(Data_Maybe.maybe(failMsg("token missing 'from'"))(readImpl1)(Foreign_Object.lookup("from")(v)))(function (from) {
+            return bind(Data_Maybe.maybe(failMsg("token missing 'to'"))(readImpl1)(Foreign_Object.lookup("to")(v)))(function (to) {
+                return bind((function () {
                     var v1 = Foreign_Object.lookup("labels")(v);
                     if (v1 instanceof Data_Maybe.Just) {
-                        return map1(map(function ($553) {
-                            return Markgraf_Graph.Label(Data_String_Common.trim($553));
+                        return map1(map(function ($575) {
+                            return Markgraf_Graph.Label(Data_String_Common.trim($575));
                         }))(readImpl4(v1.value0));
                     };
                     if (v1 instanceof Data_Maybe.Nothing) {
@@ -844,13 +754,13 @@ var readToken = function (f) {
                             })(readImpl2(v2.value0));
                         };
                         if (v2 instanceof Data_Maybe.Nothing) {
-                            return pure2([  ]);
+                            return pure([  ]);
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 208, column 16 - line 210, column 25): " + [ v2.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 236, column 16 - line 238, column 25): " + [ v2.constructor.name ]);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 206, column 13 - line 210, column 25): " + [ v1.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 234, column 13 - line 238, column 25): " + [ v1.constructor.name ]);
                 })())(function (labels) {
-                    return pure2({
+                    return pure({
                         from: from,
                         to: to,
                         labels: labels
@@ -862,8 +772,8 @@ var readToken = function (f) {
 };
 var readForeignOp = {
     readImpl: function (f) {
-        return bind1(readImpl(f))(function (v) {
-            return bind1(Data_Maybe.maybe(failMsg("missing 'op' field"))(readImpl2)(Foreign_Object.lookup("op")(v)))(function (v1) {
+        return bind(readImpl(f))(function (v) {
+            return bind(Data_Maybe.maybe(failMsg("missing 'op' field"))(readImpl2)(Foreign_Object.lookup("op")(v)))(function (v1) {
                 if (v1 === "+node") {
                     return map1(AddNode.create)(readAddNode(f));
                 };
@@ -874,13 +784,19 @@ var readForeignOp = {
                     return map1(ModNode.create)(readImpl5(f));
                 };
                 if (v1 === "+edge") {
-                    return map1(AddEdge.create)(readAddEdge(f));
+                    return map1(AddEdge.create)(readAddEdge(true)(f));
+                };
+                if (v1 === "+conn") {
+                    return map1(AddEdge.create)(readAddEdge(false)(f));
                 };
                 if (v1 === "-edge") {
-                    return map1(DelEdge.create)(readImpl6(f));
+                    return map1(DelEdge.create)(readDelEdge(true)(f));
+                };
+                if (v1 === "-conn") {
+                    return map1(DelEdge.create)(readDelEdge(false)(f));
                 };
                 if (v1 === "~edge") {
-                    return map1(RepointEdge.create)(readImpl7(f));
+                    return map1(RepointEdge.create)(readImpl6(f));
                 };
                 if (v1 === "token") {
                     return map1(Token.create)(readToken(f));
@@ -889,17 +805,17 @@ var readForeignOp = {
                     return map1(Enter.create)(readEnter(f));
                 };
                 if (v1 === "exit") {
-                    return pure2(Exit.value);
+                    return pure(Exit.value);
                 };
                 return failMsg("unknown op: " + v1);
             });
         });
     }
 };
-var readImpl9 = /* #__PURE__ */ Yoga_JSON.readImpl(readForeignOp);
+var readImpl8 = /* #__PURE__ */ Yoga_JSON.readImpl(readForeignOp);
 var readForeignBlock = {
     readImpl: function (f) {
-        return bind1(readImpl(f))(function (v) {
+        return bind(readImpl(f))(function (v) {
             var v1 = Foreign_Object.lookup("par")(v);
             if (v1 instanceof Data_Maybe.Just) {
                 return map1(Par.create)(Yoga_JSON.readImpl(Yoga_JSON.readForeignArray(readForeignBlock))(v1.value0));
@@ -910,27 +826,31 @@ var readForeignBlock = {
                     return map1(Seq.create)(Yoga_JSON.readImpl(Yoga_JSON.readForeignArray(readForeignBlock))(v2.value0));
                 };
                 if (v2 instanceof Data_Maybe.Nothing) {
-                    return bind1(readImpl9(f))(function (op) {
-                        return pure2(new Leaf({
+                    return bind(readImpl8(f))(function (op) {
+                        return pure(new Leaf({
                             op: op,
                             line: 0,
-                            column: 0
+                            column: 0,
+                            endLine: 0,
+                            endColumn: 0,
+                            span: zeroSpan,
+                            operands: [  ]
                         }));
                     });
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 140, column 18 - line 144, column 49): " + [ v2.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 154, column 18 - line 159, column 95): " + [ v2.constructor.name ]);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 138, column 5 - line 144, column 49): " + [ v1.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 152, column 5 - line 159, column 95): " + [ v1.constructor.name ]);
         });
     }
 };
-var readImpl10 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignArray(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(kindIsSymbol)(readForeignFrameKind)(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(nameIsSymbol)(readForeignMaybe)(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(opsIsSymbol)(readForeignBlock)(Yoga_JSON.readForeignFieldsNilRowRo)()())()())()())));
+var readImpl9 = /* #__PURE__ */ Yoga_JSON.readImpl(/* #__PURE__ */ Yoga_JSON.readForeignArray(/* #__PURE__ */ readForeignRecord(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(kindIsSymbol)(readForeignFrameKind)(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(nameIsSymbol)(readForeignMaybe)(/* #__PURE__ */ Yoga_JSON.readForeignFieldsCons(opsIsSymbol)(readForeignBlock)(Yoga_JSON.readForeignFieldsNilRowRo)()())()())()())));
 var readSurfaceAnim = function (f) {
-    return bind1(readImpl(f))(function (v) {
-        return bind1(Data_Maybe.maybe(pure2(0))(readImpl8)(Foreign_Object.lookup("seed")(v)))(function (seed) {
-            return bind1(Data_Maybe.maybe(pure2([  ]))(readImpl10)(Foreign_Object.lookup("frames")(v)))(function (frames) {
-                return bind1(Data_Maybe.maybe(pure2([  ]))(Yoga_JSON.readImpl(Yoga_JSON.readForeignArray(readForeignInterior)))(Foreign_Object.lookup("interiors")(v)))(function (interiors) {
-                    return pure2({
+    return bind(readImpl(f))(function (v) {
+        return bind(Data_Maybe.maybe(pure(0))(readImpl7)(Foreign_Object.lookup("seed")(v)))(function (seed) {
+            return bind(Data_Maybe.maybe(pure([  ]))(readImpl9)(Foreign_Object.lookup("frames")(v)))(function (frames) {
+                return bind(Data_Maybe.maybe(pure([  ]))(Yoga_JSON.readImpl(Yoga_JSON.readForeignArray(readForeignInterior)))(Foreign_Object.lookup("interiors")(v)))(function (interiors) {
+                    return pure({
                         seed: seed,
                         frames: frames,
                         interiors: interiors
@@ -942,10 +862,10 @@ var readSurfaceAnim = function (f) {
 };
 var readForeignInterior = {
     readImpl: function (f) {
-        return bind1(readImpl(f))(function (v) {
-            return bind1(Data_Maybe.maybe(failMsg("inside missing 'node'"))(readImpl1)(Foreign_Object.lookup("node")(v)))(function (node) {
-                return bind1(Data_Maybe.maybe(failMsg("inside missing 'doc'"))(readSurfaceAnim)(Foreign_Object.lookup("doc")(v)))(function (doc) {
-                    return pure2({
+        return bind(readImpl(f))(function (v) {
+            return bind(Data_Maybe.maybe(failMsg("inside missing 'node'"))(readImpl1)(Foreign_Object.lookup("node")(v)))(function (node) {
+                return bind(Data_Maybe.maybe(failMsg("inside missing 'doc'"))(readSurfaceAnim)(Foreign_Object.lookup("doc")(v)))(function (doc) {
+                    return pure({
                         node: node,
                         doc: doc
                     });
@@ -955,59 +875,213 @@ var readForeignInterior = {
     }
 };
 var readSurface = function (raw) {
-    var v = Control_Monad_Except.runExcept(bind1(Yoga_JSON.parseJSON(raw))(readSurfaceAnim));
+    var v = Control_Monad_Except.runExcept(bind(Yoga_JSON.parseJSON(raw))(readSurfaceAnim));
     if (v instanceof Data_Either.Left) {
-        return new Data_Either.Left(show1(v.value0));
+        return new Data_Either.Left(show(v.value0));
     };
     if (v instanceof Data_Either.Right) {
         return new Data_Either.Right(v.value0);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 231, column 19 - line 233, column 21): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 259, column 19 - line 261, column 21): " + [ v.constructor.name ]);
 };
-var emitStillHold = /* #__PURE__ */ bind(get)(function (s) {
+var errorAt = function (span) {
+    return function (msg) {
+        return {
+            msg: msg,
+            line: span.line,
+            column: span.column,
+            endLine: span.endLine,
+            endColumn: span.endColumn
+        };
+    };
+};
+var setError = function (msg) {
+    return modify_(function (s) {
+        if (s.error instanceof Data_Maybe.Just) {
+            return s;
+        };
+        if (s.error instanceof Data_Maybe.Nothing) {
+            var $422 = {};
+            for (var $423 in s) {
+                if ({}.hasOwnProperty.call(s, $423)) {
+                    $422[$423] = s[$423];
+                };
+            };
+            $422.error = new Data_Maybe.Just(errorAt(s.currentSpan)(msg));
+            return $422;
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 652, column 30 - line 654, column 60): " + [ s.error.constructor.name ]);
+    });
+};
+var registerInteriors = /* #__PURE__ */ (function () {
+    var register = function (v) {
+        return bind1(get)(function (s) {
+            if (s.error instanceof Data_Maybe.Just) {
+                return pure1(Data_Unit.unit);
+            };
+            if (s.error instanceof Data_Maybe.Nothing) {
+                var $428 = member(v.node)(s.interiorOf);
+                if ($428) {
+                    return setError("node " + (un(Markgraf_Graph.NodeId)(v.node) + " has more than one `inside` block"));
+                };
+                return modify_(function (s$prime) {
+                    var $429 = {};
+                    for (var $430 in s$prime) {
+                        if ({}.hasOwnProperty.call(s$prime, $430)) {
+                            $429[$430] = s$prime[$430];
+                        };
+                    };
+                    $429.interiorOf = insert(v.node)(v.doc)(s$prime.interiorOf);
+                    return $429;
+                });
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 333, column 5 - line 339, column 81): " + [ s.error.constructor.name ]);
+        });
+    };
+    return traverse_1(register);
+})();
+var renameKfForFlow = function (frameName) {
+    return bind1(get)(function (s) {
+        var newKfId = (function () {
+            if (frameName instanceof Data_Maybe.Just && !Data_String_Common["null"](frameName.value0)) {
+                return frameName.value0;
+            };
+            return "kf-" + show1(s.kfCounter);
+        })();
+        var $434 = Data_Array.any(function (kf) {
+            return eq10(kf.id)(newKfId);
+        })(s.keyframes);
+        if ($434) {
+            return setError("duplicate frame name " + un(Markgraf_Animation_Spec.KeyframeId)(newKfId));
+        };
+        var newKf = {
+            id: newKfId,
+            nodes: s.currNodes,
+            edges: s.currEdges,
+            kind: Markgraf_Animation_Spec.Animated.value
+        };
+        return put((function () {
+            var $435 = {};
+            for (var $436 in s) {
+                if ({}.hasOwnProperty.call(s, $436)) {
+                    $435[$436] = s[$436];
+                };
+            };
+            $435.keyframes = Data_Array.snoc(s.keyframes)(newKf);
+            $435.kfCounter = s.kfCounter + 1 | 0;
+            $435.currentKf = new Data_Maybe.Just(newKfId);
+            return $435;
+        })());
+    });
+};
+var setErrorAt = function (span) {
+    return function (msg) {
+        return discard1(setCurrentSpan(span))(function () {
+            return setError(msg);
+        });
+    };
+};
+var runDive = function (l) {
+    return discard1(setCurrentLeaf(l))(function () {
+        return bind1(get)(function (s) {
+            if (s.error instanceof Data_Maybe.Just) {
+                return pure1(Data_Unit.unit);
+            };
+            if (s.error instanceof Data_Maybe.Nothing) {
+                if (l.op instanceof Enter) {
+                    if (!member1(l.op.value0.id)(s.currNodes)) {
+                        return setErrorAt(operandSpan(0)(l))("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": does not exist"));
+                    };
+                    if (!member(l.op.value0.id)(s.interiorOf)) {
+                        return setErrorAt(operandSpan(0)(l))("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": it has no `inside` block"));
+                    };
+                    if (elem(l.op.value0.id)(s.enterStack)) {
+                        return setErrorAt(operandSpan(0)(l))("cannot enter node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": already entered"));
+                    };
+                    if (Data_Boolean.otherwise) {
+                        return modify_(function (s$prime) {
+                            var $441 = {};
+                            for (var $442 in s$prime) {
+                                if ({}.hasOwnProperty.call(s$prime, $442)) {
+                                    $441[$442] = s$prime[$442];
+                                };
+                            };
+                            $441.enterStack = Data_Array.snoc(s$prime.enterStack)(l.op.value0.id);
+                            $441.scenes = Data_Array.snoc(s$prime.scenes)(new Markgraf_Animation_Spec.EnterNode(l.op.value0.id));
+                            return $441;
+                        });
+                    };
+                };
+                if (l.op instanceof Exit) {
+                    var v = Data_Array.unsnoc(s.enterStack);
+                    if (v instanceof Data_Maybe.Nothing) {
+                        return setError("`out` (`exit`) without a matching `into` (`enter`)");
+                    };
+                    if (v instanceof Data_Maybe.Just) {
+                        return modify_(function (s$prime) {
+                            var $446 = {};
+                            for (var $447 in s$prime) {
+                                if ({}.hasOwnProperty.call(s$prime, $447)) {
+                                    $446[$447] = s$prime[$447];
+                                };
+                            };
+                            $446.enterStack = v.value0.init;
+                            $446.scenes = Data_Array.snoc(s$prime.scenes)(Markgraf_Animation_Spec.ExitNode.value);
+                            return $446;
+                        });
+                    };
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 469, column 15 - line 474, column 12): " + [ v.constructor.name ]);
+                };
+                return pure1(Data_Unit.unit);
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 455, column 3 - line 475, column 21): " + [ s.error.constructor.name ]);
+        });
+    });
+};
+var emitStillHold = /* #__PURE__ */ bind1(get)(function (s) {
     if (s.error instanceof Data_Maybe.Just) {
-        return pure(Data_Unit.unit);
+        return pure1(Data_Unit.unit);
     };
     if (s.error instanceof Data_Maybe.Nothing) {
         if (s.currentKf instanceof Data_Maybe.Just) {
             return modify_(function (s$prime) {
-                var $430 = {};
-                for (var $431 in s$prime) {
-                    if ({}.hasOwnProperty.call(s$prime, $431)) {
-                        $430[$431] = s$prime[$431];
+                var $454 = {};
+                for (var $455 in s$prime) {
+                    if ({}.hasOwnProperty.call(s$prime, $455)) {
+                        $454[$455] = s$prime[$455];
                     };
                 };
-                $430.scenes = Data_Array.snoc(s$prime.scenes)(new Markgraf_Animation_Spec.Hold(s.currentKf.value0));
-                return $430;
+                $454.scenes = Data_Array.snoc(s$prime.scenes)(new Markgraf_Animation_Spec.Hold(s.currentKf.value0));
+                return $454;
             });
         };
         if (s.currentKf instanceof Data_Maybe.Nothing) {
-            return pure(Data_Unit.unit);
+            return pure1(Data_Unit.unit);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 401, column 16 - line 403, column 27): " + [ s.currentKf.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 430, column 16 - line 432, column 27): " + [ s.currentKf.constructor.name ]);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 399, column 3 - line 403, column 27): " + [ s.error.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 428, column 3 - line 432, column 27): " + [ s.error.constructor.name ]);
 });
 var emitEvent = function (parentRef) {
     return function (kind) {
-        return bind(get)(function (s) {
-            var eid = "ev-" + show(s.eventCounter);
+        return bind1(get)(function (s) {
+            var eid = "ev-" + show1(s.eventCounter);
             var ev = {
                 id: eid,
                 kind: kind,
                 when: parentRef
             };
             return discard1(put((function () {
-                var $434 = {};
-                for (var $435 in s) {
-                    if ({}.hasOwnProperty.call(s, $435)) {
-                        $434[$435] = s[$435];
+                var $458 = {};
+                for (var $459 in s) {
+                    if ({}.hasOwnProperty.call(s, $459)) {
+                        $458[$459] = s[$459];
                     };
                 };
-                $434.eventCounter = s.eventCounter + 1 | 0;
-                return $434;
+                $458.eventCounter = s.eventCounter + 1 | 0;
+                return $458;
             })()))(function () {
-                return pure({
+                return pure1({
                     events: [ ev ],
                     firstId: new Data_Maybe.Just(eid),
                     lastId: new Data_Maybe.Just(eid)
@@ -1016,70 +1090,47 @@ var emitEvent = function (parentRef) {
         });
     };
 };
-var walkLeaf = function (parentRef) {
-    return function (op) {
-        if (op instanceof Token) {
-            return bind(get)(function (s) {
-                var fromMissing = !member(op.value0.from)(s.currNodes);
-                var toMissing = !member(op.value0.to)(s.currNodes);
-                var $438 = fromMissing || toMissing;
-                if ($438) {
-                    return discard1(setError("token references unknown node: " + nodeIdsMissing(fromMissing)(toMissing)(op.value0)))(function () {
-                        return pure({
-                            events: [  ],
-                            firstId: Data_Maybe.Nothing.value,
-                            lastId: Data_Maybe.Nothing.value
-                        });
-                    });
+var edgeName = function (directed) {
+    return function (from) {
+        return function (to) {
+            var separator = (function () {
+                if (directed) {
+                    return "\u2192";
                 };
-                var rev = synthEdgeId(op.value0.to)(op.value0.from);
-                var fwd = synthEdgeId(op.value0.from)(op.value0.to);
-                var $439 = member2(fwd)(s.currEdges);
-                if ($439) {
-                    return emitEvent(parentRef)(mkSendToken(op.value0)(fwd)(Markgraf_Animation_Spec.Forward.value));
-                };
-                var $440 = member2(rev)(s.currEdges);
-                if ($440) {
-                    return emitEvent(parentRef)(mkSendToken(op.value0)(rev)(Markgraf_Animation_Spec.Backward.value));
-                };
-                return discard1(setError("token " + (un(Markgraf_Graph.NodeId)(op.value0.from) + ("\u2192" + (un(Markgraf_Graph.NodeId)(op.value0.to) + (": no edge between " + (un(Markgraf_Graph.NodeId)(op.value0.from) + (" and " + un(Markgraf_Graph.NodeId)(op.value0.to)))))))))(function () {
-                    return pure({
-                        events: [  ],
-                        firstId: Data_Maybe.Nothing.value,
-                        lastId: Data_Maybe.Nothing.value
-                    });
-                });
-            });
+                return "--";
+            })();
+            return un(Markgraf_Graph.NodeId)(from) + (separator + un(Markgraf_Graph.NodeId)(to));
         };
-        return pure({
-            events: [  ],
-            firstId: Data_Maybe.Nothing.value,
-            lastId: Data_Maybe.Nothing.value
-        });
+    };
+};
+var edgeKind = function (directed) {
+    if (directed) {
+        return "edge";
+    };
+    return "connection";
+};
+var edgeIdFor = function (directed) {
+    return function (from) {
+        return function (to) {
+            if (directed) {
+                return synthEdgeId(from)(to);
+            };
+            return synthConnId(from)(to);
+        };
     };
 };
 var diveError = function (dives) {
     return function (msg) {
         var v = Data_Array.head(dives);
         if (v instanceof Data_Maybe.Just) {
-            return discard1(modify_(function (s) {
-                var $443 = {};
-                for (var $444 in s) {
-                    if ({}.hasOwnProperty.call(s, $444)) {
-                        $443[$444] = s[$444];
-                    };
-                };
-                $443.currentLine = v.value0.line;
-                $443.currentColumn = v.value0.column;
-                return $443;
-            }))(function () {
+            return discard1(setCurrentLeaf(v.value0))(function () {
                 return setError(msg);
             });
         };
         if (v instanceof Data_Maybe.Nothing) {
             return setError(msg);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 413, column 23 - line 417, column 26): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 442, column 23 - line 446, column 26): " + [ v.constructor.name ]);
     };
 };
 var currentEdgeData = function (s) {
@@ -1101,15 +1152,25 @@ var planDeletion = function (s) {
                 return !member2(e.id)(consumed);
             };
         };
+        var conn = function (a) {
+            return function (b) {
+                return un(Markgraf_Graph.NodeId)(a) + ("--" + un(Markgraf_Graph.NodeId)(b));
+            };
+        };
         var arrow = function (a) {
             return function (b) {
                 return un(Markgraf_Graph.NodeId)(a) + ("\u2192" + un(Markgraf_Graph.NodeId)(b));
             };
         };
-        var cannotDelete = function (leftover) {
-            return "cannot delete node " + (un(Markgraf_Graph.NodeId)(n.id) + (": still connected (" + (Data_String_Common.joinWith(", ")(mapFlipped(leftover)(function (e) {
+        var edgeDisplay = function (e) {
+            var $466 = Markgraf_Graph.edgeHasArrowhead(e.id);
+            if ($466) {
                 return arrow(e.from.node)(e.to.node);
-            })) + ("). Use -edge to drop them or `via a b` to merge " + (un(Markgraf_Graph.NodeId)(n.id) + "'s endpoints.")))));
+            };
+            return conn(e.from.node)(e.to.node);
+        };
+        var cannotDelete = function (leftover) {
+            return "cannot delete node " + (un(Markgraf_Graph.NodeId)(n.id) + (": still connected (" + (Data_String_Common.joinWith(", ")(mapFlipped(leftover)(edgeDisplay)) + ("). Use `- a -> b` or `- a -- b` to drop them, or `via a b` to merge " + (un(Markgraf_Graph.NodeId)(n.id) + "'s endpoints.")))));
         };
         var applyVia = function (acc) {
             return function (v) {
@@ -1119,7 +1180,7 @@ var planDeletion = function (s) {
                 return discard2(when(!member2(inId)(s.currEdges))(new Data_Either.Left(viaPrefix(v) + ("no edge " + arrow(v.from)(n.id)))))(function () {
                     return discard2(when(!member2(outId)(s.currEdges))(new Data_Either.Left(viaPrefix(v) + ("no edge " + arrow(n.id)(v.to)))))(function () {
                         return discard2(when(member2(mergedId)(s.currEdges) || member3(mergedId)(acc.synthesized))(new Data_Either.Left(viaPrefix(v) + ("would create " + (arrow(v.from)(v.to) + " but it already exists")))))(function () {
-                            return pure1({
+                            return pure2({
                                 consumed: insert1(inId)(insert1(outId)(acc.consumed)),
                                 synthesized: insert2(mergedId)(mkEdge(mergedId)(v.from)(v.to)(Data_Maybe.Nothing.value))(acc.synthesized)
                             });
@@ -1145,6 +1206,38 @@ var planDeletion = function (s) {
         });
     };
 };
+var coverSpan = function (start) {
+    return function (end) {
+        return {
+            line: start.line,
+            column: start.column,
+            endLine: end.endLine,
+            endColumn: end.endColumn
+        };
+    };
+};
+var edgeEndpointSpan = function (l) {
+    return coverSpan(operandSpan(0)(l))(operandSpan(1)(l));
+};
+var endpointErrorSpan = function (fromMissing) {
+    return function (toMissing) {
+        return function (l) {
+            if (fromMissing && toMissing) {
+                return edgeEndpointSpan(l);
+            };
+            if (fromMissing && !toMissing) {
+                return operandSpan(0)(l);
+            };
+            if (!fromMissing && toMissing) {
+                return operandSpan(1)(l);
+            };
+            if (!fromMissing && !toMissing) {
+                return edgeEndpointSpan(l);
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 672, column 45 - line 676, column 37): " + [ fromMissing.constructor.name, toMissing.constructor.name ]);
+        };
+    };
+};
 var collectLeaves = function (v) {
     if (v instanceof Leaf) {
         return [ v.value0 ];
@@ -1155,11 +1248,11 @@ var collectLeaves = function (v) {
     if (v instanceof Seq) {
         return Data_Array.concatMap(collectLeaves)(v.value0);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 470, column 17 - line 473, column 41): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 499, column 17 - line 502, column 41): " + [ v.constructor.name ]);
 };
-var checkBalanced = /* #__PURE__ */ bind(get)(function (s) {
+var checkBalanced = /* #__PURE__ */ bind1(get)(function (s) {
     if (s.error instanceof Data_Maybe.Just) {
-        return pure(Data_Unit.unit);
+        return pure1(Data_Unit.unit);
     };
     if (s.error instanceof Data_Maybe.Nothing) {
         var v = Data_Array.last(s.enterStack);
@@ -1167,11 +1260,11 @@ var checkBalanced = /* #__PURE__ */ bind(get)(function (s) {
             return setError("entered node " + (un(Markgraf_Graph.NodeId)(v.value0) + " was never exited"));
         };
         if (v instanceof Data_Maybe.Nothing) {
-            return pure(Data_Unit.unit);
+            return pure1(Data_Unit.unit);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 327, column 16 - line 329, column 27): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 356, column 16 - line 358, column 27): " + [ v.constructor.name ]);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 325, column 3 - line 329, column 27): " + [ s.error.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 354, column 3 - line 358, column 27): " + [ s.error.constructor.name ]);
 });
 var buildGraph = function (s) {
     return {
@@ -1180,169 +1273,189 @@ var buildGraph = function (s) {
         constraints: [  ]
     };
 };
-var applyStructural = function (v) {
-    if (v instanceof AddNode) {
-        var node = mkNode(v.value0.id)(v.value0.label)(v.value0.shape);
-        return modify_(function (s) {
-            var $457 = {};
-            for (var $458 in s) {
-                if ({}.hasOwnProperty.call(s, $458)) {
-                    $457[$458] = s[$458];
-                };
-            };
-            $457.graphNodes = upsertNode(v.value0.id)(node)(s.graphNodes);
-            $457.currNodes = insert3(v.value0.id)(s.currNodes);
-            return $457;
-        });
-    };
-    if (v instanceof DelNode) {
-        return bind(get)(function (s) {
-            var $461 = !member(v.value0.id)(s.currNodes);
-            if ($461) {
-                return setError("cannot delete node " + (un(Markgraf_Graph.NodeId)(v.value0.id) + ": does not exist"));
-            };
-            var v1 = planDeletion(s)(v.value0);
-            if (v1 instanceof Data_Either.Left) {
-                return setError(v1.value0);
-            };
-            if (v1 instanceof Data_Either.Right) {
-                return modify_(function (s$prime) {
-                    var $464 = {};
-                    for (var $465 in s$prime) {
-                        if ({}.hasOwnProperty.call(s$prime, $465)) {
-                            $464[$465] = s$prime[$465];
-                        };
-                    };
-                    $464.currNodes = delete1(v.value0.id)(s$prime.currNodes);
-                    $464.currEdges = v1.value0.nextCurrEdges;
-                    $464.graphEdges = union1(v1.value0.synthesized)(s$prime.graphEdges);
-                    return $464;
-                });
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 536, column 10 - line 542, column 10): " + [ v1.constructor.name ]);
-        });
-    };
-    if (v instanceof ModNode) {
-        return bind(get)(function (s) {
-            var $469 = !member(v.value0.id)(s.currNodes);
-            if ($469) {
-                return setError("cannot modify node " + (un(Markgraf_Graph.NodeId)(v.value0.id) + ": does not exist"));
-            };
-            if (v.value0.label instanceof Data_Maybe.Just) {
-                return modify_(function (s$prime) {
-                    var $471 = {};
-                    for (var $472 in s$prime) {
-                        if ({}.hasOwnProperty.call(s$prime, $472)) {
-                            $471[$472] = s$prime[$472];
-                        };
-                    };
-                    $471.graphNodes = updateNodeLabel(v.value0.id)(v.value0.label.value0)(s$prime.graphNodes);
-                    return $471;
-                });
-            };
-            if (v.value0.label instanceof Data_Maybe.Nothing) {
-                return pure(Data_Unit.unit);
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 547, column 10 - line 550, column 27): " + [ v.value0.label.constructor.name ]);
-        });
-    };
-    if (v instanceof AddEdge) {
-        return bind(get)(function (s) {
-            var fromMissing = !member(v.value0.from)(s.currNodes);
-            var toMissing = !member(v.value0.to)(s.currNodes);
-            var $476 = fromMissing || toMissing;
-            if ($476) {
-                return setError("cannot add edge " + (un(Markgraf_Graph.NodeId)(v.value0.from) + ("\u2192" + (un(Markgraf_Graph.NodeId)(v.value0.to) + (": unknown node " + missingList(fromMissing)(toMissing)(v.value0.from)(v.value0.to))))));
-            };
-            var eid = synthEdgeId(v.value0.from)(v.value0.to);
-            var edge = mkEdge(eid)(v.value0.from)(v.value0.to)(v.value0.label);
-            return modify_(function (s$prime) {
-                var $477 = {};
-                for (var $478 in s$prime) {
-                    if ({}.hasOwnProperty.call(s$prime, $478)) {
-                        $477[$478] = s$prime[$478];
-                    };
-                };
-                $477.graphEdges = insert2(eid)(edge)(s$prime.graphEdges);
-                $477.currEdges = insert1(eid)(s$prime.currEdges);
-                return $477;
-            });
-        });
-    };
-    if (v instanceof DelEdge) {
-        return bind(get)(function (s) {
-            var eid = synthEdgeId(v.value0.from)(v.value0.to);
-            var $481 = !member2(eid)(s.currEdges);
-            if ($481) {
-                return setError("cannot delete edge " + (un(Markgraf_Graph.NodeId)(v.value0.from) + ("\u2192" + (un(Markgraf_Graph.NodeId)(v.value0.to) + ": does not exist"))));
-            };
-            return modify_(function (s$prime) {
-                var $482 = {};
-                for (var $483 in s$prime) {
-                    if ({}.hasOwnProperty.call(s$prime, $483)) {
-                        $482[$483] = s$prime[$483];
-                    };
-                };
-                $482.currEdges = $$delete(eid)(s$prime.currEdges);
-                return $482;
-            });
-        });
-    };
-    if (v instanceof RepointEdge) {
-        return bind(get)(function (s) {
-            var v1 = planRepoint(s)(v.value0);
-            if (v1 instanceof Data_Either.Left) {
-                return setError(v1.value0);
-            };
-            if (v1 instanceof Data_Either.Right) {
-                return modify_(function (s$prime) {
-                    var $488 = {};
-                    for (var $489 in s$prime) {
-                        if ({}.hasOwnProperty.call(s$prime, $489)) {
-                            $488[$489] = s$prime[$489];
-                        };
-                    };
-                    $488.currEdges = v1.value0.nextCurrEdges;
-                    $488.graphEdges = insert2(v1.value0.newId)(v1.value0.newEdge)(s$prime.graphEdges);
-                    return $488;
-                });
-            };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 580, column 5 - line 585, column 10): " + [ v1.constructor.name ]);
-        });
-    };
-    return pure(Data_Unit.unit);
-};
-var runOp = function (l) {
-    return discard1(modify_(function (s) {
-        var $493 = {};
-        for (var $494 in s) {
-            if ({}.hasOwnProperty.call(s, $494)) {
-                $493[$494] = s[$494];
+var applyRepoint = function (l) {
+    return function (r) {
+        var arrow = function (a) {
+            return function (b) {
+                return un(Markgraf_Graph.NodeId)(a) + ("\u2192" + un(Markgraf_Graph.NodeId)(b));
             };
         };
-        $493.currentLine = l.line;
-        $493.currentColumn = l.column;
-        return $493;
-    }))(function () {
-        return applyStructural(l.op);
+        return bind1(get)(function (s) {
+            var oldId = synthEdgeId(r.from)(r.to);
+            var newId = synthEdgeId(r.newFrom)(r.newTo);
+            if (!member2(oldId)(s.currEdges)) {
+                return setErrorAt(edgeEndpointSpan(l))("cannot repoint " + (arrow(r.from)(r.to) + ": edge does not exist"));
+            };
+            if (!member1(r.newFrom)(s.currNodes)) {
+                return setErrorAt(operandSpan(2)(l))("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + (": unknown node " + un(Markgraf_Graph.NodeId)(r.newFrom))))));
+            };
+            if (!member1(r.newTo)(s.currNodes)) {
+                return setErrorAt(operandSpan(3)(l))("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + (": unknown node " + un(Markgraf_Graph.NodeId)(r.newTo))))));
+            };
+            if (notEq(oldId)(newId) && member2(newId)(s.currEdges)) {
+                return setErrorAt(coverSpan(operandSpan(2)(l))(operandSpan(3)(l)))("cannot repoint " + (arrow(r.from)(r.to) + (" to " + (arrow(r.newFrom)(r.newTo) + ": target edge already exists"))));
+            };
+            var newEdge = mkEdge(newId)(r.newFrom)(r.newTo)(Data_Maybe.Nothing.value);
+            return modify_(function (s$prime) {
+                var $479 = {};
+                for (var $480 in s$prime) {
+                    if ({}.hasOwnProperty.call(s$prime, $480)) {
+                        $479[$480] = s$prime[$480];
+                    };
+                };
+                $479.currEdges = insert1(newId)($$delete(oldId)(s$prime.currEdges));
+                $479.graphEdges = insert2(newId)(newEdge)(s$prime.graphEdges);
+                return $479;
+            });
+        });
+    };
+};
+var applyStructural = function (l) {
+    if (l.op instanceof AddNode) {
+        return bind1(get)(function (s) {
+            var $483 = member1(l.op.value0.id)(s.currNodes);
+            if ($483) {
+                return setErrorAt(operandSpan(0)(l))("cannot add node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": already exists"));
+            };
+            var node = mkNode(l.op.value0.id)(l.op.value0.label)(l.op.value0.shape);
+            return modify_(function (s$prime) {
+                var $484 = {};
+                for (var $485 in s$prime) {
+                    if ({}.hasOwnProperty.call(s$prime, $485)) {
+                        $484[$485] = s$prime[$485];
+                    };
+                };
+                $484.graphNodes = upsertNode(l.op.value0.id)(node)(s$prime.graphNodes);
+                $484.currNodes = insert3(l.op.value0.id)(s$prime.currNodes);
+                return $484;
+            });
+        });
+    };
+    if (l.op instanceof DelNode) {
+        return bind1(get)(function (s) {
+            var $488 = !member1(l.op.value0.id)(s.currNodes);
+            if ($488) {
+                return setErrorAt(operandSpan(0)(l))("cannot delete node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": does not exist"));
+            };
+            var v = planDeletion(s)(l.op.value0);
+            if (v instanceof Data_Either.Left) {
+                return setErrorAt(operandSpan(0)(l))(v.value0);
+            };
+            if (v instanceof Data_Either.Right) {
+                return modify_(function (s$prime) {
+                    var $491 = {};
+                    for (var $492 in s$prime) {
+                        if ({}.hasOwnProperty.call(s$prime, $492)) {
+                            $491[$492] = s$prime[$492];
+                        };
+                    };
+                    $491.currNodes = delete1(l.op.value0.id)(s$prime.currNodes);
+                    $491.currEdges = v.value0.nextCurrEdges;
+                    $491.graphEdges = union1(v.value0.synthesized)(s$prime.graphEdges);
+                    return $491;
+                });
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 570, column 10 - line 576, column 10): " + [ v.constructor.name ]);
+        });
+    };
+    if (l.op instanceof ModNode) {
+        return bind1(get)(function (s) {
+            var $496 = !member1(l.op.value0.id)(s.currNodes);
+            if ($496) {
+                return setErrorAt(operandSpan(0)(l))("cannot modify node " + (un(Markgraf_Graph.NodeId)(l.op.value0.id) + ": does not exist"));
+            };
+            if (l.op.value0.label instanceof Data_Maybe.Just) {
+                return modify_(function (s$prime) {
+                    var $498 = {};
+                    for (var $499 in s$prime) {
+                        if ({}.hasOwnProperty.call(s$prime, $499)) {
+                            $498[$499] = s$prime[$499];
+                        };
+                    };
+                    $498.graphNodes = updateNodeLabel(l.op.value0.id)(l.op.value0.label.value0)(s$prime.graphNodes);
+                    return $498;
+                });
+            };
+            if (l.op.value0.label instanceof Data_Maybe.Nothing) {
+                return pure1(Data_Unit.unit);
+            };
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 581, column 10 - line 584, column 27): " + [ l.op.value0.label.constructor.name ]);
+        });
+    };
+    if (l.op instanceof AddEdge) {
+        return bind1(get)(function (s) {
+            var fromMissing = !member1(l.op.value0.from)(s.currNodes);
+            var toMissing = !member1(l.op.value0.to)(s.currNodes);
+            var $503 = fromMissing || toMissing;
+            if ($503) {
+                return setErrorAt(endpointErrorSpan(fromMissing)(toMissing)(l))("cannot add " + (edgeKind(l.op.value0.directed) + (" " + (edgeName(l.op.value0.directed)(l.op.value0.from)(l.op.value0.to) + (": unknown node " + missingList(fromMissing)(toMissing)(l.op.value0.from)(l.op.value0.to))))));
+            };
+            var eid = edgeIdFor(l.op.value0.directed)(l.op.value0.from)(l.op.value0.to);
+            var $504 = member2(eid)(s.currEdges);
+            if ($504) {
+                return setErrorAt(edgeEndpointSpan(l))("cannot add " + (edgeKind(l.op.value0.directed) + (" " + (edgeName(l.op.value0.directed)(l.op.value0.from)(l.op.value0.to) + ": already exists"))));
+            };
+            var edge = mkEdge(eid)(l.op.value0.from)(l.op.value0.to)(l.op.value0.label);
+            return modify_(function (s$prime) {
+                var $505 = {};
+                for (var $506 in s$prime) {
+                    if ({}.hasOwnProperty.call(s$prime, $506)) {
+                        $505[$506] = s$prime[$506];
+                    };
+                };
+                $505.graphEdges = insert2(eid)(edge)(s$prime.graphEdges);
+                $505.currEdges = insert1(eid)(s$prime.currEdges);
+                return $505;
+            });
+        });
+    };
+    if (l.op instanceof DelEdge) {
+        return bind1(get)(function (s) {
+            var eid = edgeIdFor(l.op.value0.directed)(l.op.value0.from)(l.op.value0.to);
+            var $509 = !member2(eid)(s.currEdges);
+            if ($509) {
+                return setErrorAt(edgeEndpointSpan(l))("cannot delete " + (edgeKind(l.op.value0.directed) + (" " + (edgeName(l.op.value0.directed)(l.op.value0.from)(l.op.value0.to) + ": does not exist"))));
+            };
+            return modify_(function (s$prime) {
+                var $510 = {};
+                for (var $511 in s$prime) {
+                    if ({}.hasOwnProperty.call(s$prime, $511)) {
+                        $510[$511] = s$prime[$511];
+                    };
+                };
+                $510.currEdges = $$delete(eid)(s$prime.currEdges);
+                return $510;
+            });
+        });
+    };
+    if (l.op instanceof RepointEdge) {
+        return applyRepoint(l)(l.op.value0);
+    };
+    return pure1(Data_Unit.unit);
+};
+var runOp = function (l) {
+    return discard1(setCurrentLeaf(l))(function () {
+        return applyStructural(l);
     });
 };
 var emitStructural = function (kind) {
     return function (frameName) {
         return function (ops) {
-            return discard1(traverse_(runOp)(ops))(function () {
-                return bind(get)(function (s) {
+            return discard1(traverse_1(runOp)(ops))(function () {
+                return bind1(get)(function (s) {
                     var newKfId = (function () {
                         if (frameName instanceof Data_Maybe.Just && !Data_String_Common["null"](frameName.value0)) {
                             return frameName.value0;
                         };
-                        return "kf-" + show(s.kfCounter);
+                        return "kf-" + show1(s.kfCounter);
                     })();
-                    var $498 = Data_Array.any(function (kf) {
-                        return eq8(kf.id)(newKfId);
+                    var $517 = Data_Array.any(function (kf) {
+                        return eq10(kf.id)(newKfId);
                     })(s.keyframes);
-                    if ($498) {
-                        return setError("duplicate frame name " + un(Markgraf_Animation_Spec.KeyframeId)(newKfId));
+                    if ($517) {
+                        return discard1(traverse_2(setCurrentLeaf)(Data_Array.head(ops)))(function () {
+                            return setError("duplicate frame name " + un(Markgraf_Animation_Spec.KeyframeId)(newKfId));
+                        });
                     };
                     var newKf = {
                         id: newKfId,
@@ -1361,20 +1474,20 @@ var emitStructural = function (kind) {
                                 focus: Data_Maybe.Nothing.value
                             }));
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 500, column 15 - line 502, column 95): " + [ s.currentKf.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 530, column 15 - line 532, column 95): " + [ s.currentKf.constructor.name ]);
                     })();
                     return put((function () {
-                        var $501 = {};
-                        for (var $502 in s) {
-                            if ({}.hasOwnProperty.call(s, $502)) {
-                                $501[$502] = s[$502];
+                        var $520 = {};
+                        for (var $521 in s) {
+                            if ({}.hasOwnProperty.call(s, $521)) {
+                                $520[$521] = s[$521];
                             };
                         };
-                        $501.keyframes = Data_Array.snoc(s.keyframes)(newKf);
-                        $501.kfCounter = s.kfCounter + 1 | 0;
-                        $501.currentKf = new Data_Maybe.Just(newKfId);
-                        $501.scenes = Data_Maybe.maybe(s.scenes)(Data_Array.snoc(s.scenes))(scene);
-                        return $501;
+                        $520.keyframes = Data_Array.snoc(s.keyframes)(newKf);
+                        $520.kfCounter = s.kfCounter + 1 | 0;
+                        $520.currentKf = new Data_Maybe.Just(newKfId);
+                        $520.scenes = Data_Maybe.maybe(s.scenes)(Data_Array.snoc(s.scenes))(scene);
+                        return $520;
                     })());
                 });
             });
@@ -1384,42 +1497,32 @@ var emitStructural = function (kind) {
 var processStatic = function (kind) {
     return function (frame) {
         var leaves = collectLeaves(frame.ops);
-        var structural = Data_Array.filter(function ($554) {
+        var structural = Data_Array.filter(function ($576) {
             return isStructural((function (v) {
                 return v.op;
-            })($554));
+            })($576));
         })(leaves);
-        var nonStructural = Data_Array.filter(function ($555) {
+        var nonStructural = Data_Array.filter(function ($577) {
             return !isStructural((function (v) {
                 return v.op;
-            })($555));
+            })($577));
         })(leaves);
         var v = Data_Array.head(nonStructural);
         if (v instanceof Data_Maybe.Just) {
-            return discard1(modify_(function (s) {
-                var $505 = {};
-                for (var $506 in s) {
-                    if ({}.hasOwnProperty.call(s, $506)) {
-                        $505[$506] = s[$506];
-                    };
-                };
-                $505.currentLine = v.value0.line;
-                $505.currentColumn = v.value0.column;
-                return $505;
-            }))(function () {
-                return setError("still/title blocks hold a static snapshot; they cannot contain tokens (a -> b) or enter/exit");
+            return discard1(setCurrentLeaf(v.value0))(function () {
+                return setError("still/title blocks hold a static snapshot; they cannot contain movement tokens (`api ~> db`) or dive commands (`into`/`out`)");
             });
         };
         if (v instanceof Data_Maybe.Nothing) {
-            var $509 = eq9(kind)(Markgraf_Animation_Spec.TitleCard.value) && Data_Array["null"](structural);
-            if ($509) {
+            var $525 = eq11(kind)(Markgraf_Animation_Spec.TitleCard.value) && Data_Array["null"](structural);
+            if ($525) {
                 return setError("title " + (frameLabel(frame.name) + "has an empty body; give it nodes/edges to title, or use a still"));
             };
             return discard1(emitStructural(kind)(frame.name)(structural))(function () {
                 return emitStillHold;
             });
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 375, column 3 - line 384, column 22): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 404, column 3 - line 413, column 22): " + [ v.constructor.name ]);
     };
 };
 var altMaybe = function (v) {
@@ -1430,7 +1533,91 @@ var altMaybe = function (v) {
         if (v instanceof Data_Maybe.Nothing) {
             return v1;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 764, column 1 - line 764, column 52): " + [ v.constructor.name, v1.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 837, column 1 - line 837, column 52): " + [ v.constructor.name, v1.constructor.name ]);
+    };
+};
+var tokenEdge = function (s) {
+    return function (t) {
+        var rev = synthEdgeId(t.to)(t.from);
+        var fwd = synthEdgeId(t.from)(t.to);
+        var directedForward = (function () {
+            var $529 = member2(fwd)(s.currEdges);
+            if ($529) {
+                return new Data_Maybe.Just({
+                    id: fwd,
+                    direction: Markgraf_Animation_Spec.Forward.value
+                });
+            };
+            return Data_Maybe.Nothing.value;
+        })();
+        var directedBackward = (function () {
+            var $530 = member2(rev)(s.currEdges);
+            if ($530) {
+                return new Data_Maybe.Just({
+                    id: rev,
+                    direction: Markgraf_Animation_Spec.Backward.value
+                });
+            };
+            return Data_Maybe.Nothing.value;
+        })();
+        var connectionDirection = function (edge) {
+            var $531 = eq(edge.from.node)(t.from) && eq(edge.to.node)(t.to);
+            if ($531) {
+                return Markgraf_Animation_Spec.Forward.value;
+            };
+            return Markgraf_Animation_Spec.Backward.value;
+        };
+        var conn = synthConnId(t.from)(t.to);
+        var connection = bind3(lookup(conn)(s.graphEdges))(function (edge) {
+            var $532 = member2(conn)(s.currEdges);
+            if ($532) {
+                return new Data_Maybe.Just({
+                    id: conn,
+                    direction: connectionDirection(edge)
+                });
+            };
+            return Data_Maybe.Nothing.value;
+        });
+        return altMaybe(altMaybe(directedForward)(directedBackward))(connection);
+    };
+};
+var walkLeaf = function (parentRef) {
+    return function (l) {
+        if (l.op instanceof Token) {
+            return bind1(get)(function (s) {
+                var fromMissing = !member1(l.op.value0.from)(s.currNodes);
+                var toMissing = !member1(l.op.value0.to)(s.currNodes);
+                var $534 = fromMissing || toMissing;
+                if ($534) {
+                    return discard1(setErrorAt(endpointErrorSpan(fromMissing)(toMissing)(l))("token references unknown node: " + nodeIdsMissing(fromMissing)(toMissing)(l.op.value0)))(function () {
+                        return pure1({
+                            events: [  ],
+                            firstId: Data_Maybe.Nothing.value,
+                            lastId: Data_Maybe.Nothing.value
+                        });
+                    });
+                };
+                var v = tokenEdge(s)(l.op.value0);
+                if (v instanceof Data_Maybe.Just) {
+                    return emitEvent(parentRef)(mkSendToken(l.op.value0)(v.value0.id)(v.value0.direction));
+                };
+                if (v instanceof Data_Maybe.Nothing) {
+                    return discard1(setErrorAt(edgeEndpointSpan(l))("token " + (un(Markgraf_Graph.NodeId)(l.op.value0.from) + ("\u2192" + (un(Markgraf_Graph.NodeId)(l.op.value0.to) + (": no edge between " + (un(Markgraf_Graph.NodeId)(l.op.value0.from) + (" and " + un(Markgraf_Graph.NodeId)(l.op.value0.to)))))))))(function () {
+                        return pure1({
+                            events: [  ],
+                            firstId: Data_Maybe.Nothing.value,
+                            lastId: Data_Maybe.Nothing.value
+                        });
+                    });
+                };
+                throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 850, column 10 - line 860, column 63): " + [ v.constructor.name ]);
+            });
+        };
+        return pure1({
+            events: [  ],
+            firstId: Data_Maybe.Nothing.value,
+            lastId: Data_Maybe.Nothing.value
+        });
     };
 };
 var walkSeq = function (parentRef) {
@@ -1444,10 +1631,10 @@ var walkSeq = function (parentRef) {
                     if (acc.lastId instanceof Data_Maybe.Nothing) {
                         return parentRef;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 722, column 17 - line 724, column 29): " + [ acc.lastId.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 795, column 17 - line 797, column 29): " + [ acc.lastId.constructor.name ]);
                 })();
-                return bind(walkBlock(nextRef)(b))(function (r) {
-                    return pure({
+                return bind1(walkBlock(nextRef)(b))(function (r) {
+                    return pure1({
                         events: append1(acc.events)(r.events),
                         firstId: altMaybe(acc.firstId)(r.firstId),
                         lastId: altMaybe(r.lastId)(acc.lastId)
@@ -1457,34 +1644,34 @@ var walkSeq = function (parentRef) {
         };
         var v = Data_Array.uncons(bs);
         if (v instanceof Data_Maybe.Nothing) {
-            return pure({
+            return pure1({
                 events: [  ],
                 firstId: Data_Maybe.Nothing.value,
                 lastId: Data_Maybe.Nothing.value
             });
         };
         if (v instanceof Data_Maybe.Just) {
-            return bind(walkBlock(parentRef)(v.value0.head))(function (first) {
-                return bind(foldM2(stepSeq)(first)(v.value0.tail))(function ($$final) {
-                    return pure($$final);
+            return bind1(walkBlock(parentRef)(v.value0.head))(function (first) {
+                return bind1(foldM2(stepSeq)(first)(v.value0.tail))(function ($$final) {
+                    return pure1($$final);
                 });
             });
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 713, column 24 - line 718, column 15): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 786, column 24 - line 791, column 15): " + [ v.constructor.name ]);
     };
 };
 var walkPar = function (parentRef) {
     return function (bs) {
         var v = Data_Array.uncons(bs);
         if (v instanceof Data_Maybe.Nothing) {
-            return pure({
+            return pure1({
                 events: [  ],
                 firstId: Data_Maybe.Nothing.value,
                 lastId: Data_Maybe.Nothing.value
             });
         };
         if (v instanceof Data_Maybe.Just) {
-            return bind(walkBlock(parentRef)(v.value0.head))(function (first) {
+            return bind1(walkBlock(parentRef)(v.value0.head))(function (first) {
                 var withRef = (function () {
                     if (first.firstId instanceof Data_Maybe.Just) {
                         return new Markgraf_Animation_Spec.With(first.firstId.value0);
@@ -1492,10 +1679,10 @@ var walkPar = function (parentRef) {
                     if (first.firstId instanceof Data_Maybe.Nothing) {
                         return parentRef;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 738, column 17 - line 740, column 29): " + [ first.firstId.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 811, column 17 - line 813, column 29): " + [ first.firstId.constructor.name ]);
                 })();
-                return bind(traverseAccum(withRef)(v.value0.tail))(function (sibs) {
-                    return pure({
+                return bind1(traverseAccum(withRef)(v.value0.tail))(function (sibs) {
+                    return pure1({
                         events: append1(first.events)(sibs.events),
                         firstId: first.firstId,
                         lastId: altMaybe(first.lastId)(sibs.lastId)
@@ -1503,24 +1690,14 @@ var walkPar = function (parentRef) {
                 });
             });
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 733, column 24 - line 748, column 8): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 806, column 24 - line 821, column 8): " + [ v.constructor.name ]);
     };
 };
 var walkBlock = function (parentRef) {
     return function (v) {
         if (v instanceof Leaf) {
-            return discard1(modify_(function (s) {
-                var $526 = {};
-                for (var $527 in s) {
-                    if ({}.hasOwnProperty.call(s, $527)) {
-                        $526[$527] = s[$527];
-                    };
-                };
-                $526.currentLine = v.value0.line;
-                $526.currentColumn = v.value0.column;
-                return $526;
-            }))(function () {
-                return walkLeaf(parentRef)(v.value0.op);
+            return discard1(setCurrentLeaf(v.value0))(function () {
+                return walkLeaf(parentRef)(v.value0);
             });
         };
         if (v instanceof Seq) {
@@ -1529,14 +1706,14 @@ var walkBlock = function (parentRef) {
         if (v instanceof Par) {
             return walkPar(parentRef)(v.value0);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 705, column 23 - line 710, column 33): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 778, column 23 - line 783, column 33): " + [ v.constructor.name ]);
     };
 };
 var traverseAccum = function (ref) {
     var step = function (acc) {
         return function (b) {
-            return bind(walkBlock(ref)(b))(function (r) {
-                return pure({
+            return bind1(walkBlock(ref)(b))(function (r) {
+                return pure1({
                     events: append1(acc.events)(r.events),
                     firstId: altMaybe(acc.firstId)(r.firstId),
                     lastId: altMaybe(r.lastId)(acc.lastId)
@@ -1551,65 +1728,65 @@ var traverseAccum = function (ref) {
     });
 };
 var emitFlow = function (block) {
-    return bind(get)(function (s0) {
+    return bind1(get)(function (s0) {
         if (s0.currentKf instanceof Data_Maybe.Nothing) {
             return setError("flow ops before any structural frame");
         };
         if (s0.currentKf instanceof Data_Maybe.Just) {
-            return bind(walkBlock(Markgraf_Animation_Spec.First.value)(block))(function (result) {
-                return bind(get)(function (s1) {
+            return bind1(walkBlock(Markgraf_Animation_Spec.First.value)(block))(function (result) {
+                return bind1(get)(function (s1) {
                     var scene = new Markgraf_Animation_Spec.DataFlow({
                         keyframe: s0.currentKf.value0,
                         events: result.events,
                         focus: Data_Maybe.Nothing.value
                     });
                     return put((function () {
-                        var $533 = {};
-                        for (var $534 in s1) {
-                            if ({}.hasOwnProperty.call(s1, $534)) {
-                                $533[$534] = s1[$534];
+                        var $555 = {};
+                        for (var $556 in s1) {
+                            if ({}.hasOwnProperty.call(s1, $556)) {
+                                $555[$556] = s1[$556];
                             };
                         };
-                        $533.scenes = Data_Array.snoc(s1.scenes)(scene);
-                        return $533;
+                        $555.scenes = Data_Array.snoc(s1.scenes)(scene);
+                        return $555;
                     })());
                 });
             });
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 599, column 3 - line 605, column 49): " + [ s0.currentKf.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 632, column 3 - line 638, column 49): " + [ s0.currentKf.constructor.name ]);
     });
 };
 var processAnimated = function (frame) {
     var leaves = collectLeaves(frame.ops);
-    var structural = Data_Array.filter(function ($556) {
+    var structural = Data_Array.filter(function ($578) {
         return isStructural((function (v) {
             return v.op;
-        })($556));
+        })($578));
     })(leaves);
-    var dives = Data_Array.filter(function ($557) {
+    var dives = Data_Array.filter(function ($579) {
         return isDive((function (v) {
             return v.op;
-        })($557));
+        })($579));
     })(leaves);
     var flow = Data_Array.filter(function (l) {
         return !isStructural(l.op) && !isDive(l.op);
     })(leaves);
-    var $537 = !Data_Array["null"](dives) && !Data_Array["null"](flow);
-    if ($537) {
-        return diveError(dives)("`enter`/`exit` cannot be mixed with flow tokens in the same frame");
+    var $559 = !Data_Array["null"](dives) && !Data_Array["null"](flow);
+    if ($559) {
+        return diveError(dives)("`into`/`out` (`enter`/`exit`) cannot be mixed with flow tokens in the same frame");
     };
     return discard1(when1(!Data_Array["null"](structural))(emitStructural(Markgraf_Animation_Spec.Animated.value)(frame.name)(structural)))(function () {
         return discard1(when1(Data_Array["null"](structural) && !Data_Array["null"](flow))(renameKfForFlow(frame.name)))(function () {
             return discard1(when1(!Data_Array["null"](flow))(emitFlow(frame.ops)))(function () {
-                return traverse_(runDive)(dives);
+                return traverse_1(runDive)(dives);
             });
         });
     });
 };
 var processFrame = function (frame) {
-    return bind(get)(function (s0) {
+    return bind1(get)(function (s0) {
         if (s0.error instanceof Data_Maybe.Just) {
-            return pure(Data_Unit.unit);
+            return pure1(Data_Unit.unit);
         };
         if (s0.error instanceof Data_Maybe.Nothing) {
             if (frame.kind instanceof AnimatedKeyframe) {
@@ -1621,26 +1798,26 @@ var processFrame = function (frame) {
             if (frame.kind instanceof Title) {
                 return processStatic(Markgraf_Animation_Spec.TitleCard.value)(frame);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 343, column 16 - line 346, column 45): " + [ frame.kind.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 372, column 16 - line 375, column 45): " + [ frame.kind.constructor.name ]);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 341, column 3 - line 346, column 45): " + [ s0.error.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 370, column 3 - line 375, column 45): " + [ s0.error.constructor.name ]);
     });
 };
 var run = function (surface) {
     return discard1(registerInteriors(surface.interiors))(function () {
-        return discard1(traverse_(processFrame)(surface.frames))(function () {
+        return discard1(traverse_1(processFrame)(surface.frames))(function () {
             return discard1(checkBalanced)(function () {
-                return bind(get)(function (s) {
+                return bind1(get)(function (s) {
                     if (s.error instanceof Data_Maybe.Just) {
-                        return pure(new Data_Either.Left(s.error.value0));
+                        return pure1(new Data_Either.Left(s.error.value0));
                     };
                     if (s.error instanceof Data_Maybe.Nothing) {
                         var v = convertInteriors(surface.interiors);
                         if (v instanceof Data_Either.Left) {
-                            return pure(new Data_Either.Left(v.value0));
+                            return pure1(new Data_Either.Left(v.value0));
                         };
                         if (v instanceof Data_Either.Right) {
-                            return pure(new Data_Either.Right({
+                            return pure1(new Data_Either.Right({
                                 seed: surface.seed,
                                 graph: buildGraph(s),
                                 keyframes: s.keyframes,
@@ -1648,9 +1825,9 @@ var run = function (surface) {
                                 interiors: v.value0
                             }));
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 285, column 16 - line 295, column 10): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 314, column 16 - line 324, column 10): " + [ v.constructor.name ]);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 283, column 3 - line 295, column 10): " + [ s.error.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Surface (line 312, column 3 - line 324, column 10): " + [ s.error.constructor.name ]);
                 });
             });
         });

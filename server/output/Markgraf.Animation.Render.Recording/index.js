@@ -32,6 +32,7 @@ var on2 = /* #__PURE__ */ on({
     }
 });
 var tokenLabelTargets = /* #__PURE__ */ Markgraf_Animation_Render_Layers.tokenLabelTargets(Markgraf_Animation_Render_Draw.monadDrawRunDraw);
+var tokenLabelTargetsInViewport = /* #__PURE__ */ Markgraf_Animation_Render_Layers.tokenLabelTargetsInViewport(Markgraf_Animation_Render_Draw.monadDrawRunDraw);
 var renderLevelsDrawAt = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderLevelsDrawAt(Markgraf_Animation_Render_Draw.monadDrawRunDraw);
 var renderSceneAt = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderSceneAt(Markgraf_Animation_Render_Draw.monadDrawRunDraw);
 var renderLevelsDraw = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderLevelsDraw(Markgraf_Animation_Render_Draw.monadDrawRunDraw);
@@ -139,7 +140,7 @@ var measureOp = function (v) {
     if (v instanceof Markgraf_Animation_Render_Metrics.MeasureInk) {
         return pure(v.value2(Markgraf_Animation_Render_Metrics.measureInkNative(v.value0)(v.value1)));
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 266, column 1 - line 266, column 46): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 268, column 1 - line 268, column 46): " + [ v.constructor.name ]);
 };
 var freezeCtx = function (ctx) {
     return function __do() {
@@ -163,7 +164,7 @@ var encodeLineJoin = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.MiterJoin) {
         return 2.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 480, column 18 - line 483, column 19): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 482, column 18 - line 485, column 19): " + [ v.constructor.name ]);
 };
 var encodeLineCap = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.ButtCap) {
@@ -175,7 +176,7 @@ var encodeLineCap = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.SquareCap) {
         return 2.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 486, column 17 - line 489, column 19): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 488, column 17 - line 491, column 19): " + [ v.constructor.name ]);
 };
 var encodeLayer = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.LayerBase) {
@@ -193,7 +194,7 @@ var encodeLayer = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.LayerOverlay) {
         return 4.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 515, column 15 - line 520, column 22): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 517, column 15 - line 522, column 22): " + [ v.constructor.name ]);
 };
 var encodeClipFillRule = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.NonZero) {
@@ -202,7 +203,7 @@ var encodeClipFillRule = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.EvenOdd) {
         return 1.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 510, column 22 - line 512, column 17): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 512, column 22 - line 514, column 17): " + [ v.constructor.name ]);
 };
 var encodeBlend = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.Normal) {
@@ -211,7 +212,7 @@ var encodeBlend = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.Difference) {
         return 1.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 505, column 15 - line 507, column 20): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 507, column 15 - line 509, column 20): " + [ v.constructor.name ]);
 };
 var encodeBaseline = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.BaselineTop) {
@@ -226,7 +227,7 @@ var encodeBaseline = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.BaselineBottom) {
         return 3.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 498, column 18 - line 502, column 24): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 500, column 18 - line 504, column 24): " + [ v.constructor.name ]);
 };
 var encodeAlign = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.AlignLeft) {
@@ -238,7 +239,7 @@ var encodeAlign = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.AlignRight) {
         return 2.0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 492, column 15 - line 495, column 20): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 494, column 15 - line 497, column 20): " + [ v.constructor.name ]);
 };
 var currentAlpha = function (ctx) {
     return function __do() {
@@ -463,7 +464,7 @@ var renderOp = function ($copy_ctx) {
                     return v.value1;
                 };
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 306, column 16 - line 412, column 14): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 308, column 16 - line 414, column 14): " + [ v.constructor.name ]);
         };
         while (!$tco_done) {
             $tco_result = $tco_loop($tco_var_ctx, $copy_v);
@@ -497,7 +498,7 @@ var frameLabelTargets = function (rs) {
         if (v instanceof Data_Maybe.Just) {
             return interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(tokenLabelTargets(v.value0.segment.layout)(v.value0.state)))();
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 220, column 5 - line 222, column 120): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 222, column 5 - line 224, column 120): " + [ v.constructor.name ]);
     };
     return buildTargets();
 };
@@ -513,9 +514,10 @@ var recordLevelsLive = function (cfg) {
                             return Data_Map_Internal.empty;
                         };
                         if (v instanceof Data_Maybe.Just) {
-                            return interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(tokenLabelTargets(v.value0.segment.layout)(v.value0.state)))();
+                            var targetViewport = Markgraf_Animation_Render_Scene.levelLabelViewport(Markgraf_Animation_Render_Scene.outerViewport(cfg)(rs))(v.value0);
+                            return interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(tokenLabelTargetsInViewport(targetViewport)(v.value0.segment.layout)(v.value0.state)))();
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 200, column 16 - line 202, column 120): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.Recording (line 200, column 16 - line 204, column 135): " + [ v.constructor.name ]);
                     })();
                     var stepped = Markgraf_Animation_LabelSpring.step(dt)(targets)(prev);
                     interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(renderLevelsDrawAt(cfg)(stepped.applied)(rs)))();
@@ -537,7 +539,7 @@ var recordSceneLive = function (cfg) {
                 return function (prev) {
                     var buildFrame = function __do() {
                         var ctx = mkCtx();
-                        var targets = interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(tokenLabelTargets(layout)(state)))();
+                        var targets = interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(tokenLabelTargetsInViewport(Markgraf_Animation_Render_Scene.sceneViewport(cfg)(layout)(state))(layout)(state)))();
                         var stepped = Markgraf_Animation_LabelSpring.step(dt)(targets)(prev);
                         interpretRec(handleWithMetrics(ctx))(Markgraf_Animation_Render_Draw.unRunDraw(renderSceneAt(cfg)(layout)(state)(stepped.applied)))();
                         var ops = freezeCtx(ctx)();

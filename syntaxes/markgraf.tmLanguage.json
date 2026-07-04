@@ -24,17 +24,22 @@
           "patterns": [
             { "name": "constant.character.escape.markgraf", "match": "\\\\." }
           ]
+        },
+        {
+          "name": "string.unquoted.pipe.markgraf",
+          "begin": "\\|",
+          "end": "\\|"
         }
       ]
     },
     "keywords": {
       "patterns": [
-        { "name": "keyword.control.markgraf", "match": "\\b(?:seed|keyframe|still|title|inside|par|seq|enter|exit|via)\\b" }
+        { "name": "keyword.control.markgraf", "match": "\\b(?:seed|scene|still|title|inside|par|seq|into|out|via)\\b" }
       ]
     },
     "operators": {
       "patterns": [
-        { "name": "keyword.operator.markgraf", "match": "(?:\\+node|\\-node|~node|\\+edge|\\-edge|~edge|->|=>)" }
+        { "name": "keyword.operator.markgraf", "match": "(?:<~|~>|--|->|=>|\\+|-|~|:)" }
       ]
     },
     "numbers": {

@@ -102,7 +102,7 @@ var trimEdgesToShapes = function (edgeEnds) {
                         x: Markgraf_ShapeBoundary.shapeBoundary(np.shape)(box)(Markgraf_ShapeBoundary.RightSide.value)(p.y)
                     };
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 414, column 5 - line 418, column 70): " + [ side.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 418, column 5 - line 422, column 70): " + [ side.constructor.name ]);
             };
         };
         var pairs = toUnfoldable(layout.edges);
@@ -118,8 +118,8 @@ var trimEdgesToShapes = function (edgeEnds) {
         };
         var absDiff = function (a) {
             return function (b) {
-                var $95 = a > b;
-                if ($95) {
+                var $96 = a > b;
+                if ($96) {
                     return a - b;
                 };
                 return b - a;
@@ -141,23 +141,23 @@ var trimEdgesToShapes = function (edgeEnds) {
                     };
                     var approachSide = function (n) {
                         if (aligned(n.x)(p.x) && within(box.x)(box.w)(p.x)) {
-                            var $97 = n.y >= box.y + box.h;
-                            if ($97) {
+                            var $98 = n.y >= box.y + box.h;
+                            if ($98) {
                                 return new Data_Maybe.Just(Markgraf_ShapeBoundary.BottomSide.value);
                             };
-                            var $98 = n.y <= box.y;
-                            if ($98) {
+                            var $99 = n.y <= box.y;
+                            if ($99) {
                                 return new Data_Maybe.Just(Markgraf_ShapeBoundary.TopSide.value);
                             };
                             return Data_Maybe.Nothing.value;
                         };
                         if (aligned(n.y)(p.y) && within(box.y)(box.h)(p.y)) {
-                            var $99 = n.x >= box.x + box.w;
-                            if ($99) {
+                            var $100 = n.x >= box.x + box.w;
+                            if ($100) {
                                 return new Data_Maybe.Just(Markgraf_ShapeBoundary.RightSide.value);
                             };
-                            var $100 = n.x <= box.x;
-                            if ($100) {
+                            var $101 = n.x <= box.x;
+                            if ($101) {
                                 return new Data_Maybe.Just(Markgraf_ShapeBoundary.LeftSide.value);
                             };
                             return Data_Maybe.Nothing.value;
@@ -165,7 +165,7 @@ var trimEdgesToShapes = function (edgeEnds) {
                         if (Data_Boolean.otherwise) {
                             return Data_Maybe.Nothing.value;
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 396, column 5 - line 405, column 28): " + [ n.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 400, column 5 - line 409, column 28): " + [ n.constructor.name ]);
                     };
                     var v = bind(neighbour)(approachSide);
                     if (v instanceof Data_Maybe.Just && v.value0 instanceof Markgraf_ShapeBoundary.TopSide) {
@@ -195,7 +195,7 @@ var trimEdgesToShapes = function (edgeEnds) {
                     if (v instanceof Data_Maybe.Nothing) {
                         return snap(np)(p);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 388, column 31 - line 393, column 25): " + [ v.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 392, column 31 - line 397, column 25): " + [ v.constructor.name ]);
                 };
             };
         };
@@ -212,9 +212,9 @@ var trimEdgesToShapes = function (edgeEnds) {
                     if (v2 instanceof Data_Maybe.Just) {
                         return Data_Array.cons(snapToward(v.value0)(neighbourOf(v2.value0.tail))(v2.value0.head))(v2.value0.tail);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 366, column 31 - line 368, column 79): " + [ v2.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 370, column 31 - line 372, column 79): " + [ v2.constructor.name ]);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 365, column 3 - line 365, column 33): " + [ v.constructor.name, v1.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 369, column 3 - line 369, column 33): " + [ v.constructor.name, v1.constructor.name ]);
             };
         };
         var trimTarget = function (v) {
@@ -230,9 +230,9 @@ var trimEdgesToShapes = function (edgeEnds) {
                     if (v2 instanceof Data_Maybe.Just) {
                         return Data_Array.snoc(v2.value0.init)(snapToward(v.value0)(lastNeighbour(v2.value0.init))(v2.value0.last));
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 371, column 31 - line 373, column 81): " + [ v2.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 375, column 31 - line 377, column 81): " + [ v2.constructor.name ]);
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 370, column 3 - line 370, column 33): " + [ v.constructor.name, v1.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 374, column 3 - line 374, column 33): " + [ v.constructor.name, v1.constructor.name ]);
             };
         };
         var trimEdge = function (eid) {
@@ -244,7 +244,7 @@ var trimEdgesToShapes = function (edgeEnds) {
                 if (v instanceof Data_Maybe.Just) {
                     return trimTarget(lookup1(v.value0.value1)(layout.nodes))(trimSource(lookup1(v.value0.value0)(layout.nodes))(path));
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 359, column 23 - line 363, column 55): " + [ v.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 363, column 23 - line 367, column 55): " + [ v.constructor.name ]);
             };
         };
         var trimmed = fromFoldable(mapFlipped(pairs)(function (v) {
@@ -275,7 +275,7 @@ var resolveLabel = function (n) {
     if (n.label instanceof Data_Maybe.Nothing) {
         return un(Markgraf_Graph.NodeId)(n.id);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 241, column 18 - line 243, column 28): " + [ n.label.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 245, column 18 - line 247, column 28): " + [ n.label.constructor.name ]);
 };
 var resolveEdge = function (anim) {
     return function (inferred) {
@@ -289,7 +289,7 @@ var resolveEdge = function (anim) {
             if (v instanceof Data_Maybe.Nothing) {
                 return lookup(eid)(inferred);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 302, column 33 - line 304, column 35): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 306, column 33 - line 308, column 35): " + [ v.constructor.name ]);
         };
     };
 };
@@ -310,7 +310,7 @@ var posOf = function (sf) {
                         if (v instanceof Data_Maybe.Nothing) {
                             return un(Markgraf_Graph.NodeId)(np.node);
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 326, column 12 - line 328, column 35): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 330, column 12 - line 332, column 35): " + [ v.constructor.name ]);
                     })(),
                     shape: Data_Maybe.fromMaybe(Markgraf_Graph.Rectangle.value)(lookup1(np.node)(shapes))
                 };
@@ -442,15 +442,15 @@ var pathOf = function (sf) {
         };
         if (v instanceof Data_Maybe.Just) {
             return Data_Array.cons(gridPosToPoint(sf)(v.value0.head.start))(map1((function () {
-                var $176 = gridPosToPoint(sf);
-                return function ($177) {
-                    return $176((function (v1) {
+                var $177 = gridPosToPoint(sf);
+                return function ($178) {
+                    return $177((function (v1) {
                         return v1.end;
-                    })($177));
+                    })($178));
                 };
             })())(Data_Array.cons(v.value0.head)(v.value0.tail)));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 336, column 16 - line 340, column 61): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 340, column 16 - line 344, column 61): " + [ v.constructor.name ]);
     };
 };
 var edgeEntry = function (sf) {
@@ -474,6 +474,32 @@ var fromLayoutResultWithLabels = function (scale) {
     };
 };
 var defaultPixelScale = 8.0;
+var layoutFromSizedGraph = function (_anim) {
+    return function (sized) {
+        var shapes = fromFoldable6(mapFlipped(sized.nodes)(function (n) {
+            return new Data_Tuple.Tuple(n.id, n.shape);
+        }));
+        var result = Markgraf_Layout.layout(Markgraf_Layout.defaultConfig)(sized);
+        var labels = fromFoldable6(mapFlipped(sized.nodes)(function (n) {
+            return new Data_Tuple.Tuple(n.id, resolveLabel(n));
+        }));
+        var edgeLabels = fromFoldable(Data_Array.mapMaybe(function (e) {
+            return map(function (l) {
+                return new Data_Tuple.Tuple(e.id, l);
+            })(e.label);
+        })(sized.edges));
+        var edgeEnds = fromFoldable(mapFlipped(sized.edges)(function (e) {
+            return new Data_Tuple.Tuple(e.id, new Data_Tuple.Tuple(e.from.node, e.to.node));
+        }));
+        var v = trimEdgesToShapes(edgeEnds)(fromLayoutResultWithLabels(defaultPixelScale)(labels)(shapes)(result));
+        return {
+            nodes: v.nodes,
+            edges: v.edges,
+            chipExtras: v.chipExtras,
+            edgeLabels: edgeLabels
+        };
+    };
+};
 var collectTokenLabels = function (anim) {
     var collectEvent = function (acc) {
         return function (ev) {
@@ -483,7 +509,7 @@ var collectTokenLabels = function (anim) {
             if (ev.kind instanceof Markgraf_Animation_Spec.FillNodeWithoutTransition) {
                 return foldl(Data_Function.flip(insert))(acc)(ev.kind.value0.labels);
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 143, column 25 - line 145, column 75): " + [ ev.kind.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 148, column 25 - line 150, column 75): " + [ ev.kind.constructor.name ]);
         };
     };
     var collectScene = function (acc) {
@@ -503,7 +529,7 @@ var collectTokenLabels = function (anim) {
             if (v instanceof Markgraf_Animation_Spec.ExitNode) {
                 return acc;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 137, column 22 - line 142, column 25): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 142, column 22 - line 147, column 25): " + [ v.constructor.name ]);
         };
     };
     return foldl(collectScene)(Data_Set.empty)(anim.scenes);
@@ -537,30 +563,7 @@ var cellPx = /* #__PURE__ */ (function () {
 })();
 var layoutFromAnimationWith = function (widths) {
     return function (anim) {
-        var base = Markgraf_AutoSize.autoSize(Markgraf_AutoSize.defaultAutoSizeConfig)(unionGraph(anim));
-        var sized = Markgraf_AutoSize.applyMeasuredWidths(cellPx)(widths)(base);
-        var edgeEnds = fromFoldable(mapFlipped(sized.edges)(function (e) {
-            return new Data_Tuple.Tuple(e.id, new Data_Tuple.Tuple(e.from.node, e.to.node));
-        }));
-        var edgeLabels = fromFoldable(Data_Array.mapMaybe(function (e) {
-            return map(function (l) {
-                return new Data_Tuple.Tuple(e.id, l);
-            })(e.label);
-        })(sized.edges));
-        var labels = fromFoldable6(mapFlipped(sized.nodes)(function (n) {
-            return new Data_Tuple.Tuple(n.id, resolveLabel(n));
-        }));
-        var result = Markgraf_Layout.layout(Markgraf_Layout.defaultConfig)(sized);
-        var shapes = fromFoldable6(mapFlipped(sized.nodes)(function (n) {
-            return new Data_Tuple.Tuple(n.id, n.shape);
-        }));
-        var v = trimEdgesToShapes(edgeEnds)(fromLayoutResultWithLabels(defaultPixelScale)(labels)(shapes)(result));
-        return {
-            nodes: v.nodes,
-            edges: v.edges,
-            chipExtras: v.chipExtras,
-            edgeLabels: edgeLabels
-        };
+        return layoutFromSizedGraph(anim)(Markgraf_AutoSize.applyMeasuredWidths(cellPx)(widths)(Markgraf_AutoSize.autoSize(Markgraf_AutoSize.defaultAutoSizeConfig)(unionGraph(anim))));
     };
 };
 var layoutFromAnimation = /* #__PURE__ */ layoutFromAnimationWith(Data_Map_Internal.empty);
@@ -581,7 +584,7 @@ var allTokenEvents = function (anim) {
         if (v instanceof Markgraf_Animation_Spec.ExitNode) {
             return [  ];
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 212, column 15 - line 217, column 24): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 216, column 15 - line 221, column 24): " + [ v.constructor.name ]);
     };
     return Data_Array.concatMap(fromScene)(anim.scenes);
 };
@@ -661,7 +664,7 @@ var chipExtraPoints = function (metrics) {
                         };
                         return acc;
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 168, column 21 - line 180, column 18): " + [ ev.kind.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.FromELK (line 172, column 21 - line 184, column 18): " + [ ev.kind.constructor.name ]);
                 };
             };
             return foldl(addEvent)(Data_Map_Internal.empty)(allTokenEvents(anim));
@@ -685,10 +688,20 @@ var layoutFromAnimationWithChips = function (nodeWidths) {
 var layoutTreeFromAnimationWithChips = function (nodeWidths) {
     return function (chipMetrics) {
         return function (anim) {
+            var withChipExtras = function (baseLayout) {
+                return {
+                    edgeLabels: baseLayout.edgeLabels,
+                    edges: baseLayout.edges,
+                    nodes: baseLayout.nodes,
+                    chipExtras: chipExtraPoints(chipMetrics)(anim)(baseLayout)
+                };
+            };
             var recurse = layoutTreeFromAnimationWithChips(nodeWidths)(chipMetrics);
+            var childTrees = map2(recurse)(un(Markgraf_Animation_Spec.Interiors)(anim.interiors));
+            var baseGraph = Markgraf_AutoSize.applyMeasuredWidths(cellPx)(nodeWidths)(Markgraf_AutoSize.autoSize(Markgraf_AutoSize.defaultAutoSizeConfig)(unionGraph(anim)));
             return {
-                layout: layoutFromAnimationWithChips(nodeWidths)(chipMetrics)(anim),
-                interiors: map2(recurse)(un(Markgraf_Animation_Spec.Interiors)(anim.interiors))
+                layout: withChipExtras(layoutFromSizedGraph(anim)(baseGraph)),
+                interiors: childTrees
             };
         };
     };

@@ -4,18 +4,116 @@ import * as Data_Eq from "../Data.Eq/index.js";
 import * as Data_Maybe from "../Data.Maybe/index.js";
 import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Show from "../Data.Show/index.js";
+var showRecord = /* #__PURE__ */ Data_Show.showRecord()();
+var vhIsSymbol = {
+    reflectSymbol: function () {
+        return "vh";
+    }
+};
+var vwIsSymbol = {
+    reflectSymbol: function () {
+        return "vw";
+    }
+};
+var vxIsSymbol = {
+    reflectSymbol: function () {
+        return "vx";
+    }
+};
+var vyIsSymbol = {
+    reflectSymbol: function () {
+        return "vy";
+    }
+};
+var heightIsSymbol = {
+    reflectSymbol: function () {
+        return "height";
+    }
+};
+var widthIsSymbol = {
+    reflectSymbol: function () {
+        return "width";
+    }
+};
+var eqRec = /* #__PURE__ */ Data_Eq.eqRec();
+var eqRowCons = /* #__PURE__ */ Data_Eq.eqRowCons(Data_Eq.eqRowNil)();
 var un = /* #__PURE__ */ Data_Newtype.un();
 var identity = /* #__PURE__ */ Control_Category.identity(Control_Category.categoryFn);
+var RenderedWorldViewport = function (x) {
+    return x;
+};
 var OutputAspect = function (x) {
     return x;
 };
+var DisplayPxPerWorld = function (x) {
+    return x;
+};
+var DisplayPx = function (x) {
+    return x;
+};
+var DisplayViewport = function (x) {
+    return x;
+};
+var showRenderedWorldViewport = /* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(vhIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(vwIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsCons(vxIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(vyIsSymbol)(Data_Show.showNumber))(Data_Show.showNumber))(Data_Show.showNumber))(Data_Show.showNumber));
 var showOutputAspect = Data_Show.showNumber;
+var showDisplayPxPerWorld = Data_Show.showNumber;
+var showDisplayPx = Data_Show.showNumber;
+var showDisplayViewport = /* #__PURE__ */ showRecord(/* #__PURE__ */ Data_Show.showRecordFieldsCons(heightIsSymbol)(/* #__PURE__ */ Data_Show.showRecordFieldsConsNil(widthIsSymbol)(showDisplayPx))(showDisplayPx));
+var newtypeRenderedWorldViewp = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
 var newtypeOutputAspect_ = {
     Coercible0: function () {
         return undefined;
     }
 };
+var newtypeDisplayViewport_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeDisplayPx_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var newtypeDisplayPxPerWorld_ = {
+    Coercible0: function () {
+        return undefined;
+    }
+};
+var eqRenderedWorldViewport = /* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(vyIsSymbol)(Data_Eq.eqNumber))()(vxIsSymbol)(Data_Eq.eqNumber))()(vwIsSymbol)(Data_Eq.eqNumber))()(vhIsSymbol)(Data_Eq.eqNumber));
 var eqOutputAspect = Data_Eq.eqNumber;
+var eqDisplayPxPerWorld = Data_Eq.eqNumber;
+var eqDisplayPx = Data_Eq.eqNumber;
+var eqDisplayViewport = /* #__PURE__ */ eqRec(/* #__PURE__ */ Data_Eq.eqRowCons(/* #__PURE__ */ eqRowCons(widthIsSymbol)(eqDisplayPx))()(heightIsSymbol)(eqDisplayPx));
+var screenScaleDisplayPxPerWorld = function (displayViewport) {
+    return function (renderedViewport) {
+        var viewport = un(RenderedWorldViewport)(renderedViewport);
+        var display = un(DisplayViewport)(displayViewport);
+        var width = un(DisplayPx)(display.width);
+        var $79 = width <= 0.0 || viewport.vw <= 0.0;
+        if ($79) {
+            return 0.0;
+        };
+        return width / viewport.vw;
+    };
+};
+var renderedFontDisplayPx = function (spec) {
+    return spec.fontWorldPx * spec.placementScale * un(DisplayPxPerWorld)(spec.scale);
+};
+var displayAspect = function (displayViewport) {
+    var v = un(DisplayViewport)(displayViewport);
+    var width = un(DisplayPx)(v.width);
+    var height = un(DisplayPx)(v.height);
+    var $80 = width <= 0.0 || height <= 0.0;
+    if ($80) {
+        return Data_Maybe.Nothing.value;
+    };
+    return new Data_Maybe.Just(width / height);
+};
 var coverAspect = function (outputAspect) {
     return function (vp) {
         var target = un(OutputAspect)(outputAspect);
@@ -42,12 +140,12 @@ var coverAspect = function (outputAspect) {
         if (invalid) {
             return vp;
         };
-        var $16 = target > content;
-        if ($16) {
+        var $82 = target > content;
+        if ($82) {
             return growWidth;
         };
-        var $17 = target < content;
-        if ($17) {
+        var $83 = target < content;
+        if ($83) {
             return growHeight;
         };
         return vp;
@@ -60,18 +158,50 @@ var coverAspectMaybe = function (v) {
     if (v instanceof Data_Maybe.Just) {
         return coverAspect(v.value0);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.Framing (line 63, column 20 - line 65, column 48): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.Framing (line 119, column 20 - line 121, column 48): " + [ v.constructor.name ]);
+};
+var renderedWorldViewport = function (displayViewport) {
+    return function (worldViewport) {
+        var v = displayAspect(displayViewport);
+        if (v instanceof Data_Maybe.Nothing) {
+            return worldViewport;
+        };
+        if (v instanceof Data_Maybe.Just) {
+            return coverAspect(v.value0)(worldViewport);
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.Render.Framing (line 78, column 3 - line 80, column 64): " + [ v.constructor.name ]);
+    };
 };
 var aspectOf = function (vp) {
     return vp.vw / vp.vh;
 };
 export {
+    DisplayPx,
+    DisplayPxPerWorld,
+    DisplayViewport,
     OutputAspect,
+    RenderedWorldViewport,
     aspectOf,
+    displayAspect,
+    renderedWorldViewport,
+    screenScaleDisplayPxPerWorld,
+    renderedFontDisplayPx,
     coverAspect,
     coverAspectMaybe,
+    newtypeDisplayPx_,
+    newtypeDisplayPxPerWorld_,
+    newtypeDisplayViewport_,
     newtypeOutputAspect_,
+    newtypeRenderedWorldViewp,
+    eqDisplayPx,
+    eqDisplayPxPerWorld,
+    eqDisplayViewport,
     eqOutputAspect,
-    showOutputAspect
+    eqRenderedWorldViewport,
+    showDisplayPx,
+    showDisplayPxPerWorld,
+    showDisplayViewport,
+    showOutputAspect,
+    showRenderedWorldViewport
 };
 //# sourceMappingURL=index.js.map

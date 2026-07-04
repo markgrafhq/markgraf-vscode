@@ -35,21 +35,21 @@ var $runtime_lazy = function (name, moduleName, init) {
         return val;
     };
 };
-var bind = /* #__PURE__ */ Control_Bind.bind(Parsing.bindParserT);
-var pure = /* #__PURE__ */ Control_Applicative.pure(Parsing.applicativeParserT);
 var alt = /* #__PURE__ */ Control_Alt.alt(Parsing.altParserT);
 var voidLeft = /* #__PURE__ */ Data_Functor.voidLeft(Parsing.functorParserT);
+var bind = /* #__PURE__ */ Control_Bind.bind(Parsing.bindParserT);
+var pure = /* #__PURE__ */ Control_Applicative.pure(Parsing.applicativeParserT);
 var fromFoldable = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
+var choice = /* #__PURE__ */ Parsing_Combinators.choice(Data_Foldable.foldableArray);
 var discard = /* #__PURE__ */ Control_Bind.discard(Control_Bind.discardUnit)(Parsing.bindParserT);
+var map = /* #__PURE__ */ Data_Functor.map(Parsing.functorParserT);
+var bind1 = /* #__PURE__ */ Control_Bind.bind(Data_Maybe.bindMaybe);
 var applySecond = /* #__PURE__ */ Control_Apply.applySecond(Parsing.applyParserT);
-var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
-var map1 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
 var fromFoldable1 = /* #__PURE__ */ Data_Map_Internal.fromFoldable(Data_Ord.ordString)(Data_Foldable.foldableArray);
 var append1 = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
-var bind1 = /* #__PURE__ */ Control_Bind.bind(Data_Maybe.bindMaybe);
+var map1 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
 var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Data_Ord.ordString);
-var choice = /* #__PURE__ */ Parsing_Combinators.choice(Data_Foldable.foldableArray);
-var map2 = /* #__PURE__ */ Data_Functor.map(Parsing.functorParserT);
+var map2 = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var TopFrame = /* #__PURE__ */ (function () {
     function TopFrame(value0) {
         this.value0 = value0;
@@ -68,6 +68,28 @@ var TopInside = /* #__PURE__ */ (function () {
     };
     return TopInside;
 })();
+var statementBoundaryStart = /* #__PURE__ */ alt(/* #__PURE__ */ voidLeft(/* #__PURE__ */ Parsing_Combinators.lookAhead(/* #__PURE__ */ Parsing_String["char"]("}")))(Data_Unit.unit))(/* #__PURE__ */ alt(/* #__PURE__ */ voidLeft(/* #__PURE__ */ Parsing_Combinators.lookAhead(/* #__PURE__ */ Parsing_String["char"]("#")))(Data_Unit.unit))(/* #__PURE__ */ alt(/* #__PURE__ */ voidLeft(/* #__PURE__ */ Parsing_Combinators.lookAhead(/* #__PURE__ */ Parsing_String.satisfy(function (c) {
+    return c === "\x0a" || c === "\x0d";
+})))(Data_Unit.unit))(Parsing_String.eof)));
+var spanFromPositions = function (start) {
+    return function (end) {
+        return {
+            line: start.line,
+            column: start.column,
+            endLine: end.line,
+            endColumn: end.column
+        };
+    };
+};
+var spanned = function (parser) {
+    return bind(Parsing.position)(function (v) {
+        return bind(parser)(function (value) {
+            return bind(Parsing.position)(function (v1) {
+                return pure(new Data_Tuple.Tuple(value, spanFromPositions(v)(v1)));
+            });
+        });
+    });
+};
 var skipSpace = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String.satisfy(function (c) {
     return c === " " || (c === "\x09" || (c === "\x0a" || c === "\x0d"));
 }))(function () {
@@ -98,14 +120,178 @@ var pipeLabel = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("|")
         });
     });
 });
+var parsedOp = function (op) {
+    return function (operands) {
+        return {
+            op: op,
+            operands: operands
+        };
+    };
+};
+var parseLinkArrow = /* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ choice([ /* #__PURE__ */ voidLeft(/* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ Parsing_String.string("->")))(true), /* #__PURE__ */ voidLeft(/* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ Parsing_String.string("--")))(false) ]))("edge arrow '->' or '--'");
+var notLineEnd = function (c) {
+    return c !== "\x0a" && (c !== "\x0d" && (c !== "#" && (c !== "}" && c !== "{")));
+};
 var letter = /* #__PURE__ */ Parsing_String.satisfy(function (c) {
     return c >= "a" && c <= "z" || c >= "A" && c <= "Z";
 });
+var isGraphNoLabelTerminator = function (c) {
+    return c === "\x0a" || (c === "\x0d" || (c === "#" || c === "}"));
+};
+var isNodeNoLabelTerminator = function (c) {
+    return isGraphNoLabelTerminator(c) || c === "{";
+};
+var isFrameNameChar = function (c) {
+    return c !== "{" && (c !== "\x0a" && c !== "\x0d");
+};
+var identHyphen = /* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("-"))(function () {
+    return discard(Parsing_Combinators.notFollowedBy(alt(Parsing_String["char"](">"))(Parsing_String["char"]("-"))))(function () {
+        return pure("-");
+    });
+}));
 var hws = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_Combinators.many(/* #__PURE__ */ Parsing_String.satisfy(function (c) {
     return c === " " || c === "\x09";
 })))(function () {
     return pure(Data_Unit.unit);
 });
+var hws1 = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String.satisfy(function (c) {
+    return c === " " || c === "\x09";
+}))(function () {
+    return hws;
+});
+var parseOptionalPatchLink = /* #__PURE__ */ discard(hws)(function () {
+    return bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](Parsing_Combinators.lookAhead(Parsing_String["char"]("-")))))(function (arrowStart) {
+        if (arrowStart instanceof Data_Maybe.Just) {
+            return map(Data_Maybe.Just.create)(parseLinkArrow);
+        };
+        if (arrowStart instanceof Data_Maybe.Nothing) {
+            return pure(Data_Maybe.Nothing.value);
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 398, column 3 - line 400, column 28): " + [ arrowStart.constructor.name ]);
+    });
+});
+var friendlyParseMessage = function (raw) {
+    var withoutExpected = Data_Maybe.fromMaybe(raw)(Data_String_CodeUnits.stripPrefix("Expected ")(raw));
+    if (withoutExpected === "'{'") {
+        return "Open the block with `{`.";
+    };
+    if (withoutExpected === "integer (seed value)") {
+        return "Put an integer after `seed`.";
+    };
+    if (withoutExpected === "closing '}'") {
+        return "Close this block with `}`.";
+    };
+    if (withoutExpected === "closing '\"' (unterminated string)") {
+        return "This string is unterminated; close it with `\"`.";
+    };
+    if (withoutExpected === "closing '|'") {
+        return "Close this pipe label with `|`.";
+    };
+    if (withoutExpected === "space after '+'") {
+        return "Put a space after `+`: `+ api: API`.";
+    };
+    if (withoutExpected === "node identifier after '+'") {
+        return "Put a node id after `+`: `+ api: API`.";
+    };
+    if (withoutExpected === "space after '-'") {
+        return "Put a space after `-`: `- api`.";
+    };
+    if (withoutExpected === "node identifier after '-'") {
+        return "Put a node id after `-`: `- api`.";
+    };
+    if (withoutExpected === "space after '~'") {
+        return "Put a space after `~`: `~ api -> db => api -> cache`.";
+    };
+    if (withoutExpected === "node identifier") {
+        return "Put a node identifier here.";
+    };
+    if (withoutExpected === "node identifier after 'inside'") {
+        return "Tell `inside` which node owns this interior: `inside api { ... }`.";
+    };
+    if (withoutExpected === "source node identifier after 'via'") {
+        return "Put the source node after `via`: `via a b`.";
+    };
+    if (withoutExpected === "target node identifier after 'via'") {
+        return "Put the second endpoint after `via`: `via a b`.";
+    };
+    if (withoutExpected === "source node identifier") {
+        return "Put a source node identifier here.";
+    };
+    if (withoutExpected === "new source node identifier") {
+        return "Put the new source node identifier after `=>`.";
+    };
+    if (withoutExpected === "new target node identifier") {
+        return "Put the new target node identifier after the replacement arrow.";
+    };
+    if (withoutExpected === "edge arrow '->' or '--'") {
+        return "Use `->` for a directed edge or `--` for an undirected edge.";
+    };
+    if (withoutExpected === "source edge arrow '->'") {
+        return "Use `->` in the edge you are changing: `~ api -> db => api -> cache`.";
+    };
+    if (withoutExpected === "replacement edge arrow '->'") {
+        return "Use `->` in the replacement edge: `~ api -> db => api -> cache`.";
+    };
+    if (withoutExpected === "repoint separator '=>'") {
+        return "Use `=>` before the replacement edge: `~ api -> db => api -> cache`.";
+    };
+    if (withoutExpected === "target node identifier") {
+        return "Put a target node after the arrow.";
+    };
+    if (withoutExpected === "'~>'") {
+        return "Use `~>` for movement from left to right.";
+    };
+    if (withoutExpected === "'<~'") {
+        return "Use `<~` for movement from right to left.";
+    };
+    if (withoutExpected === "'->' or '<-'") {
+        return "Use `->` or `<-` between token endpoints, or prefer `~>` / `<~`.";
+    };
+    if (withoutExpected === "label (\"\u2026\", : rest-of-line, or |\u2026|)") {
+        return "label must use `: text`, `\"text\"`, or `|multi-line|`.";
+    };
+    if (withoutExpected === "attribute key") {
+        return "Start each attribute with a name, like `shape`.";
+    };
+    if (withoutExpected === "':'") {
+        return "Put `:` between the attribute name and value: `{shape: cylinder}`.";
+    };
+    if (withoutExpected === "attribute value") {
+        return "Put an attribute value after `:`.";
+    };
+    if (withoutExpected === "closing '}' for attributes") {
+        return "Close the attribute block with `}`.";
+    };
+    if (withoutExpected === "space after 'into'") {
+        return "Put a space after `into`: `into api`.";
+    };
+    if (withoutExpected === "node identifier after 'into'") {
+        return "Tell `into` which node to dive into.";
+    };
+    if (withoutExpected === "newline or '}' (statements end at the end of the line)") {
+        return "This statement has extra text. Put the next statement on a new line or close the block with `}`.";
+    };
+    if (withoutExpected === "statement (+ node, - node, + edge, - edge, into, out, or 'a ~> b'/'a <~ b')") {
+        return "I don't recognize this statement. Start with `+`, `-`, `~`, `into`, `out`, `par`, `seq`, or movement like `api ~> db`.";
+    };
+    if (withoutExpected === "'scene', 'still', 'title', 'inside', or end of input") {
+        return "Start a block with `scene`, `still`, `title`, or `inside`.";
+    };
+    return withoutExpected;
+};
+var frameName = function (raw) {
+    var unquoted = function (s) {
+        return Data_Maybe.fromMaybe(s)(bind1(Data_String_CodeUnits.stripPrefix("\"")(s))(function (withoutPrefix) {
+            return Data_String_CodeUnits.stripSuffix("\"")(withoutPrefix);
+        }));
+    };
+    var trimmed = Data_String_Common.trim(raw);
+    var v = unquoted(trimmed);
+    if (v === "") {
+        return Data_Maybe.Nothing.value;
+    };
+    return new Data_Maybe.Just(v);
+};
 var escapedChar = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("\\"))(function () {
     return bind(Parsing_String.anyChar)(function (c) {
         return pure((function () {
@@ -135,31 +321,15 @@ var quotedString = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("
         });
     });
 });
-var labelBody = /* #__PURE__ */ (function () {
-    var notLineEnd = function (c) {
-        return c !== "\x0a" && (c !== "\x0d" && (c !== "#" && c !== "}"));
-    };
-    var colonLabel = bind(Parsing_String["char"](":"))(function () {
-        return discard(hws)(function () {
-            return bind(Parsing_Combinators.many(Parsing_String.satisfy(notLineEnd)))(function (cs) {
-                return pure(Data_String_Common.trim(Data_String_CodeUnits.fromCharArray(fromFoldable(cs))));
-            });
-        });
-    });
-    return discard(hws)(function () {
-        return Parsing_Combinators.withErrorMessage(alt(colonLabel)(alt(pipeLabel)(quotedString)))("label (\"\u2026\", : rest-of-line, or |\u2026|)");
-    });
-})();
-var tokenLabel = /* #__PURE__ */ alt(pipeLabel)(quotedString);
 var digit = /* #__PURE__ */ Parsing_String.satisfy(function (c) {
     return c >= "0" && c <= "9";
 });
+var identRest = /* #__PURE__ */ alt(letter)(/* #__PURE__ */ alt(digit)(/* #__PURE__ */ alt(/* #__PURE__ */ Parsing_String["char"]("_"))(identHyphen)));
 var ident = /* #__PURE__ */ bind(/* #__PURE__ */ alt(letter)(/* #__PURE__ */ Parsing_String["char"]("_")))(function (first) {
-    return bind(Parsing_Combinators.many(alt(letter)(alt(digit)(alt(Parsing_String["char"]("_"))(Parsing_String["char"]("-"))))))(function (rest) {
+    return bind(Parsing_Combinators.many(identRest))(function (rest) {
         return pure(Data_String_CodeUnits.singleton(first) + Data_String_CodeUnits.fromCharArray(fromFoldable(rest)));
     });
 });
-var frameName = /* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ alt(quotedString)(ident))("frame name (identifier or quoted string)");
 var parseAttr = /* #__PURE__ */ discard(hws)(function () {
     return bind(Parsing_Combinators.withErrorMessage(ident)("attribute key"))(function (key) {
         return discard(hws)(function () {
@@ -175,23 +345,98 @@ var parseAttr = /* #__PURE__ */ discard(hws)(function () {
         });
     });
 });
-var parseToken = /* #__PURE__ */ bind(ident)(function (left) {
-    return discard(hws)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(alt(Parsing_String.string("->"))(Parsing_String.string("<-")))("'->' or '<-'"))(function (arrow) {
+var parseAttrs = /* #__PURE__ */ (function () {
+    var parseBody = bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](Parsing_Combinators.lookAhead(Parsing_String["char"]("}")))))(function (emptyAttrs) {
+        if (emptyAttrs instanceof Data_Maybe.Just) {
+            return pure(Data_Map_Internal.empty);
+        };
+        if (emptyAttrs instanceof Data_Maybe.Nothing) {
+            return bind(parseAttr)(function (first) {
+                return bind(Parsing_Combinators.many(Parsing_Combinators["try"](applySecond(applySecond(applySecond(hws)(Parsing_String["char"](",")))(hws))(parseAttr))))(function (rest) {
+                    return pure(fromFoldable1(append1([ first ])(fromFoldable(rest))));
+                });
+            });
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 508, column 5 - line 513, column 67): " + [ emptyAttrs.constructor.name ]);
+    });
+    return Parsing_Combinators.between(applySecond(Parsing_String["char"]("{"))(hws))(Parsing_Combinators.withErrorMessage(applySecond(hws)(Parsing_String["char"]("}")))("closing '}' for attributes"))(parseBody);
+})();
+var parseOptionalAttrs = /* #__PURE__ */ discard(hws)(function () {
+    return bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](Parsing_Combinators.lookAhead(Parsing_String["char"]("{")))))(function (hasAttrs) {
+        if (hasAttrs instanceof Data_Maybe.Just) {
+            return parseAttrs;
+        };
+        if (hasAttrs instanceof Data_Maybe.Nothing) {
+            return pure(Data_Map_Internal.empty);
+        };
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 499, column 3 - line 501, column 30): " + [ hasAttrs.constructor.name ]);
+    });
+});
+var parseDelEdgePatch = function (from) {
+    return function (fromSpan) {
+        return function (directed) {
             return discard(hws)(function () {
-                return bind(Parsing_Combinators.withErrorMessage(ident)("target node identifier"))(function (right) {
-                    return bind(Parsing_Combinators.many(Parsing_Combinators["try"](applySecond(hws)(tokenLabel))))(function (labels) {
-                        var v = (function () {
-                            if (arrow === "<-") {
-                                return new Data_Tuple.Tuple(right, left);
-                            };
-                            return new Data_Tuple.Tuple(left, right);
-                        })();
-                        return pure(new Markgraf_Animation_Surface.Token({
-                            from: v.value0,
-                            to: v.value1,
-                            labels: map(Markgraf_Graph.Label)(fromFoldable(labels))
-                        }));
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v) {
+                    return pure(parsedOp(new Markgraf_Animation_Surface.DelEdge({
+                        from: from,
+                        to: v.value0,
+                        directed: directed
+                    }))([ fromSpan, v.value1 ]));
+                });
+            });
+        };
+    };
+};
+var parseMoveHead = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ bind(/* #__PURE__ */ spanned(ident))(function (start) {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.lookAhead(alt(Parsing_String["char"]("~"))(voidLeft(Parsing_Combinators["try"](Parsing_String.string("<~")))("<"))))(function () {
+            return pure(start);
+        });
+    });
+})))(function (v) {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.lookAhead(alt(Parsing_String["char"]("~"))(Parsing_String["char"]("<"))))(function (moveStart) {
+            return bind((function () {
+                if (moveStart === "~") {
+                    return Parsing_Combinators.withErrorMessage(Parsing_String.string("~>"))("'~>'");
+                };
+                return Parsing_Combinators.withErrorMessage(Parsing_String.string("<~"))("'<~'");
+            })())(function (arrow) {
+                return pure(new Data_Tuple.Tuple(v.value0, new Data_Tuple.Tuple(v.value1, arrow)));
+            });
+        });
+    });
+});
+var parseRepointEdgePatch = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("~"))(function () {
+    return discard(Parsing_Combinators.withErrorMessage(hws1)("space after '~'"))(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("source node identifier")))(function (v) {
+            return discard(hws)(function () {
+                return bind(Parsing_Combinators.withErrorMessage(Parsing_String.string("->"))("source edge arrow '->'"))(function () {
+                    return discard(hws)(function () {
+                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+                            return discard(hws)(function () {
+                                return bind(Parsing_Combinators.withErrorMessage(Parsing_String.string("=>"))("repoint separator '=>'"))(function () {
+                                    return discard(hws)(function () {
+                                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("new source node identifier")))(function (v2) {
+                                            return discard(hws)(function () {
+                                                return bind(Parsing_Combinators.withErrorMessage(Parsing_String.string("->"))("replacement edge arrow '->'"))(function () {
+                                                    return discard(hws)(function () {
+                                                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("new target node identifier")))(function (v3) {
+                                                            return pure(parsedOp(new Markgraf_Animation_Surface.RepointEdge({
+                                                                from: v.value0,
+                                                                to: v1.value0,
+                                                                newFrom: v2.value0,
+                                                                newTo: v3.value0
+                                                            }))([ v.value1, v1.value1, v2.value1, v3.value1 ]));
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -208,7 +453,7 @@ var intLit = /* #__PURE__ */ bind(digit)(function (d) {
         if (v instanceof Data_Maybe.Nothing) {
             return pure(0);
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 369, column 3 - line 371, column 22): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 711, column 3 - line 713, column 22): " + [ v.constructor.name ]);
     });
 });
 var keyword = function (kw) {
@@ -220,20 +465,6 @@ var keyword = function (kw) {
         });
     }));
 };
-var parseVia = /* #__PURE__ */ discard(ws1)(function () {
-    return bind(keyword("via"))(function () {
-        return bind(ident)(function (from) {
-            return discard(ws1)(function () {
-                return bind(ident)(function (to) {
-                    return pure({
-                        from: from,
-                        to: to
-                    });
-                });
-            });
-        });
-    });
-});
 var prefix = function (kw) {
     return Parsing_Combinators["try"](bind(Parsing_String.string(kw))(function () {
         return discard(Parsing_Combinators.notFollowedBy(alt(letter)(alt(digit)(alt(Parsing_String["char"]("_"))(Parsing_String["char"]("-"))))))(function () {
@@ -241,78 +472,68 @@ var prefix = function (kw) {
         });
     }));
 };
-var parseAddEdge = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("+edge"))(function () {
-    return discard(ws1)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("source node identifier"))(function (from) {
+var parseDelLink = function (opName) {
+    return function (directed) {
+        return discard(prefix(opName))(function () {
             return discard(ws1)(function () {
-                return bind(Parsing_Combinators.withErrorMessage(ident)("target node identifier"))(function (to) {
-                    return bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](applySecond(hws)(tokenLabel))))(function (label) {
-                        return pure(new Markgraf_Animation_Surface.AddEdge({
-                            from: from,
-                            to: to,
-                            label: map1(Markgraf_Graph.Label)(label)
-                        }));
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("source node identifier")))(function (v) {
+                    return discard(ws1)(function () {
+                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+                            return pure(parsedOp(new Markgraf_Animation_Surface.DelEdge({
+                                from: v.value0,
+                                to: v1.value0,
+                                directed: directed
+                            }))([ v.value1, v1.value1 ]));
+                        });
                     });
                 });
             });
         });
-    });
-});
-var parseDelEdge = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("-edge"))(function () {
-    return discard(ws1)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("source node identifier"))(function (from) {
-            return discard(ws1)(function () {
-                return bind(Parsing_Combinators.withErrorMessage(ident)("target node identifier"))(function (to) {
-                    return pure(new Markgraf_Animation_Surface.DelEdge({
-                        from: from,
-                        to: to
-                    }));
-                });
-            });
-        });
-    });
-});
-var parseDelNode = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("-node"))(function () {
-    return discard(ws1)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("node identifier"))(function (nid) {
-            return bind(Parsing_Combinators.many(Parsing_Combinators["try"](parseVia)))(function (vias) {
-                return pure(new Markgraf_Animation_Surface.DelNode({
-                    id: nid,
-                    via: fromFoldable(vias)
-                }));
-            });
-        });
-    });
-});
+    };
+};
+var parseDelConn = /* #__PURE__ */ parseDelLink("-conn")(false);
+var parseDelEdge = /* #__PURE__ */ parseDelLink("-edge")(true);
 var parseEnter = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("enter"))(function () {
     return discard(ws1)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("node identifier"))(function (nid) {
-            return pure(new Markgraf_Animation_Surface.Enter({
-                id: nid
-            }));
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier")))(function (v) {
+            return pure(parsedOp(new Markgraf_Animation_Surface.Enter({
+                id: v.value0
+            }))([ v.value1 ]));
         });
     });
 });
 var parseExit = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("exit"))(function () {
-    return pure(Markgraf_Animation_Surface.Exit.value);
+    return pure(parsedOp(Markgraf_Animation_Surface.Exit.value)([  ]));
+});
+var parseInto = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("into"))(function () {
+    return discard(Parsing_Combinators.withErrorMessage(hws1)("space after 'into'"))(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier after 'into'")))(function (v) {
+            return pure(parsedOp(new Markgraf_Animation_Surface.Enter({
+                id: v.value0
+            }))([ v.value1 ]));
+        });
+    });
+});
+var parseOut = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("out"))(function () {
+    return pure(parsedOp(Markgraf_Animation_Surface.Exit.value)([  ]));
 });
 var parseRepointEdge = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("~edge"))(function () {
     return discard(ws1)(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("source node identifier"))(function (from) {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("source node identifier")))(function (v) {
             return discard(ws1)(function () {
-                return bind(Parsing_Combinators.withErrorMessage(ident)("target node identifier"))(function (to) {
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
                     return discard(ws)(function () {
                         return bind(Parsing_Combinators.withErrorMessage(Parsing_String.string("->"))("'->'"))(function () {
                             return discard(ws)(function () {
-                                return bind(Parsing_Combinators.withErrorMessage(ident)("new source node identifier"))(function (newFrom) {
+                                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("new source node identifier")))(function (v2) {
                                     return discard(ws1)(function () {
-                                        return bind(Parsing_Combinators.withErrorMessage(ident)("new target node identifier"))(function (newTo) {
-                                            return pure(new Markgraf_Animation_Surface.RepointEdge({
-                                                from: from,
-                                                to: to,
-                                                newFrom: newFrom,
-                                                newTo: newTo
-                                            }));
+                                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("new target node identifier")))(function (v3) {
+                                            return pure(parsedOp(new Markgraf_Animation_Surface.RepointEdge({
+                                                from: v.value0,
+                                                to: v1.value0,
+                                                newFrom: v2.value0,
+                                                newTo: v3.value0
+                                            }))([ v.value1, v1.value1, v2.value1, v3.value1 ]));
                                         });
                                     });
                                 });
@@ -333,102 +554,358 @@ var parseSeed = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("seed"))(function
         });
     });
 });
-var braces = /* #__PURE__ */ Parsing_Combinators.between(/* #__PURE__ */ applySecond(/* #__PURE__ */ Parsing_String["char"]("{"))(ws))(/* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ applySecond(ws)(/* #__PURE__ */ Parsing_String["char"]("}")))("closing '}'"));
-var parseAttrs = /* #__PURE__ */ (function () {
-    var parseBody = bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](parseAttr)))(function (first) {
-        if (first instanceof Data_Maybe.Nothing) {
-            return pure(Data_Map_Internal.empty);
-        };
-        if (first instanceof Data_Maybe.Just) {
-            return bind(Parsing_Combinators.many(Parsing_Combinators["try"](applySecond(applySecond(applySecond(hws)(Parsing_String["char"](",")))(hws))(parseAttr))))(function (rest) {
-                return pure(fromFoldable1(append1([ first.value0 ])(fromFoldable(rest))));
-            });
-        };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 225, column 5 - line 229, column 64): " + [ first.constructor.name ]);
-    });
-    return braces(parseBody);
-})();
-var parseAddNode = /* #__PURE__ */ (function () {
-    var isNoLabelTerminator = function (c) {
-        return c === "\x0a" || (c === "\x0d" || (c === "#" || (c === "}" || c === "{")));
-    };
-    var noLabelMarker = bind(alt(voidLeft(Parsing_String.eof)(Data_Unit.unit))(voidLeft(Parsing_String.satisfy(isNoLabelTerminator))(Data_Unit.unit)))(function () {
-        return pure(true);
-    });
-    var optionalLabel = discard(hws)(function () {
-        return bind(alt(Parsing_Combinators["try"](Parsing_Combinators.lookAhead(noLabelMarker)))(pure(false)))(function (noLabel) {
-            if (noLabel) {
-                return pure("");
-            };
-            return labelBody;
-        });
-    });
-    return discard(prefix("+node"))(function () {
-        return discard(ws1)(function () {
-            return bind(Parsing_Combinators.withErrorMessage(ident)("node identifier"))(function (nid) {
-                return bind(optionalLabel)(function (label) {
-                    return bind(alt(Parsing_Combinators["try"](applySecond(hws)(parseAttrs)))(pure(Data_Map_Internal.empty)))(function (attrs) {
-                        var shape = Data_Maybe.fromMaybe(Markgraf_Graph.Rectangle.value)(bind1(lookup("shape")(attrs))(Markgraf_Graph.parseShape));
-                        return pure(new Markgraf_Animation_Surface.AddNode({
-                            id: nid,
-                            label: label,
-                            shape: shape
-                        }));
+var parseVia = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ discard(hws)(function () {
+    return prefix("via");
+})))(function () {
+    return discard(Parsing.consume)(function () {
+        return discard(hws1)(function () {
+            return bind(Parsing_Combinators.withErrorMessage(ident)("source node identifier after 'via'"))(function (from) {
+                return discard(hws)(function () {
+                    return bind(Parsing_Combinators.withErrorMessage(ident)("target node identifier after 'via'"))(function (to) {
+                        return pure({
+                            from: from,
+                            to: to
+                        });
                     });
                 });
             });
         });
     });
-})();
-var parseLeaf = /* #__PURE__ */ bind(Parsing.position)(function (v) {
-    return bind(Parsing_Combinators.withErrorMessage(choice([ parseAddNode, parseDelNode, parseRepointEdge, parseAddEdge, parseDelEdge, parseEnter, parseExit, parseToken ]))("statement (+node, -node, +edge, -edge, ~edge, enter, exit, or 'a -> b')"))(function (op) {
-        return pure(new Markgraf_Animation_Surface.Leaf({
-            op: op,
-            line: v.line,
-            column: v.column
-        }));
+});
+var parseDelNode = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("-node"))(function () {
+    return discard(ws1)(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier")))(function (v) {
+            return bind(Parsing_Combinators.many(parseVia))(function (vias) {
+                return pure(parsedOp(new Markgraf_Animation_Surface.DelNode({
+                    id: v.value0,
+                    via: fromFoldable(vias)
+                }))([ v.value1 ]));
+            });
+        });
     });
 });
+var parseDelNodePatch = function (nid) {
+    return function (nidSpan) {
+        return bind(Parsing_Combinators.many(parseVia))(function (vias) {
+            return pure(parsedOp(new Markgraf_Animation_Surface.DelNode({
+                id: nid,
+                via: fromFoldable(vias)
+            }))([ nidSpan ]));
+        });
+    };
+};
+var parseDelPatch = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("-"))(function () {
+    return discard(Parsing_Combinators.withErrorMessage(hws1)("space after '-'"))(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier after '-'")))(function (v) {
+            return bind(parseOptionalPatchLink)(function (link) {
+                if (link instanceof Data_Maybe.Just) {
+                    return parseDelEdgePatch(v.value0)(v.value1)(link.value0);
+                };
+                if (link instanceof Data_Maybe.Nothing) {
+                    return parseDelNodePatch(v.value0)(v.value1);
+                };
+                throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 379, column 3 - line 381, column 47): " + [ link.constructor.name ]);
+            });
+        });
+    });
+});
+var colonLabel = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"](":"))(function () {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.many(Parsing_String.satisfy(notLineEnd)))(function (cs) {
+            return pure(Data_String_Common.trim(Data_String_CodeUnits.fromCharArray(fromFoldable(cs))));
+        });
+    });
+});
+var labelBody = /* #__PURE__ */ discard(hws)(function () {
+    return Parsing_Combinators.withErrorMessage(alt(colonLabel)(alt(pipeLabel)(quotedString)))("label (\"\u2026\", : rest-of-line, or |\u2026|)");
+});
+var optionalLabelBefore = function (isNoLabelTerminator) {
+    var noLabelMarker = bind(alt(voidLeft(Parsing_String.eof)(Data_Unit.unit))(voidLeft(Parsing_String.satisfy(isNoLabelTerminator))(Data_Unit.unit)))(function () {
+        return pure(true);
+    });
+    return discard(hws)(function () {
+        return bind(alt(Parsing_Combinators["try"](Parsing_Combinators.lookAhead(noLabelMarker)))(pure(false)))(function (noLabel) {
+            if (noLabel) {
+                return pure(Data_Maybe.Nothing.value);
+            };
+            return map(Data_Maybe.Just.create)(labelBody);
+        });
+    });
+};
+var optionalGraphLabel = /* #__PURE__ */ optionalLabelBefore(isGraphNoLabelTerminator);
+var parseAddEdgePatch = function (from) {
+    return function (fromSpan) {
+        return function (directed) {
+            return discard(hws)(function () {
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v) {
+                    return bind(optionalGraphLabel)(function (label) {
+                        return pure(parsedOp(new Markgraf_Animation_Surface.AddEdge({
+                            from: from,
+                            to: v.value0,
+                            label: map1(Markgraf_Graph.Label)(label),
+                            directed: directed
+                        }))([ fromSpan, v.value1 ]));
+                    });
+                });
+            });
+        };
+    };
+};
+var parseMalformedLeftMove = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_Combinators["try"](/* #__PURE__ */ bind(/* #__PURE__ */ spanned(ident))(function (start) {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.lookAhead(Parsing_String["char"]("<")))(function () {
+            return discard(Parsing_Combinators.notFollowedBy(Parsing_Combinators["try"](Parsing_String.string("<-"))))(function () {
+                return pure(start);
+            });
+        });
+    });
+})))(function (v) {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.withErrorMessage(Parsing_String.string("<~"))("'<~'"))(function () {
+            return discard(hws)(function () {
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+                    return bind(optionalGraphLabel)(function (label) {
+                        return pure(parsedOp(new Markgraf_Animation_Surface.Token({
+                            from: v1.value0,
+                            to: v.value0,
+                            labels: Data_Maybe.maybe([  ])(function ($196) {
+                                return Data_Array.singleton(Markgraf_Graph.Label($196));
+                            })(label)
+                        }))([ v1.value1, v.value1 ]));
+                    });
+                });
+            });
+        });
+    });
+});
+var parseMoveToken = /* #__PURE__ */ bind(parseMoveHead)(function (v) {
+    return discard(hws)(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+            return bind(optionalGraphLabel)(function (label) {
+                var v2 = (function () {
+                    if (v.value1.value1 === "<~") {
+                        return new Data_Tuple.Tuple(v1.value0, v.value0);
+                    };
+                    return new Data_Tuple.Tuple(v.value0, v1.value0);
+                })();
+                var operands = (function () {
+                    if (v.value1.value1 === "<~") {
+                        return [ v1.value1, v.value1.value0 ];
+                    };
+                    return [ v.value1.value0, v1.value1 ];
+                })();
+                return pure(parsedOp(new Markgraf_Animation_Surface.Token({
+                    from: v2.value0,
+                    to: v2.value1,
+                    labels: Data_Maybe.maybe([  ])(function ($197) {
+                        return Data_Array.singleton(Markgraf_Graph.Label($197));
+                    })(label)
+                }))(operands));
+            });
+        });
+    });
+});
+var optionalNodeLabel = /* #__PURE__ */ map(/* #__PURE__ */ Data_Maybe.fromMaybe(""))(/* #__PURE__ */ optionalLabelBefore(isNodeNoLabelTerminator));
+var parseAddNode = /* #__PURE__ */ discard(/* #__PURE__ */ prefix("+node"))(function () {
+    return discard(ws1)(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier")))(function (v) {
+            return bind(optionalNodeLabel)(function (label) {
+                return bind(parseOptionalAttrs)(function (attrs) {
+                    var shape = Data_Maybe.fromMaybe(Markgraf_Graph.Rectangle.value)(bind1(lookup("shape")(attrs))(Markgraf_Graph.parseShape));
+                    return pure(parsedOp(new Markgraf_Animation_Surface.AddNode({
+                        id: v.value0,
+                        label: label,
+                        shape: shape
+                    }))([ v.value1 ]));
+                });
+            });
+        });
+    });
+});
+var parseAddNodePatch = function (nid) {
+    return function (nidSpan) {
+        return bind(optionalNodeLabel)(function (label) {
+            return bind(parseOptionalAttrs)(function (attrs) {
+                var shape = Data_Maybe.fromMaybe(Markgraf_Graph.Rectangle.value)(bind1(lookup("shape")(attrs))(Markgraf_Graph.parseShape));
+                return pure(parsedOp(new Markgraf_Animation_Surface.AddNode({
+                    id: nid,
+                    label: label,
+                    shape: shape
+                }))([ nidSpan ]));
+            });
+        });
+    };
+};
+var parseAddPatch = /* #__PURE__ */ bind(/* #__PURE__ */ Parsing_String["char"]("+"))(function () {
+    return discard(Parsing_Combinators.withErrorMessage(hws1)("space after '+'"))(function () {
+        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("node identifier after '+'")))(function (v) {
+            return bind(parseOptionalPatchLink)(function (link) {
+                if (link instanceof Data_Maybe.Just) {
+                    return parseAddEdgePatch(v.value0)(v.value1)(link.value0);
+                };
+                if (link instanceof Data_Maybe.Nothing) {
+                    return parseAddNodePatch(v.value0)(v.value1);
+                };
+                throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 355, column 3 - line 357, column 47): " + [ link.constructor.name ]);
+            });
+        });
+    });
+});
+var tokenLabel = /* #__PURE__ */ alt(colonLabel)(/* #__PURE__ */ alt(pipeLabel)(quotedString));
+var parseAddLink = function (opName) {
+    return function (directed) {
+        return discard(prefix(opName))(function () {
+            return discard(ws1)(function () {
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("source node identifier")))(function (v) {
+                    return discard(ws1)(function () {
+                        return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+                            return bind(Parsing_Combinators.optionMaybe(Parsing_Combinators["try"](applySecond(hws)(tokenLabel))))(function (label) {
+                                return pure(parsedOp(new Markgraf_Animation_Surface.AddEdge({
+                                    from: v.value0,
+                                    to: v1.value0,
+                                    label: map1(Markgraf_Graph.Label)(label),
+                                    directed: directed
+                                }))([ v.value1, v1.value1 ]));
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    };
+};
+var parseAddConn = /* #__PURE__ */ parseAddLink("+conn")(false);
+var parseAddEdge = /* #__PURE__ */ parseAddLink("+edge")(true);
+var parseToken = /* #__PURE__ */ bind(/* #__PURE__ */ spanned(ident))(function (v) {
+    return discard(hws)(function () {
+        return bind(Parsing_Combinators.withErrorMessage(alt(Parsing_String.string("->"))(Parsing_String.string("<-")))("'->' or '<-'"))(function (arrow) {
+            return discard(hws)(function () {
+                return bind(spanned(Parsing_Combinators.withErrorMessage(ident)("target node identifier")))(function (v1) {
+                    return bind(Parsing_Combinators.many(Parsing_Combinators["try"](applySecond(hws)(tokenLabel))))(function (labels) {
+                        var v2 = (function () {
+                            if (arrow === "<-") {
+                                return new Data_Tuple.Tuple(v1.value0, v.value0);
+                            };
+                            return new Data_Tuple.Tuple(v.value0, v1.value0);
+                        })();
+                        var operands = (function () {
+                            if (arrow === "<-") {
+                                return [ v1.value1, v.value1 ];
+                            };
+                            return [ v.value1, v1.value1 ];
+                        })();
+                        return pure(parsedOp(new Markgraf_Animation_Surface.Token({
+                            from: v2.value0,
+                            to: v2.value1,
+                            labels: map2(Markgraf_Graph.Label)(fromFoldable(labels))
+                        }))(operands));
+                    });
+                });
+            });
+        });
+    });
+});
+var parseLeaf = /* #__PURE__ */ bind(Parsing.position)(function (v) {
+    return bind(Parsing_Combinators.withErrorMessage(choice([ parseAddNode, parseAddEdge, parseAddConn, parseDelNode, parseDelEdge, parseDelConn, parseRepointEdge, parseAddPatch, parseDelPatch, parseRepointEdgePatch, parseMoveToken, parseMalformedLeftMove, parseInto, parseOut, parseEnter, parseExit, parseToken ]))("statement (+ node, - node, + edge, - edge, into, out, or 'a ~> b'/'a <~ b')"))(function (parsed) {
+        return bind(Parsing.position)(function (v1) {
+            var span = spanFromPositions(v)(v1);
+            return pure(new Markgraf_Animation_Surface.Leaf({
+                op: parsed.op,
+                line: span.line,
+                column: span.column,
+                endLine: span.endLine,
+                endColumn: span.endColumn,
+                span: span,
+                operands: parsed.operands
+            }));
+        });
+    });
+});
+var braces = /* #__PURE__ */ Parsing_Combinators.between(/* #__PURE__ */ applySecond(/* #__PURE__ */ Parsing_String["char"]("{"))(ws))(/* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ applySecond(ws)(/* #__PURE__ */ Parsing_String["char"]("}")))("closing '}'"));
 var parseBlockBody = function (wrap) {
-    return bind(Parsing_Combinators.many($lazy_parseStatement(123)))(function (items) {
+    return bind(Parsing_Combinators.many($lazy_parseStatement(213)))(function (items) {
         return pure(wrap(fromFoldable(items)));
     });
 };
 var $lazy_parseStatement = /* #__PURE__ */ $runtime_lazy("parseStatement", "Markgraf.Animation.SurfaceText", function () {
-    return discard(Parsing_Combinators["try"](applySecond(ws)(Parsing_Combinators.notFollowedBy(Parsing_String["char"]("}")))))(function () {
-        return bind(choice([ Parsing_Combinators["try"]($lazy_parseParBlock(130)), Parsing_Combinators["try"]($lazy_parseSeqBlock(131)), parseLeaf ]))(function (s) {
-            return discard(hws)(function () {
-                return discard(statementTerminator)(function () {
-                    return pure(s);
+    return discard(Parsing_Combinators["try"](discard(ws)(function () {
+        return discard(Parsing_Combinators.notFollowedBy(Parsing_String["char"]("}")))(function () {
+            return Parsing_Combinators.notFollowedBy(Parsing_String.eof);
+        });
+    })))(function () {
+        return discard(Parsing.consume)(function () {
+            return bind(choice([ $lazy_parseParBlock(224), $lazy_parseSeqBlock(225), parseLeaf ]))(function (s) {
+                return discard(hws)(function () {
+                    return discard(statementTerminator)(function () {
+                        return pure(s);
+                    });
                 });
             });
         });
     });
 });
 var $lazy_parseParBlock = /* #__PURE__ */ $runtime_lazy("parseParBlock", "Markgraf.Animation.SurfaceText", function () {
-    return bind(keyword("par"))(function () {
+    var parseOpenPar = bind(Parsing_Combinators["try"](bind(prefix("par"))(function () {
+        return discard(hws)(function () {
+            return Parsing_Combinators.lookAhead(Parsing_String["char"]("{"));
+        });
+    })))(function () {
         return braces(parseBlockBody(Markgraf_Animation_Surface.Par.create));
     });
+    var parseMissingOpenPar = bind(Parsing_Combinators["try"](bind(prefix("par"))(function () {
+        return discard(hws)(function () {
+            return statementBoundaryStart;
+        });
+    })))(function () {
+        return discard(Parsing.consume)(function () {
+            return bind(Parsing_Combinators.withErrorMessage(Parsing_String["char"]("{"))("'{'"))(function () {
+                return pure(new Markgraf_Animation_Surface.Par([  ]));
+            });
+        });
+    });
+    return alt(parseOpenPar)(parseMissingOpenPar);
 });
 var $lazy_parseSeqBlock = /* #__PURE__ */ $runtime_lazy("parseSeqBlock", "Markgraf.Animation.SurfaceText", function () {
-    return bind(keyword("seq"))(function () {
+    var parseOpenSeq = bind(Parsing_Combinators["try"](bind(prefix("seq"))(function () {
+        return discard(hws)(function () {
+            return Parsing_Combinators.lookAhead(Parsing_String["char"]("{"));
+        });
+    })))(function () {
         return braces(parseBlockBody(Markgraf_Animation_Surface.Seq.create));
     });
+    var parseMissingOpenSeq = bind(Parsing_Combinators["try"](bind(prefix("seq"))(function () {
+        return discard(hws)(function () {
+            return statementBoundaryStart;
+        });
+    })))(function () {
+        return discard(Parsing.consume)(function () {
+            return bind(Parsing_Combinators.withErrorMessage(Parsing_String["char"]("{"))("'{'"))(function () {
+                return pure(new Markgraf_Animation_Surface.Seq([  ]));
+            });
+        });
+    });
+    return alt(parseOpenSeq)(parseMissingOpenSeq);
 });
-var parseStatement = /* #__PURE__ */ $lazy_parseStatement(126);
-var parseParBlock = /* #__PURE__ */ $lazy_parseParBlock(148);
-var parseSeqBlock = /* #__PURE__ */ $lazy_parseSeqBlock(153);
+var parseStatement = /* #__PURE__ */ $lazy_parseStatement(216);
+var parseParBlock = /* #__PURE__ */ $lazy_parseParBlock(242);
+var parseSeqBlock = /* #__PURE__ */ $lazy_parseSeqBlock(261);
 var parseFrameWith = function (kw) {
     return function (kind) {
         return bind(keyword(kw))(function () {
-            return bind(frameName)(function (name) {
-                return discard(ws)(function () {
-                    return bind(braces(parseBlockBody(Markgraf_Animation_Surface.Seq.create)))(function (body) {
-                        return discard(ws)(function () {
-                            return pure({
-                                name: new Data_Maybe.Just(name),
-                                ops: body,
-                                kind: kind
+            return bind(Parsing_Combinators.many(Parsing_String.satisfy(isFrameNameChar)))(function (rawName) {
+                return bind(Parsing_Combinators.withErrorMessage(Parsing_String["char"]("{"))("'{'"))(function () {
+                    return discard(ws)(function () {
+                        return bind(parseBlockBody(Markgraf_Animation_Surface.Seq.create))(function (body) {
+                            return discard(ws)(function () {
+                                return bind(Parsing_Combinators.withErrorMessage(Parsing_String["char"]("}"))("closing '}'"))(function () {
+                                    return discard(ws)(function () {
+                                        return pure({
+                                            name: frameName(Data_String_CodeUnits.fromCharArray(fromFoldable(rawName))),
+                                            ops: body,
+                                            kind: kind
+                                        });
+                                    });
+                                });
                             });
                         });
                     });
@@ -438,7 +915,7 @@ var parseFrameWith = function (kw) {
     };
 };
 var parseAnyFrame = /* #__PURE__ */ (function () {
-    return alt(parseFrameWith("keyframe")(Markgraf_Animation_Surface.AnimatedKeyframe.value))(alt(parseFrameWith("still")(Markgraf_Animation_Surface.Still.value))(parseFrameWith("title")(Markgraf_Animation_Surface.Title.value)));
+    return alt(parseFrameWith("scene")(Markgraf_Animation_Surface.AnimatedKeyframe.value))(alt(parseFrameWith("keyframe")(Markgraf_Animation_Surface.AnimatedKeyframe.value))(alt(parseFrameWith("still")(Markgraf_Animation_Surface.Still.value))(parseFrameWith("title")(Markgraf_Animation_Surface.Title.value))));
 })();
 var $lazy_parseDocument = /* #__PURE__ */ $runtime_lazy("parseDocument", "Markgraf.Animation.SurfaceText", function () {
     var topInterior = function (v) {
@@ -448,7 +925,7 @@ var $lazy_parseDocument = /* #__PURE__ */ $runtime_lazy("parseDocument", "Markgr
         if (v instanceof TopFrame) {
             return Data_Maybe.Nothing.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 74, column 17 - line 76, column 26): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 153, column 17 - line 155, column 26): " + [ v.constructor.name ]);
     };
     var topFrame = function (v) {
         if (v instanceof TopFrame) {
@@ -457,10 +934,10 @@ var $lazy_parseDocument = /* #__PURE__ */ $runtime_lazy("parseDocument", "Markgr
         if (v instanceof TopInside) {
             return Data_Maybe.Nothing.value;
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 71, column 14 - line 73, column 27): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 150, column 14 - line 152, column 27): " + [ v.constructor.name ]);
     };
     return bind(Parsing_Combinators.optionMaybe(parseSeed))(function (seedVal) {
-        return bind(Parsing_Combinators.many($lazy_parseTopItem(63)))(function (itemList) {
+        return bind(Parsing_Combinators.many($lazy_parseTopItem(142)))(function (itemList) {
             var items = fromFoldable(itemList);
             return pure({
                 seed: Data_Maybe.fromMaybe(0)(seedVal),
@@ -472,9 +949,9 @@ var $lazy_parseDocument = /* #__PURE__ */ $runtime_lazy("parseDocument", "Markgr
 });
 var $lazy_parseInside = /* #__PURE__ */ $runtime_lazy("parseInside", "Markgraf.Animation.SurfaceText", function () {
     return bind(keyword("inside"))(function () {
-        return bind(Parsing_Combinators.withErrorMessage(ident)("node identifier"))(function (nid) {
+        return bind(Parsing_Combinators.withErrorMessage(ident)("node identifier after 'inside'"))(function (nid) {
             return discard(ws)(function () {
-                return bind(braces($lazy_parseDocument(97)))(function (doc) {
+                return bind(braces($lazy_parseDocument(177)))(function (doc) {
                     return discard(ws)(function () {
                         return pure({
                             node: nid,
@@ -488,20 +965,22 @@ var $lazy_parseInside = /* #__PURE__ */ $runtime_lazy("parseInside", "Markgraf.A
 });
 var $lazy_parseTopItem = /* #__PURE__ */ $runtime_lazy("parseTopItem", "Markgraf.Animation.SurfaceText", function () {
     return Control_Lazy.defer(Parsing.lazyParserT)(function (v) {
-        return alt(map2(TopInside.create)(Parsing_Combinators["try"]($lazy_parseInside(81))))(map2(TopFrame.create)(parseAnyFrame));
+        return alt(map(TopInside.create)($lazy_parseInside(160)))(map(TopFrame.create)(parseAnyFrame));
     });
 });
-var parseDocument = /* #__PURE__ */ $lazy_parseDocument(60);
-var parseInside = /* #__PURE__ */ $lazy_parseInside(92);
-var parseTopItem = /* #__PURE__ */ $lazy_parseTopItem(80);
-var parseSurface = /* #__PURE__ */ Control_Apply.applyFirst(Parsing.applyParserT)(/* #__PURE__ */ applySecond(ws)(parseDocument))(/* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ applySecond(ws)(Parsing_String.eof))("'keyframe', 'still', 'title', 'inside', or end of input"));
+var parseDocument = /* #__PURE__ */ $lazy_parseDocument(139);
+var parseInside = /* #__PURE__ */ $lazy_parseInside(172);
+var parseTopItem = /* #__PURE__ */ $lazy_parseTopItem(159);
+var parseSurface = /* #__PURE__ */ Control_Apply.applyFirst(Parsing.applyParserT)(/* #__PURE__ */ applySecond(ws)(parseDocument))(/* #__PURE__ */ Parsing_Combinators.withErrorMessage(/* #__PURE__ */ applySecond(ws)(Parsing_String.eof))("'scene', 'still', 'title', 'inside', or end of input"));
 var runSurfaceParserDetailed = function (src) {
     var toFailure = function (err) {
         var v = Parsing.parseErrorPosition(err);
         return {
-            msg: Parsing.parseErrorMessage(err),
+            msg: friendlyParseMessage(Parsing.parseErrorMessage(err)),
             line: v.line,
-            column: v.column
+            column: v.column,
+            endLine: v.line,
+            endColumn: v.column + 1 | 0
         };
     };
     var v = Parsing.runParser(src)(parseSurface);
@@ -511,7 +990,7 @@ var runSurfaceParserDetailed = function (src) {
     if (v instanceof Data_Either.Right) {
         return new Data_Either.Right(v.value0);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 46, column 32 - line 48, column 27): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 57, column 32 - line 59, column 27): " + [ v.constructor.name ]);
 };
 var runSurfaceParser = function (src) {
     var v = runSurfaceParserDetailed(src);
@@ -521,7 +1000,7 @@ var runSurfaceParser = function (src) {
     if (v instanceof Data_Either.Right) {
         return new Data_Either.Right(v.value0);
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 41, column 24 - line 43, column 27): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.SurfaceText (line 52, column 24 - line 54, column 27): " + [ v.constructor.name ]);
 };
 export {
     runSurfaceParser,

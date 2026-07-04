@@ -12,6 +12,7 @@ import * as Data_Maybe from "../Data.Maybe/index.js";
 import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Semigroup from "../Data.Semigroup/index.js";
 import * as Data_Show from "../Data.Show/index.js";
+import * as Data_Unfoldable from "../Data.Unfoldable/index.js";
 import * as Markgraf_Animation_Layout from "../Markgraf.Animation.Layout/index.js";
 import * as Markgraf_Animation_Layout_FromELK from "../Markgraf.Animation.Layout.FromELK/index.js";
 import * as Markgraf_Animation_Schedule from "../Markgraf.Animation.Schedule/index.js";
@@ -28,10 +29,11 @@ var append = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray
 var un = /* #__PURE__ */ Data_Newtype.un();
 var show = /* #__PURE__ */ Data_Show.show(Data_Show.showInt);
 var fromFoldable = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
+var eq = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(Markgraf_Graph.eqNodeId));
+var toUnfoldable = /* #__PURE__ */ Data_Map_Internal.toUnfoldable(Data_Unfoldable.unfoldableArray);
 var bind1 = /* #__PURE__ */ Control_Bind.bind(Data_Either.bindEither);
 var lmap = /* #__PURE__ */ Data_Bifunctor.lmap(Data_Bifunctor.bifunctorEither);
 var pure1 = /* #__PURE__ */ Control_Applicative.pure(Data_Either.applicativeEither);
-var eq = /* #__PURE__ */ Data_Eq.eq(/* #__PURE__ */ Data_Eq.eqArray(Markgraf_Graph.eqNodeId));
 var shapeId = function (v) {
     if (v instanceof Markgraf_Graph.Rectangle) {
         return 0;
@@ -54,7 +56,7 @@ var shapeId = function (v) {
     if (v instanceof Markgraf_Graph.Cloud) {
         return 6;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 205, column 11 - line 212, column 13): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 210, column 11 - line 217, column 13): " + [ v.constructor.name ]);
 };
 var segTokens = function (seg) {
     var center = function (n) {
@@ -79,7 +81,7 @@ var segTokens = function (seg) {
                     if (w.target.value2 instanceof Markgraf_Animation_Spec.Backward) {
                         return Data_Array.reverse(path);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 135, column 20 - line 137, column 35): " + [ w.target.value2.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 136, column 20 - line 138, column 35): " + [ w.target.value2.constructor.name ]);
                 })();
                 return pure({
                     points: map(Markgraf_Animation_Layout.applyPlacement(seg.placement))(append(pre)(append(oriented)(post))),
@@ -99,7 +101,7 @@ var schedErr = function (errs) {
     return "schedule: " + (show(Data_Array.length(errs)) + " error(s)");
 };
 var renderErr = function (e) {
-    return e.msg + (" (line " + (show(e.line) + (", col " + (show(e.column) + ")"))));
+    return e.msg + (" (line " + (show(e.line) + (", cols " + (show(e.column) + ("-" + (show(e.endColumn) + ")"))))));
 };
 var placedNode = function (depth) {
     return function (pl) {
@@ -118,7 +120,8 @@ var placedNode = function (depth) {
                 h: h,
                 label: np.label,
                 shape: shapeId(np.shape),
-                depth: depth
+                depth: depth,
+                labelScale: scale
             };
         };
     };
@@ -128,40 +131,14 @@ var segNodes = function (seg) {
 };
 var placedEdge = function (depth) {
     return function (pl) {
-        return function (pts) {
+        return function (v) {
             return {
-                points: map(Markgraf_Animation_Layout.applyPlacement(pl))(pts),
-                depth: depth
+                points: map(Markgraf_Animation_Layout.applyPlacement(pl))(v.value1),
+                depth: depth,
+                arrowhead: Markgraf_Graph.edgeHasArrowhead(v.value0)
             };
         };
     };
-};
-var segEdges = function (seg) {
-    return map(placedEdge(Data_Array.length(seg.path))(seg.placement))(fromFoldable(Data_Map_Internal.values(seg.layout.edges)));
-};
-var layoutJson = function (src) {
-    var build = bind1(Markgraf_Animation_SurfaceText.runSurfaceParser(src))(function (surface) {
-        return bind1(lmap(renderErr)(Markgraf_Animation_Surface.toAnimation(surface)))(function (animation) {
-            return pure1(Markgraf_Animation_Layout_FromELK.layoutFromAnimation(animation));
-        });
-    });
-    if (build instanceof Data_Either.Left) {
-        return {
-            ok: false,
-            error: build.value0,
-            nodes: [  ],
-            edges: [  ]
-        };
-    };
-    if (build instanceof Data_Either.Right) {
-        return {
-            ok: true,
-            error: "",
-            nodes: map(placedNode(0)(Markgraf_Animation_Layout.identityPlacement))(fromFoldable(Data_Map_Internal.values(build.value0.nodes))),
-            edges: map(placedEdge(0)(Markgraf_Animation_Layout.identityPlacement))(fromFoldable(Data_Map_Internal.values(build.value0.edges)))
-        };
-    };
-    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 73, column 18 - line 80, column 6): " + [ build.constructor.name ]);
 };
 var footprintFor = function (segments) {
     return function (path) {
@@ -185,6 +162,36 @@ var footprintFor = function (segments) {
         })(segments));
     };
 };
+var edgePairs = function (edges) {
+    return toUnfoldable(edges);
+};
+var layoutJson = function (src) {
+    var build = bind1(Markgraf_Animation_SurfaceText.runSurfaceParser(src))(function (surface) {
+        return bind1(lmap(renderErr)(Markgraf_Animation_Surface.toAnimation(surface)))(function (animation) {
+            return pure1(Markgraf_Animation_Layout_FromELK.layoutFromAnimation(animation));
+        });
+    });
+    if (build instanceof Data_Either.Left) {
+        return {
+            ok: false,
+            error: build.value0,
+            nodes: [  ],
+            edges: [  ]
+        };
+    };
+    if (build instanceof Data_Either.Right) {
+        return {
+            ok: true,
+            error: "",
+            nodes: map(placedNode(0)(Markgraf_Animation_Layout.identityPlacement))(fromFoldable(Data_Map_Internal.values(build.value0.nodes))),
+            edges: map(placedEdge(0)(Markgraf_Animation_Layout.identityPlacement))(edgePairs(build.value0.edges))
+        };
+    };
+    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 74, column 18 - line 81, column 6): " + [ build.constructor.name ]);
+};
+var segEdges = function (seg) {
+    return map(placedEdge(Data_Array.length(seg.path))(seg.placement))(edgePairs(seg.layout.edges));
+};
 var diveOf = function (segments) {
     return function (d) {
         return {
@@ -197,7 +204,7 @@ var diveOf = function (segments) {
                 if (d.direction instanceof Markgraf_Animation_Schedule.DiveOut) {
                     return 0;
                 };
-                throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 160, column 10 - line 162, column 19): " + [ d.direction.constructor.name ]);
+                throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 161, column 10 - line 163, column 19): " + [ d.direction.constructor.name ]);
             })(),
             parent: footprintFor(segments)(d.parentPath),
             child: footprintFor(segments)(d.childPath)
@@ -235,7 +242,7 @@ var scheduleJson = function (src) {
     if (build instanceof Data_Either.Right) {
         return build.value0;
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 96, column 20 - line 98, column 15): " + [ build.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Layout.Export (line 97, column 20 - line 99, column 15): " + [ build.constructor.name ]);
 };
 export {
     layoutJson,

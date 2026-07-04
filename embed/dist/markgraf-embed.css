@@ -67,17 +67,29 @@
   transform: scale(1);
 }
 
-/* The bar sits in normal flow *below* the canvas (not as a bottom overlay),
-   so it reserves its own space and can never cover the lowest node of the
-   graph. It's always visible — a player should show its scrubber. */
 .markgraf-embed [data-mg="bar"] {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
   background: rgba(255, 255, 255, 0.92);
   color: var(--mg-fg);
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.08s ease, transform 0.08s ease;
+  pointer-events: none;
+}
+
+.markgraf-embed:hover [data-mg="bar"],
+.markgraf-embed:focus-within [data-mg="bar"] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .markgraf-embed [data-mg="play"] {
@@ -217,10 +229,6 @@
 
 .markgraf-embed [data-mg="scrub"]::-webkit-slider-runnable-track {
   height: 4px;
-  /* WebKit lays the 4px track at the top of the 18px input box, which floated
-     the line and thumb above the play button / time / speed. Centre it within
-     the input: (18 - 4) / 2 = 7px. */
-  margin-top: 7px;
   background: var(--mg-track);
   border-radius: 999px;
   transition: background 0.15s ease;
@@ -244,11 +252,7 @@
   border-radius: 50%;
   background: #111;
   border: 2px solid #fff;
-  /* `margin-top` centres the thumb on the track; `top: auto` resets any host
-     slider positioning (e.g. Obsidian's editor sets `top: var(--slider-thumb-y)`
-     on range thumbs, which otherwise floats ours above the controls). */
   margin-top: -5px;
-  top: auto;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   transition: transform 0.08s ease;
 }

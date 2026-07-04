@@ -10,11 +10,12 @@ import * as Data_Functor from "../Data.Functor/index.js";
 import * as Data_Int from "../Data.Int/index.js";
 import * as Data_Map_Internal from "../Data.Map.Internal/index.js";
 import * as Data_Maybe from "../Data.Maybe/index.js";
+import * as Data_Newtype from "../Data.Newtype/index.js";
 import * as Data_Number_Format from "../Data.Number.Format/index.js";
-import * as Data_Ord from "../Data.Ord/index.js";
 import * as Data_Show from "../Data.Show/index.js";
 import * as Data_String_Common from "../Data.String.Common/index.js";
 import * as Data_Unit from "../Data.Unit/index.js";
+import * as Markgraf_Animation_Camera_Policy from "../Markgraf.Animation.Camera.Policy/index.js";
 import * as Markgraf_Animation_LabelSpring from "../Markgraf.Animation.LabelSpring/index.js";
 import * as Markgraf_Animation_Render_Draw from "../Markgraf.Animation.Render.Draw/index.js";
 import * as Markgraf_Animation_Render_Isometric from "../Markgraf.Animation.Render.Isometric/index.js";
@@ -30,12 +31,10 @@ var map = /* #__PURE__ */ Data_Functor.map(Control_Monad_ST_Internal.functorST);
 var $$void = /* #__PURE__ */ Data_Functor["void"](Control_Monad_ST_Internal.functorST);
 var pure = /* #__PURE__ */ Control_Applicative.pure(Control_Monad_ST_Internal.applicativeST);
 var when = /* #__PURE__ */ Control_Applicative.when(Control_Monad_ST_Internal.applicativeST);
-var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
-var map1 = /* #__PURE__ */ Data_Functor.map(Data_Map_Internal.functorMap);
 var apply = /* #__PURE__ */ Control_Apply.apply(Control_Monad_ST_Internal.applyST);
 var eq3 = /* #__PURE__ */ Data_Eq.eq(Markgraf_Animation_TextRun.eqRunStyle);
-var map2 = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
-var map3 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
+var map1 = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
+var map2 = /* #__PURE__ */ Data_Functor.map(Data_Maybe.functorMaybe);
 var SvgDraw = function (x) {
     return x;
 };
@@ -47,6 +46,7 @@ var runSvgDraw = function (env) {
 var rgb = function (c) {
     return "rgb(" + (show(c.r) + ("," + (show(c.g) + ("," + (show(c.b) + ")")))));
 };
+var renderPadding = /* #__PURE__ */ Data_Newtype.un()(Markgraf_Animation_Camera_Policy.CameraPaddingWorld)(Markgraf_Animation_Camera_Policy.defaultCameraPaddingWorld);
 var openGroup = function (attrs) {
     if (attrs === "") {
         return "<g>";
@@ -54,7 +54,7 @@ var openGroup = function (attrs) {
     if (Data_Boolean.otherwise) {
         return "<g " + (attrs + ">");
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 648, column 1 - line 648, column 30): " + [ attrs.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 637, column 1 - line 637, column 30): " + [ attrs.constructor.name ]);
 };
 var n4 = /* #__PURE__ */ Data_Number_Format.toStringWith(/* #__PURE__ */ Data_Number_Format.fixed(4));
 var transformAttr = function (t) {
@@ -71,7 +71,7 @@ var pathD = function (buf) {
             if (v instanceof Data_Maybe.Nothing) {
                 return 0.0;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 770, column 12 - line 772, column 21): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 759, column 12 - line 761, column 21): " + [ v.constructor.name ]);
         };
         return function __do() {
             var out = Data_Array_ST["new"]();
@@ -125,7 +125,7 @@ var pathD = function (buf) {
                                 return $$void(Control_Monad_ST_Internal.write(Data_Array.length(buf))(cursor))();
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 734, column 7 - line 766, column 66): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 723, column 7 - line 755, column 66): " + [ v.constructor.name ]);
                     })();
                 };
                 return {};
@@ -147,7 +147,7 @@ var joinName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.MiterJoin) {
         return "miter";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 619, column 12 - line 622, column 23): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 608, column 12 - line 611, column 23): " + [ v.constructor.name ]);
 };
 var functorSvgDraw = {
     map: function (f) {
@@ -159,12 +159,12 @@ var functorSvgDraw = {
     }
 };
 var $$escape = /* #__PURE__ */ (function () {
-    var $102 = Data_String_Common.replaceAll("\"")("&quot;");
-    var $103 = Data_String_Common.replaceAll(">")("&gt;");
-    var $104 = Data_String_Common.replaceAll("<")("&lt;");
-    var $105 = Data_String_Common.replaceAll("&")("&amp;");
-    return function ($106) {
-        return $102($103($104($105($106))));
+    var $99 = Data_String_Common.replaceAll("\"")("&quot;");
+    var $100 = Data_String_Common.replaceAll(">")("&gt;");
+    var $101 = Data_String_Common.replaceAll("<")("&lt;");
+    var $102 = Data_String_Common.replaceAll("&")("&amp;");
+    return function ($103) {
+        return $99($100($101($102($103))));
     };
 })();
 var runSvg = function (r) {
@@ -174,7 +174,7 @@ var runSvg = function (r) {
     if (r.style instanceof Markgraf_Animation_TextRun.RunCode) {
         return "<tspan font-family=\"" + (Markgraf_Animation_TextMetrics.defaultCodeFont.family + ("\" font-weight=\"" + (Markgraf_Animation_TextMetrics.defaultCodeFont.weight + ("\">" + ($$escape(r.text) + "</tspan>")))));
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 592, column 12 - line 600, column 20): " + [ r.style.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 581, column 12 - line 589, column 20): " + [ r.style.constructor.name ]);
 };
 var emit = function (s) {
     return function (env) {
@@ -183,21 +183,6 @@ var emit = function (s) {
             return when(d === 0)($$void(Data_Array_ST.push(s)(env.out)))();
         };
     };
-};
-var clampToViewport = function (vp) {
-    var maxX = (vp.vx + vp.vw) - 4.0;
-    var maxY = (vp.vy + vp.vh) - 4.0;
-    var minX = vp.vx + 4.0;
-    var minY = vp.vy + 4.0;
-    var clampOne = function (r) {
-        return {
-            w: r.w,
-            h: r.h,
-            x: clamp(minX)(maxX - r.w)(r.x),
-            y: clamp(minY)(maxY - r.h)(r.y)
-        };
-    };
-    return map1(clampOne);
 };
 var capName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.ButtCap) {
@@ -209,7 +194,7 @@ var capName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.SquareCap) {
         return "square";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 625, column 11 - line 628, column 24): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 614, column 11 - line 617, column 24): " + [ v.constructor.name ]);
 };
 var blendName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.Normal) {
@@ -218,7 +203,7 @@ var blendName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.Difference) {
         return "difference";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 644, column 13 - line 646, column 29): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 633, column 13 - line 635, column 29): " + [ v.constructor.name ]);
 };
 var baselineDy = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.BaselineTop) {
@@ -233,7 +218,7 @@ var baselineDy = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.BaselineBottom) {
         return "";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 637, column 14 - line 641, column 23): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 626, column 14 - line 630, column 23): " + [ v.constructor.name ]);
 };
 var bakedStroke = function (env) {
     return function (style) {
@@ -287,7 +272,7 @@ var bakePath = function (t) {
             if (v instanceof Data_Maybe.Nothing) {
                 return 0.0;
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 683, column 10 - line 685, column 19): " + [ v.constructor.name ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 672, column 10 - line 674, column 19): " + [ v.constructor.name ]);
         };
         var go = function __do() {
             var out = Data_Array_ST["new"]();
@@ -340,7 +325,7 @@ var bakePath = function (t) {
                                 return $$void(Control_Monad_ST_Internal.write(Data_Array.length(buf))(cursor))();
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 697, column 7 - line 722, column 66): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 686, column 7 - line 711, column 66): " + [ v.constructor.name ]);
                     })();
                 };
                 return {};
@@ -419,7 +404,7 @@ var bgDotsSvg = function (pid) {
             if (Data_Boolean.otherwise) {
                 return "<rect width=\"" + (n2(s.tile) + ("\" height=\"" + (n2(s.tile) + ("\" fill=\"" + (rgb(s.bgColor) + ("\" fill-opacity=\"" + (n2(alphaFraction(s.bgColor)) + "\"/>")))))));
             };
-            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 532, column 3 - line 542, column 20): " + [  ]);
+            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 521, column 3 - line 531, column 20): " + [  ]);
         })();
         return "<defs><pattern id=\"" + (pid + ("\" x=\"" + (n2(s.origin.x) + ("\" y=\"" + (n2(s.origin.y) + ("\" width=\"" + (n2(s.tile) + ("\" height=\"" + (n2(s.tile) + ("\" patternUnits=\"userSpaceOnUse\">" + (bgRect + ("<circle cx=\"" + (n2(s.tile / 2.0) + ("\" cy=\"" + (n2(s.tile / 2.0) + ("\" r=\"" + (n2(s.dotRadius) + ("\" fill=\"" + (rgb(s.dotColor) + ("\"/></pattern></defs>" + ("<rect x=\"" + (n2(s.viewport.vx) + ("\" y=\"" + (n2(s.viewport.vy) + ("\" width=\"" + (n2(s.viewport.vw) + ("\" height=\"" + (n2(s.viewport.vh) + ("\" fill=\"url(#" + (pid + ")\"/>"))))))))))))))))))))))))))))));
     };
@@ -440,7 +425,7 @@ var roundedRectSvg = function (rect) {
                     if (mStroke instanceof Data_Maybe.Nothing) {
                         return "";
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 490, column 17 - line 502, column 18): " + [ mStroke.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 479, column 17 - line 491, column 18): " + [ mStroke.constructor.name ]);
                 })();
                 var fillAttrs = (function () {
                     if (mFill instanceof Data_Maybe.Just) {
@@ -449,7 +434,7 @@ var roundedRectSvg = function (rect) {
                     if (mFill instanceof Data_Maybe.Nothing) {
                         return " fill=\"none\"";
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 483, column 15 - line 489, column 32): " + [ mFill.constructor.name ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 472, column 15 - line 478, column 32): " + [ mFill.constructor.name ]);
                 })();
                 return "<rect x=\"" + (n2(rect.x) + ("\" y=\"" + (n2(rect.y) + ("\" width=\"" + (n2(rect.w) + ("\" height=\"" + (n2(rect.h) + ("\" rx=\"" + (n2(r) + ("\"" + (fillAttrs + (strokeAttrs + "/>"))))))))))));
             };
@@ -471,7 +456,7 @@ var alignName = function (v) {
     if (v instanceof Markgraf_Animation_Render_Op.AlignRight) {
         return "end";
     };
-    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 631, column 13 - line 634, column 22): " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 620, column 13 - line 623, column 22): " + [ v.constructor.name ]);
 };
 var textSvg = function (spec) {
     var runs = Markgraf_Animation_TextRun.parseRuns(Markgraf_Animation_TextMetrics.normalizeLabel(spec.content));
@@ -480,7 +465,7 @@ var textSvg = function (spec) {
         if (runs.length === 1 && eq3(runs[0].style)(Markgraf_Animation_TextRun.RunText.value)) {
             return $$escape(runs[0].text);
         };
-        return Data_String_Common.joinWith("")(map2(runSvg)(runs));
+        return Data_String_Common.joinWith("")(map1(runSvg)(runs));
     })();
     return openTag + (body + "</text>");
 };
@@ -535,7 +520,7 @@ var monadDrawSvgDraw = {
                             var r$prime = Data_Maybe.maybe(r)(function (t) {
                                 return t.sx * r;
                             })(mt);
-                            var mStroke$prime = map3(function (s) {
+                            var mStroke$prime = map2(function (s) {
                                 return Data_Maybe.maybe(s)(function (t) {
                                     return {
                                         color: s.color,
@@ -593,7 +578,7 @@ var monadDrawSvgDraw = {
                         if (rule instanceof Markgraf_Animation_Render_Op.NonZero) {
                             return "";
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 140, column 18 - line 142, column 22): " + [ rule.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 142, column 18 - line 144, column 22): " + [ rule.constructor.name ]);
                     })();
                     var cid = "clip" + show(n);
                     return emit("<defs><clipPath id=\"" + (cid + ("\"><path d=\"" + (pathD(bakedClipPath) + ("\"" + (ruleAttr + ("/></clipPath></defs>" + openGroup("clip-path=\"url(#" + (cid + ")\"")))))))))(env)();
@@ -612,8 +597,8 @@ var monadDrawSvgDraw = {
     popAlpha: /* #__PURE__ */ liftSD(/* #__PURE__ */ emit("</g>")),
     pushBlur: function (radius) {
         return liftSD(function (env) {
-            var $96 = radius < 1.0e-2;
-            if ($96) {
+            var $93 = radius < 1.0e-2;
+            if ($93) {
                 return emit("<g>")(env);
             };
             return function __do() {
@@ -687,7 +672,7 @@ var monadDrawSvgDraw = {
     }
 };
 var renderLevelsDrawAt = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderLevelsDrawAt(monadDrawSvgDraw);
-var tokenLabelTargets = /* #__PURE__ */ Markgraf_Animation_Render_Layers.tokenLabelTargets(monadDrawSvgDraw);
+var tokenLabelTargetsInViewport = /* #__PURE__ */ Markgraf_Animation_Render_Layers.tokenLabelTargetsInViewport(monadDrawSvgDraw);
 var renderScene = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderScene(monadDrawSvgDraw);
 var renderSceneAt = /* #__PURE__ */ Markgraf_Animation_Render_Scene.renderSceneAt(monadDrawSvgDraw);
 var renderLevelsPartsAt = function (outputAspect) {
@@ -696,7 +681,7 @@ var renderLevelsPartsAt = function (outputAspect) {
             return function (transparency) {
                 return function (rs) {
                     var cfg = {
-                        padding: 24.0,
+                        padding: renderPadding,
                         transparentBg: Markgraf_Animation_Render_Theme.isTransparent(transparency),
                         halftoneShadows: true,
                         watermark: "",
@@ -750,7 +735,7 @@ var renderLevelsPartsLive = function (outputAspect) {
                 return function (dt) {
                     return function (prev) {
                         var cfg = {
-                            padding: 24.0,
+                            padding: renderPadding,
                             transparentBg: Markgraf_Animation_Render_Theme.isTransparent(transparency),
                             halftoneShadows: true,
                             watermark: "",
@@ -768,16 +753,17 @@ var renderLevelsPartsLive = function (outputAspect) {
                                 return Data_Map_Internal.empty;
                             };
                             if (v instanceof Data_Maybe.Just) {
+                                var targetViewport = Markgraf_Animation_Render_Scene.levelLabelViewport(Markgraf_Animation_Render_Scene.outerViewport(cfg)(rs))(v.value0);
                                 return runSvgDraw({
                                     out: out,
                                     maskDepth: maskDepth,
                                     clipCounter: clipCounter,
                                     patternCounter: patternCounter,
-                                    viewport: Markgraf_Animation_Render_Scene.outerViewport(cfg)(rs),
+                                    viewport: targetViewport,
                                     bake: bake
-                                })(tokenLabelTargets(v.value0.segment.layout)(v.value0.state))();
+                                })(tokenLabelTargetsInViewport(targetViewport)(v.value0.segment.layout)(v.value0.state))();
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 458, column 5 - line 463, column 59): " + [ v.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 446, column 5 - line 452, column 84): " + [ v.constructor.name ]);
                         };
                         var stepped = Markgraf_Animation_LabelSpring.step(dt)(deepestTargets())(prev);
                         return {
@@ -795,7 +781,7 @@ var renderSVGParts = function (theme) {
         return function (layout) {
             return function (state) {
                 var cfg = {
-                    padding: 24.0,
+                    padding: renderPadding,
                     transparentBg: Markgraf_Animation_Render_Theme.isTransparent(transparency),
                     halftoneShadows: true,
                     watermark: "",
@@ -813,7 +799,7 @@ var renderSVGParts = function (theme) {
                     if (Data_Boolean.otherwise) {
                         return Markgraf_Animation_Render_Scene.sceneViewport(cfg)(layout)(state);
                     };
-                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 255, column 3 - line 257, column 49): " + [  ]);
+                    throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 257, column 3 - line 259, column 49): " + [  ]);
                 })();
                 var build = function __do() {
                     var out = Data_Array_ST["new"]();
@@ -860,7 +846,7 @@ var renderSVGPartsLive = function (outputAspect) {
                     return function (dt) {
                         return function (prev) {
                             var cfg = {
-                                padding: 24.0,
+                                padding: renderPadding,
                                 transparentBg: Markgraf_Animation_Render_Theme.isTransparent(transparency),
                                 halftoneShadows: true,
                                 watermark: "",
@@ -878,7 +864,7 @@ var renderSVGPartsLive = function (outputAspect) {
                                 if (Data_Boolean.otherwise) {
                                     return Markgraf_Animation_Render_Scene.sceneViewport(cfg)(layout)(state);
                                 };
-                                throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 308, column 3 - line 310, column 49): " + [  ]);
+                                throw new Error("Failed pattern match at Markgraf.Animation.Render.SVG (line 310, column 3 - line 312, column 49): " + [  ]);
                             })();
                             var buildTargets = function __do() {
                                 var out = Data_Array_ST["new"]();
@@ -893,10 +879,10 @@ var renderSVGPartsLive = function (outputAspect) {
                                     patternCounter: patternCounter,
                                     viewport: viewport,
                                     bake: bake
-                                })(tokenLabelTargets(layout)(state))();
+                                })(tokenLabelTargetsInViewport(viewport)(layout)(state))();
                             };
                             var targets = buildTargets();
-                            var stepped = Markgraf_Animation_LabelSpring.step(dt)(clampToViewport(viewport)(targets))(prev);
+                            var stepped = Markgraf_Animation_LabelSpring.step(dt)(targets)(prev);
                             var buildBody = function __do() {
                                 var out = Data_Array_ST["new"]();
                                 var maskDepth = Control_Monad_ST_Internal["new"](0)();

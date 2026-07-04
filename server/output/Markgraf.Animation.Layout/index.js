@@ -79,13 +79,13 @@ var fromFoldable2 = /* #__PURE__ */ Data_Map_Internal.fromFoldable(Markgraf_Grap
 var map = /* #__PURE__ */ Data_Functor.map(Data_Functor.functorArray);
 var sum = /* #__PURE__ */ Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber);
 var clamp = /* #__PURE__ */ Data_Ord.clamp(Data_Ord.ordNumber);
+var un = /* #__PURE__ */ Data_Newtype.un();
 var max = /* #__PURE__ */ Data_Ord.max(Data_Ord.ordNumber);
 var min = /* #__PURE__ */ Data_Ord.min(Data_Ord.ordNumber);
 var foldl = /* #__PURE__ */ Data_Foldable.foldl(Data_Foldable.foldableArray);
 var fromFoldable3 = /* #__PURE__ */ Data_Array.fromFoldable(Data_List_Types.foldableList);
 var append1 = /* #__PURE__ */ Data_Semigroup.append(Data_Semigroup.semigroupArray);
 var lookup = /* #__PURE__ */ Data_Map_Internal.lookup(Markgraf_Graph.ordNodeId);
-var un = /* #__PURE__ */ Data_Newtype.un();
 var Placement = function (x) {
     return x;
 };
@@ -212,7 +212,7 @@ var pointAt = function (path) {
                                 $tco_done = true;
                                 return fallback;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 62, column 16 - line 64, column 26): " + [ v1.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 64, column 16 - line 66, column 26): " + [ v1.constructor.name ]);
                         };
                         if (v instanceof Data_Maybe.Just) {
                             if (remaining <= v.value0.head.len) {
@@ -232,7 +232,7 @@ var pointAt = function (path) {
                                 return;
                             };
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 61, column 33 - line 68, column 62): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 63, column 33 - line 70, column 62): " + [ v.constructor.name ]);
                     };
                     while (!$tco_done) {
                         $tco_result = $tco_loop($tco_var_arr, $tco_var_remaining, $copy_fallback);
@@ -248,7 +248,20 @@ var pointAt = function (path) {
         if (v instanceof Data_Maybe.Just) {
             return new Data_Maybe.Just(walk(segs)(target)(v.value0));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 49, column 18 - line 51, column 46): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 51, column 18 - line 53, column 46): " + [ v.constructor.name ]);
+    };
+};
+var placementScaleEpsilon = 1.0e-6;
+var unplaceBBox = function (placement) {
+    return function (b) {
+        var p = un(Placement)(placement);
+        var safeScale = max(placementScaleEpsilon)(p.scale);
+        return {
+            x: (b.x - p.tx) / safeScale,
+            y: (b.y - p.ty) / safeScale,
+            w: b.w / safeScale,
+            h: b.h / safeScale
+        };
     };
 };
 var placementInsetRatio = 0.15;
@@ -392,9 +405,18 @@ var nodesBBox = function (layout) {
         if (v instanceof Data_Maybe.Just) {
             return finalize(foldl(extend)(initial(v.value0.head))(v.value0.tail));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 274, column 17 - line 276, column 71): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 292, column 17 - line 294, column 71): " + [ v.constructor.name ]);
     };
     return collapse(Data_Array.concatMap(silhouetteCorners)(fromFoldable3(Data_Map_Internal.values(layout.nodes))));
+};
+var invertPlacement = function (placement) {
+    var p = un(Placement)(placement);
+    var safeScale = max(placementScaleEpsilon)(p.scale);
+    return {
+        scale: 1.0 / safeScale,
+        tx: -p.tx / safeScale,
+        ty: -p.ty / safeScale
+    };
 };
 var insetFor = function (np) {
     return max(4.0)(placementInsetRatio * min(np.w)(np.h));
@@ -461,6 +483,7 @@ var bbox = function (layout) {
         };
     };
     var edgePoints = Data_Array.concat(fromFoldable3(Data_Map_Internal.values(layout.edges)));
+    var points = append1(nodeCorners)(edgePoints);
     var collapse = function (ps) {
         var v = Data_Array.uncons(ps);
         if (v instanceof Data_Maybe.Nothing) {
@@ -474,10 +497,8 @@ var bbox = function (layout) {
         if (v instanceof Data_Maybe.Just) {
             return finalize(foldl(extend)(initial(v.value0.head))(v.value0.tail));
         };
-        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 255, column 17 - line 257, column 71): " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 275, column 17 - line 277, column 71): " + [ v.constructor.name ]);
     };
-    var chipPoints = Data_Array.concat(fromFoldable3(Data_Map_Internal.values(layout.chipExtras)));
-    var points = append1(nodeCorners)(append1(edgePoints)(chipPoints));
     return collapse(points);
 };
 var composedPlacement = function (root) {
@@ -520,9 +541,9 @@ var composedPlacement = function (root) {
                                 $copy_acc = composePlacement(acc)(placementFor(bbox(v1.value0.layout))(parentRectFor(parent)(v.value0.head)));
                                 return;
                             };
-                            throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 189, column 28 - line 193, column 96): " + [ v1.constructor.name ]);
+                            throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 191, column 28 - line 195, column 96): " + [ v1.constructor.name ]);
                         };
-                        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 187, column 24 - line 193, column 96): " + [ v.constructor.name ]);
+                        throw new Error("Failed pattern match at Markgraf.Animation.Layout (line 189, column 24 - line 195, column 96): " + [ v.constructor.name ]);
                     };
                     while (!$tco_done) {
                         $tco_result = $tco_loop($tco_var_parent, $tco_var_segs, $copy_acc);
@@ -558,6 +579,8 @@ export {
     insetFor,
     applyPlacement,
     placeBBox,
+    invertPlacement,
+    unplaceBBox,
     newtypeInteriorTrees_,
     eqInteriorTrees,
     newtypePlacement_,
