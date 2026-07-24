@@ -22,8 +22,10 @@
   overflow: hidden;
 }
 
-.markgraf-embed canvas[data-mg="stage"] {
+.markgraf-embed canvas[data-mg="stage"],
+.markgraf-embed svg[data-mg="stage"] {
   width: 100%;
+  height: auto;
   display: block;
   max-height: var(--mg-max-height, 90svh);
   object-fit: contain;

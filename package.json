@@ -1,7 +1,7 @@
 {
   "name": "markgraf-vscode",
   "displayName": "Markgraf",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -38,7 +38,7 @@
         "markgraf.serverRuntime": {
           "type": "string",
           "default": "",
-          "description": "Runtime command for the Markgraf language server. Leave empty to use VS Code\u2019s Node runtime."
+          "description": "Runtime command for the Markgraf language server. Leave empty to use VS Code’s Node runtime."
         }
       }
     },
