@@ -1,0 +1,31 @@
+name: release
+
+# GitHub-only release packaging. Marketplace publication is intentionally
+# separate until its publisher credentials are configured.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Build extension
+        run: bun run build
+      - name: Package and attach VSIX
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eux
+          VERSION="$(node -p "require('./package.json').version")"
+          VSIX="markgraf-vscode-${VERSION}.vsix"
+          bunx @vscode/vsce@latest package --out "$VSIX"
+          gh release upload "${{ github.event.release.tag_name }}" "$VSIX" --clobber
