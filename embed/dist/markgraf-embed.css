@@ -148,7 +148,9 @@
   border-radius: 4px;
   padding: 1px 4px;
   color: var(--mg-fg);
-  font: 11px/1 inherit;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
   cursor: pointer;
 }
 
