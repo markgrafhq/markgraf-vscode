@@ -52,6 +52,8 @@
     preview.setAttribute("data-markgraf-src-b64", encodeBase64(source));
     preview.setAttribute("data-markgraf-titles", "false");
     preview.setAttribute("data-markgraf-theme", savedTheme());
+    // The built-in Markdown preview owns a CSP that forbids blob workers.
+    preview.setAttribute("data-markgraf-renderer", "svg");
 
     for (const theme of themes) {
       const button = document.createElement("button");

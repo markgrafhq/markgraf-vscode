@@ -62,7 +62,7 @@ export const extendMarkdownItImpl = md => {
     }
 
     const source = Buffer.from(token.content, "utf8").toString("base64");
-    return `<div class="markgraf-markdown-preview markgraf-embed" data-markgraf data-markgraf-src-b64="${source}" data-markgraf-titles="false"></div>`;
+    return `<div class="markgraf-markdown-preview markgraf-embed" data-markgraf data-markgraf-renderer="svg" data-markgraf-src-b64="${source}" data-markgraf-titles="false"></div>`;
   };
 
   const fallback = (tokens, index, options, env, self) => self.renderToken(tokens, index, options);
@@ -142,7 +142,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'nonce-${nonce}'; img-src ${webview.cspSource} data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; worker-src blob:; font-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; script-src ${webview.cspSource} 'nonce-${nonce}'; img-src ${webview.cspSource} data:;">
   <link rel="stylesheet" href="${cssUri}">
   <style>
     :root {
@@ -389,7 +389,8 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     let currentTheme = state.theme ?? ${JSON.stringify(defaultTheme)};
     let lastFrame = state.lastFrame ?? null;
     let wasPlaying = state.wasPlaying ?? true;
-    let previewBlocked = false;
+    let previewApi = null;
+    let disposePreview = null;
 
     const markSelectedTheme = () => {
       for (const button of themeButtons) {
@@ -401,7 +402,7 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       currentSource = source;
       markSelectedTheme();
       rememberFrame();
-      pausePreview();
+      previewApi?.pause();
 
       const parsed = window.markgraf.tryParse(source);
       if (!parsed.ok) {
@@ -410,11 +411,12 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
       }
 
       showPreview(source);
-      restoreFrame();
     };
 
     const showParseError = message => {
-      previewBlocked = true;
+      disposePreview?.();
+      disposePreview = null;
+      previewApi = null;
       element.innerHTML = "";
       element.className = "preview-error";
       element.removeAttribute("data-markgraf");
@@ -424,54 +426,32 @@ const previewHtml = (webview, embedDist, source, defaultTheme) => {
     };
 
     const showPreview = source => {
-      previewBlocked = false;
+      previewApi = null;
       element.innerHTML = "";
       element.className = "markgraf-embed";
       element.setAttribute("data-markgraf", "");
       element.setAttribute("data-markgraf-theme", currentTheme);
       element.setAttribute("data-markgraf-mounted", "1");
-      window.markgraf.mount(element, source);
+      disposePreview = window.markgraf.mount(element, source, true, restoreFrame);
     };
 
     const rememberFrame = () => {
-      const scrub = element.querySelector('[data-mg="scrub"]');
-      if (!scrub) {
+      if (!previewApi) {
         return;
       }
 
-      lastFrame = scrub.value;
-      if (!previewBlocked) {
-        wasPlaying = element.querySelector('[data-mg="play"]')?.dataset.mgPlaying === "1";
-      }
+      lastFrame = previewApi.duration > 0 ? (previewApi.time / previewApi.duration) * 1000 : 0;
+      wasPlaying = previewApi.playing;
       vscode.setState({ theme: currentTheme, lastFrame, wasPlaying });
     };
 
-    const restoreFrame = () => {
-      if (lastFrame == null) {
-        return;
+    const restoreFrame = api => {
+      previewApi = api;
+      if (lastFrame != null) {
+        api.seek((Number(lastFrame) / 1000) * api.duration);
       }
-
-      requestAnimationFrame(() => {
-        const scrub = element.querySelector('[data-mg="scrub"]');
-        if (!scrub) {
-          return;
-        }
-
-        scrub.value = lastFrame;
-        scrub.dispatchEvent(new Event("input", { bubbles: true }));
-
-        const play = element.querySelector('[data-mg="play"]');
-        const playing = play?.dataset.mgPlaying === "1";
-        if (play && wasPlaying !== playing) {
-          play.click();
-        }
-      });
-    };
-
-    const pausePreview = () => {
-      const play = element.querySelector('[data-mg="play"]');
-      if (play?.dataset.mgPlaying === "1") {
-        play.click();
+      if (wasPlaying) {
+        api.play();
       }
     };
 
