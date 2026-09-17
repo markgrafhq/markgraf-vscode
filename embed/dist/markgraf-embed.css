@@ -26,9 +26,14 @@
 .markgraf-embed svg[data-mg="stage"] {
   width: 100%;
   height: auto;
+  min-height: 180px;
   display: block;
   max-height: var(--mg-max-height, 90svh);
   object-fit: contain;
+}
+
+.markgraf-embed canvas[data-mg="stage"] {
+  aspect-ratio: 16 / 9;
 }
 
 .markgraf-embed :focus,
