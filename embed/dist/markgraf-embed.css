@@ -1,7 +1,32 @@
 @font-face {
-  font-family: 'CommitMono';
-  src: url('./CommitMono-Regular.woff2') format('woff2');
-  font-weight: 400;
+  font-family: "Victor Mono";
+  src: url("./VictorMono-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victor Mono";
+  src: url("./VictorMono-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victor Mono";
+  src: url("./VictorMono-MediumItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Victor Mono";
+  src: url("./VictorMono-BoldItalic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 700;
   font-display: swap;
 }
 
